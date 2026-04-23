@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>ヒトオシ</title>
+<style>
+:root {
+  --cr: #FDF5EC;
+  --lv: #C4B4D8;
+  --lv-l: #EDE8F5;
+  --lv-m: #B0A0CC;
+  --pk: #E0B8C4;
+  --pk-l: #F8ECF0;
+  --pk-m: #C89AAC;
+  --be: #E8DDD0;
+  --be-d: #D0C0B0;
+  --tx: #4E3E4C;
+  --tx-m: #7A6878;
+  --tx-s: #A898A8;
+  --wh: #FFFFFF;
+  --sh: 0 4px 24px rgba(130,90,120,.11);
+  --sh-s: 0 2px 10px rgba(130,90,120,.09);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  background:var(--cr);
+  background-image:
+    radial-gradient(ellipse at 12% 88%, rgba(196,180,216,.17) 0%, transparent 52%),
+    radial-gradient(ellipse at 88% 12%, rgba(224,184,196,.17) 0%, transparent 52%);
+  font-family:-apple-system,'Hiragino Sans','Hiragino Kaku Gothic ProN','Noto Sans JP',sans-serif;
+  color:var(--tx);
+  min-height:100vh;
+  padding:0 16px max(32px,env(safe-area-inset-bottom,32px));
+  max-width:480px;
+  margin:0 auto;
+}
+
+/* ── Header ── */
+.hd{
+  padding:36px 4px 28px;
+  position:relative;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:6px;
+}
+.snd-btn{
+  position:absolute;top:36px;right:4px;
+  background:var(--wh);border:none;border-radius:20px;
+  padding:6px 12px;font-size:11px;color:var(--tx-s);
+  cursor:pointer;display:flex;align-items:center;gap:4px;
+  box-shadow:var(--sh-s);transition:box-shadow .2s;
+  -webkit-tap-highlight-color:transparent;
+}
+.snd-btn:hover{box-shadow:0 3px 14px rgba(130,90,120,.17)}
+.logo{
+  width:38px;height:38px;
+  background:linear-gradient(135deg,var(--lv) 0%,var(--pk) 100%);
+  border-radius:13px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:18px;color:#fff;
+  box-shadow:0 3px 12px rgba(170,130,190,.28);
+}
+.app-name{font-size:27px;font-weight:800;letter-spacing:.18em;color:var(--tx)}
+.app-sub{font-size:11.5px;color:var(--tx-s);letter-spacing:.05em;line-height:1.65;text-align:center}
+
+/* ── Section ── */
+.sec{margin-bottom:20px}
+.lbl{
+  font-size:10.5px;font-weight:700;color:var(--tx-s);
+  letter-spacing:.16em;text-transform:uppercase;
+  margin-bottom:10px;
+  display:flex;align-items:center;gap:7px;
+}
+.lbl::after{content:'';flex:1;height:1px;background:var(--be)}
+
+/* ── Chips ── */
+.chips{display:flex;flex-wrap:wrap;gap:7px}
+.chip{
+  background:var(--wh);border:1.5px solid var(--be);border-radius:22px;
+  padding:7px 14px;font-size:12.5px;color:var(--tx-m);
+  cursor:pointer;
+  transition:background .16s,border-color .16s,color .16s,box-shadow .16s,transform .1s;
+  user-select:none;-webkit-tap-highlight-color:transparent;
+  box-shadow:var(--sh-s);
+}
+.chip:active{transform:scale(.96)}
+.mood-chips .chip.on{
+  background:var(--lv);border-color:var(--lv);color:#fff;font-weight:600;
+  box-shadow:0 3px 12px rgba(160,140,210,.34);
+}
+.scene-chips .chip.on{
+  background:var(--pk);border-color:var(--pk);color:#fff;font-weight:600;
+  box-shadow:0 3px 12px rgba(200,154,172,.34);
+}
+
+/* ── Main Button ── */
+.btn-wrap{padding:4px 0 18px}
+.main-btn{
+  width:100%;
+  background:linear-gradient(135deg,var(--lv-m) 0%,var(--pk-m) 100%);
+  border:none;border-radius:26px;
+  padding:17px 24px;
+  font-size:15.5px;font-weight:700;color:#fff;
+  cursor:pointer;letter-spacing:.09em;
+  transition:transform .15s,box-shadow .15s;
+  box-shadow:0 5px 20px rgba(175,125,165,.33);
+  -webkit-tap-highlight-color:transparent;
+}
+.main-btn:hover{transform:translateY(-2px);box-shadow:0 7px 24px rgba(175,125,165,.42)}
+.main-btn:active{transform:translateY(1px);box-shadow:0 3px 12px rgba(175,125,165,.26)}
+
+/* ── Result Card ── */
+.card{
+  background:var(--wh);border-radius:22px;
+  padding:26px 20px 22px;
+  margin-bottom:12px;
+  box-shadow:var(--sh);
+  display:none;opacity:0;transform:translateY(14px);
+  transition:opacity .36s ease,transform .36s ease;
+  position:relative;overflow:hidden;
+}
+.card.vis{display:block}
+.card.in{opacity:1;transform:translateY(0)}
+.card-bar{
+  position:absolute;top:0;left:0;right:0;height:3px;
+  background:linear-gradient(90deg,var(--lv) 0%,var(--pk) 100%);
+  border-radius:22px 22px 0 0;
+}
+.card-body{display:flex;gap:14px;align-items:flex-end}
+.card-texts{flex:1}
+.c-msg{font-size:14.5px;line-height:1.82;color:var(--tx);font-weight:500;margin-bottom:15px}
+.c-act-lbl{font-size:9.5px;font-weight:700;color:var(--pk-m);letter-spacing:.12em;margin-bottom:5px}
+.c-act{
+  background:var(--pk-l);border-radius:11px;
+  padding:9px 13px;font-size:12.5px;color:var(--tx-m);line-height:1.5;
+}
+.mascot-box{
+  width:66px;flex-shrink:0;
+  display:flex;align-items:flex-end;justify-content:center;
+  padding-bottom:2px;
+}
+.mascot{
+  width:60px;height:60px;
+  object-fit:contain;object-position:center;
+}
+.mascot.pop{animation:mpop .55s cubic-bezier(.34,1.56,.64,1)}
+@keyframes mpop{
+  0%{transform:scale(1) rotate(0)}
+  38%{transform:scale(1.3) rotate(-7deg)}
+  68%{transform:scale(.93) rotate(3deg)}
+  100%{transform:scale(1) rotate(0)}
+}
+
+/* ── Action Buttons ── */
+.act-btns{display:none;gap:9px;margin-bottom:22px}
+.act-btns.vis{display:flex}
+.btn-fav{
+  flex:1;background:var(--wh);border:1.5px solid var(--be);border-radius:18px;
+  padding:11px 8px;font-size:13px;color:var(--tx-s);
+  cursor:pointer;display:flex;align-items:center;justify-content:center;gap:5px;
+  transition:all .18s;-webkit-tap-highlight-color:transparent;
+  box-shadow:var(--sh-s);
+}
+.btn-fav.on{background:var(--pk-l);border-color:var(--pk);color:var(--pk-m)}
+.btn-done{
+  flex:2;
+  background:linear-gradient(135deg,#ECD4F4 0%,#F4D4DC 100%);
+  border:none;border-radius:18px;
+  padding:11px 8px;
+  font-size:13.5px;font-weight:700;color:var(--tx);
+  cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;
+  transition:transform .15s,box-shadow .15s;
+  box-shadow:0 4px 14px rgba(175,145,195,.2);
+  -webkit-tap-highlight-color:transparent;
+}
+.btn-done:hover{transform:translateY(-1px);box-shadow:0 6px 18px rgba(175,145,195,.3)}
+.btn-done:active{transform:translateY(1px)}
+
+/* ── Divider ── */
+.div{height:1px;background:linear-gradient(90deg,transparent,var(--be),transparent);margin:4px 0 22px;display:none}
+
+/* ── Favorites ── */
+.fav-sec{display:none;padding-bottom:44px}
+.fav-sec.vis{display:block}
+.fav-ttl{font-size:10.5px;font-weight:700;color:var(--tx-s);letter-spacing:.16em;margin-bottom:12px}
+.fav-list{display:flex;flex-direction:column;gap:9px}
+.fav-item{
+  background:var(--wh);border-radius:16px;padding:12px 13px;
+  box-shadow:0 2px 10px rgba(130,90,120,.08);
+  display:flex;align-items:flex-start;gap:9px;
+}
+.fav-con{flex:1}
+.fav-tag{font-size:10px;color:var(--tx-s);margin-bottom:3px}
+.fav-msg{font-size:12.5px;color:var(--tx-m);line-height:1.55}
+.fav-del{background:none;border:none;color:var(--be-d);cursor:pointer;font-size:17px;line-height:1;padding:0;flex-shrink:0;transition:color .15s}
+.fav-del:hover{color:var(--pk-m)}
+
+/* ── Confetti ── */
+.cel{position:fixed;inset:0;pointer-events:none;z-index:999;display:none}
+.cel.on{display:block}
+.dot{position:absolute;border-radius:50%;animation:fall linear forwards}
+@keyframes fall{
+  0%{opacity:1;transform:translateY(0) scale(1) rotate(0)}
+  80%{opacity:1}
+  100%{opacity:0;transform:translateY(100vh) scale(.35) rotate(540deg)}
+}
+
+/* ── Toast ── */
+.toast{
+  position:fixed;
+  bottom:max(28px,env(safe-area-inset-bottom,28px));
+  left:50%;transform:translateX(-50%) translateY(8px);
+  background:rgba(70,55,68,.88);color:#fff;
+  padding:9px 18px;border-radius:18px;font-size:12.5px;
+  opacity:0;transition:opacity .24s,transform .24s;
+  pointer-events:none;z-index:1000;
+  backdrop-filter:blur(8px);white-space:nowrap;
+}
+.toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
+
+@media(min-width:480px){body{padding-bottom:52px}.hd{padding-top:48px}}
+@media(max-width:360px){.chip{font-size:12px;padding:6px 12px}.app-name{font-size:24px}}
+</style>
+</head>
+<body>
+
+<header class="hd">
+  <button class="snd-btn" id="sndBtn" onclick="toggleSnd()">
+    <span id="sndIco">🔔</span><span id="sndTxt">音あり</span>
+  </button>
+  <div class="logo">✦</div>
+  <div class="app-name">ヒトオシ</div>
+  <div class="app-sub">仕事に行きたくない朝の<br>やさしい 1 タップ応援</div>
+</header>
+
+<section class="sec">
+  <div class="lbl">いまの気分</div>
+  <div class="chips mood-chips" id="moodC">
+    <button class="chip" data-v="だるい">😪 だるい</button>
+    <button class="chip" data-v="眠い">💤 眠い</button>
+    <button class="chip" data-v="不安">😰 不安</button>
+    <button class="chip" data-v="行きたくない">🚫 行きたくない</button>
+    <button class="chip" data-v="人に会いたくない">🙈 人に会いたくない</button>
+    <button class="chip" data-v="何もしたくない">🌫️ 何もしたくない</button>
+    <button class="chip" data-v="めんどくさい">😮‍💨 めんどくさい</button>
+    <button class="chip" data-v="緊張する">💦 緊張する</button>
+    <button class="chip" data-v="気分が重い">☁️ 気分が重い</button>
+    <button class="chip" data-v="疲れている">🪫 疲れている</button>
+  </div>
+</section>
+
+<section class="sec">
+  <div class="lbl">いまどこ？</div>
+  <div class="chips scene-chips" id="sceneC">
+    <button class="chip" data-v="出勤前">🌅 出勤前</button>
+    <button class="chip" data-v="通勤中">🚃 通勤中</button>
+    <button class="chip" data-v="仕事前">💼 仕事前</button>
+    <button class="chip" data-v="昼休み中">☕ 昼休み中</button>
+    <button class="chip" data-v="午後つらいとき">🌇 午後つらいとき</button>
+  </div>
+</section>
+
+<div class="btn-wrap">
+  <button class="main-btn" onclick="go()">そっと背中を押して ✦</button>
+</div>
+
+<div class="card" id="card">
+  <div class="card-bar"></div>
+  <div class="card-body">
+    <div class="card-texts">
+      <div class="c-msg" id="cMsg"></div>
+      <div class="c-act-lbl">✦ ちいさな一歩</div>
+      <div class="c-act" id="cAct"></div>
+    </div>
+    <div class="mascot-box">
+      <img src="mascot.png" alt="" class="mascot" id="mascot" onerror="this.parentElement.style.display='none'">
+    </div>
+  </div>
+</div>
+
+<div class="act-btns" id="actBtns">
+  <button class="btn-fav" id="favBtn" onclick="toggleFav()">
+    <span id="favIco">♡</span> お気に入り
+  </button>
+  <button class="btn-done" onclick="done()">✓ できた！</button>
+</div>
+
+<div class="div" id="div"></div>
+<div class="fav-sec" id="favSec">
+  <div class="fav-ttl">✦ お気に入り</div>
+  <div class="fav-list" id="favList"></div>
+</div>
+
+<div class="cel" id="cel"></div>
+<div class="toast" id="toast"></div>
+
+<script>
+const D = {
+  "だるい":{
+    "出勤前":      {m:"だるいままでいいよ。だるいまま着替えた人、えらい。",           a:"服を1枚だけ選んでみる"},
+    "通勤中":      {m:"だるいまま乗れてるじゃん。それだけで今日の主役。",            a:"窓の外を5秒だけぼーっと見てみる"},
+    "仕事前":      {m:"だるくても席についてれば、それでOKです今日は。",             a:"お茶かお水をひとくち飲む"},
+    "昼休み中":    {m:"午前中よく来たよ。だるいのに来たんだから。",                 a:"目を5秒だけ閉じてみる"},
+    "午後つらいとき":{m:"あとちょっとだけ、だるいまま座ってればいい。",             a:"背筋だけちょっと伸ばしてみる"}
+  },
+  "眠い":{
+    "出勤前":      {m:"眠いのは夜ちゃんと生きた証拠。えらいよ。",                  a:"顔を洗うか、冷たい水を飲む"},
+    "通勤中":      {m:"眠いまま乗れてる、すごいよ。寝ててもいいよ途中まで。",        a:"目を閉じて揺られてていい"},
+    "仕事前":      {m:"眠たい目で画面見てるの、がんばってるよ。",                  a:"水かお茶を飲んで、深呼吸1回"},
+    "昼休み中":    {m:"眠いなら寝ていい。昼休みは合法的な充電タイム。",             a:"15分だけ目を閉じてみる"},
+    "午後つらいとき":{m:"眠いまま午後突入、今日のあなたほんとにえらい。",           a:"席を立ってちょっとだけ歩く"}
+  },
+  "不安":{
+    "出勤前":      {m:"不安なまま行く、それが一番つよい。",                        a:"深呼吸を3回だけしてみる"},
+    "通勤中":      {m:"不安のままで着けばいい。揺られながらそれでいい。",            a:"好きな音楽を1曲だけかけてみる"},
+    "仕事前":      {m:"不安なのは、ちゃんと考えてる人の証拠かもね。",               a:"まず1つだけ、小さいこと片付けてみる"},
+    "昼休み中":    {m:"不安な午前中を乗り越えたね。よく乗り越えた。",               a:"空や外の景色を少し眺めてみる"},
+    "午後つらいとき":{m:"不安なままここまで来た、それだけで十分すごい。",            a:"肩の力を抜いて、深呼吸1回"}
+  },
+  "行きたくない":{
+    "出勤前":      {m:"行きたくないのわかる。でもカバン持てたじゃん。",              a:"カバンを玄関まで持っていく、それだけ"},
+    "通勤中":      {m:"行きたくなかったのに電車乗ってる、もうすごい。",              a:"今日帰ったら何しようかだけ考える"},
+    "仕事前":      {m:"行きたくなかったのにいる。今日の自分に拍手。",               a:"まず5分だけ、時計を見ながらやってみる"},
+    "昼休み中":    {m:"行きたくなかったのに午前中こなした、偉すぎる。",              a:"今夜の自分へのご褒美を決めてみる"},
+    "午後つらいとき":{m:"行きたくなかった日に帰れたら、それは勝ちです。",           a:"退勤後の楽しみをスマホのメモに書く"}
+  },
+  "人に会いたくない":{
+    "出勤前":      {m:"挨拶だけでいいよ。それだけでじゅうぶん。",                  a:"最低限の挨拶だけにする、と心の中で決める"},
+    "通勤中":      {m:"イヤホンという壁、最高の発明だよね。",                      a:"好きなプレイリストで自分の世界に入る"},
+    "仕事前":      {m:"今日は必要最低限だけ返事すればいい日にしよう。",             a:"必要な人だけに挨拶、と心の中で決める"},
+    "昼休み中":    {m:"一人で食べてもいい。それが最高の休息の日もある。",            a:"一人でこっそり好きなものを食べる"},
+    "午後つらいとき":{m:"会いたくない日に会い続けた自分、えらすぎ。もう少し。",     a:"帰ったら誰にも連絡しない時間を作る、と決める"}
+  },
+  "何もしたくない":{
+    "出勤前":      {m:"何もしたくないのにここまで起きた、すでに偉い。",             a:"着替えるだけ着替えてみる、それだけでいい"},
+    "通勤中":      {m:"何もしたくないまま乗れてる。輸送されてるだけでえらい。",      a:"窓の外をぼーっと見てていい"},
+    "仕事前":      {m:"何もしたくない時ほど、小さいことをひとつだけ。",             a:"いちばん簡単なタスクを1個だけやる"},
+    "昼休み中":    {m:"何もしたくない昼休みは、何もしなくていい。",                 a:"ただ座って、好きな音楽を聴く"},
+    "午後つらいとき":{m:"何もしたくないのにここまで来た。今日はそれだけで合格。",   a:"5分だけ席を離れて、外の空気を吸う"}
+  },
+  "めんどくさい":{
+    "出勤前":      {m:"めんどくさい気持ち、正直でいいよ。でも体だけ動かしてみよ。", a:"まず靴だけ履いてみる"},
+    "通勤中":      {m:"めんどくさいのに乗ってる、それが今日一番の仕事かも。",       a:"今日終わったら何を食べるか決めておく"},
+    "仕事前":      {m:"めんどくさいの全部わかる。でもとりあえず1個だけね。",        a:"いちばん小さなタスクをひとつだけ片す"},
+    "昼休み中":    {m:"午前よくやった。午後もめんどくさいままでいいよ。",           a:"好きなものを食べてエネルギーチャージ"},
+    "午後つらいとき":{m:"めんどくさい気持ち、正直で好き。あとちょっと。",          a:"退勤まであと何時間か確認してみる"}
+  },
+  "緊張する":{
+    "出勤前":      {m:"緊張するってことは、ちゃんと向き合ってる証拠。",             a:"深呼吸：4秒吸って6秒かけて吐く"},
+    "通勤中":      {m:"緊張したまま向かえてる、それだけで十分つよい。",             a:"肩の力を抜いて、遠くを見てみる"},
+    "仕事前":      {m:"緊張しててOK。みんなそれなりに緊張してるよ。",              a:"手のひらに「大丈夫」と書いて握る（内緒で）"},
+    "昼休み中":    {m:"緊張した午前中を乗り越えたね、よくやった。",                a:"温かいものを飲んで、少しだけ体を緩める"},
+    "午後つらいとき":{m:"緊張しながらここまで来た。今日のあなたほんとにすごい。",   a:"ゆっくり深呼吸して、肩を回してみる"}
+  },
+  "気分が重い":{
+    "出勤前":      {m:"気分が重い日は、体だけ動かせばいい。頭は後から追いつく。",   a:"着替えだけしてみる、それだけでいい"},
+    "通勤中":      {m:"重いまま乗れてる、それだけでもう今日は合格点。",             a:"目を閉じて音楽を聴く"},
+    "仕事前":      {m:"気分が重くても体は来てる。今日の自分、えらい。",             a:"お茶をゆっくり飲む、それだけでいい"},
+    "昼休み中":    {m:"重い気分で午前中乗り切ったね、それ相当すごいよ。",           a:"外に出て5分だけぼーっとする"},
+    "午後つらいとき":{m:"気分が重い日こそ、終わった時の軽さが待ってるよ。",        a:"退勤後の好きなことをひとつ決めておく"}
+  },
+  "疲れている":{
+    "出勤前":      {m:"疲れてるのに起きてる、もうそれで十分すごい。",              a:"水をひとくち飲んで、深呼吸する"},
+    "通勤中":      {m:"疲れてるのに来てる、今日もあなたはすごい人です。",           a:"座れたら目を閉じて、ぼーっとしていい"},
+    "仕事前":      {m:"疲れたまま来た、それが今日一番の仕事。",                   a:"いちばん簡単なことから始める"},
+    "昼休み中":    {m:"疲れてるから昼休みがある。今日はしっかり休んで。",           a:"横になれなくても、目を閉じるだけでもいい"},
+    "午後つらいとき":{m:"疲れてるまま午後も来た、ほんとに偉い。あとちょっとだけ。",a:"今夜は早く寝る、と決めておく"}
+  }
+};
+
+let mood=null, scene=null, soundOn=true, cur=null, faved=false;
+let favs=JSON.parse(localStorage.getItem('ht_f')||'[]');
+let actx=null;
+
+function ac(){
+  if(!actx) actx=new(window.AudioContext||window.webkitAudioContext)();
+  return actx;
+}
+function playPop(){
+  if(!soundOn)return;
+  try{
+    const c=ac(),o=c.createOscillator(),g=c.createGain();
+    o.connect(g);g.connect(c.destination);
+    o.type='sine';
+    o.frequency.setValueAtTime(680,c.currentTime);
+    o.frequency.exponentialRampToValueAtTime(960,c.currentTime+.07);
+    g.gain.setValueAtTime(.2,c.currentTime);
+    g.gain.exponentialRampToValueAtTime(.001,c.currentTime+.26);
+    o.start(c.currentTime);o.stop(c.currentTime+.26);
+  }catch(e){}
+}
+function playWin(){
+  if(!soundOn)return;
+  try{
+    const c=ac();
+    [523,659,784,1047].forEach((f,i)=>{
+      const o=c.createOscillator(),g=c.createGain();
+      o.connect(g);g.connect(c.destination);
+      o.type='sine';o.frequency.value=f;
+      const t=c.currentTime+i*.11;
+      g.gain.setValueAtTime(0,t);
+      g.gain.linearRampToValueAtTime(.16,t+.03);
+      g.gain.exponentialRampToValueAtTime(.001,t+.38);
+      o.start(t);o.stop(t+.38);
+    });
+  }catch(e){}
+}
+
+document.getElementById('moodC').addEventListener('click',e=>{
+  const ch=e.target.closest('.chip');if(!ch)return;
+  document.querySelectorAll('#moodC .chip').forEach(c=>c.classList.remove('on'));
+  ch.classList.add('on');mood=ch.dataset.v;playPop();
+});
+document.getElementById('sceneC').addEventListener('click',e=>{
+  const ch=e.target.closest('.chip');if(!ch)return;
+  document.querySelectorAll('#sceneC .chip').forEach(c=>c.classList.remove('on'));
+  ch.classList.add('on');scene=ch.dataset.v;playPop();
+});
+
+function go(){
+  if(!mood||!scene){showToast('気分と場面を選んでね 🌸');return;}
+  playPop();
+  const d=D[mood][scene];
+  cur={mood,scene,...d};
+  document.getElementById('cMsg').textContent=d.m;
+  document.getElementById('cAct').textContent=d.a;
+  faved=favs.some(f=>f.mood===mood&&f.scene===scene);
+  syncFav();
+  const card=document.getElementById('card');
+  card.classList.remove('in');
+  card.classList.add('vis');
+  document.getElementById('actBtns').classList.add('vis');
+  requestAnimationFrame(()=>requestAnimationFrame(()=>card.classList.add('in')));
+  setTimeout(()=>card.scrollIntoView({behavior:'smooth',block:'nearest'}),50);
+}
+
+function toggleFav(){
+  if(!cur)return;
+  playPop();
+  const i=favs.findIndex(f=>f.mood===cur.mood&&f.scene===cur.scene);
+  if(i>=0){favs.splice(i,1);faved=false;showToast('お気に入りから外したよ');}
+  else{favs.unshift({...cur});faved=true;showToast('お気に入りに追加したよ 💕');}
+  localStorage.setItem('ht_f',JSON.stringify(favs));
+  syncFav();renderFavs();
+}
+function syncFav(){
+  const btn=document.getElementById('favBtn');
+  btn.classList.toggle('on',faved);
+  document.getElementById('favIco').textContent=faved?'♥':'♡';
+}
+function renderFavs(){
+  const sec=document.getElementById('favSec');
+  const dv=document.getElementById('div');
+  const list=document.getElementById('favList');
+  if(!favs.length){sec.classList.remove('vis');dv.style.display='none';return;}
+  sec.classList.add('vis');dv.style.display='block';
+  list.innerHTML=favs.map((f,i)=>`
+    <div class="fav-item">
+      <div class="fav-con">
+        <div class="fav-tag">${f.mood} × ${f.scene}</div>
+        <div class="fav-msg">${f.m}</div>
+      </div>
+      <button class="fav-del" onclick="delFav(${i})">×</button>
+    </div>`).join('');
+}
+function delFav(i){
+  if(cur&&favs[i].mood===cur.mood&&favs[i].scene===cur.scene){faved=false;syncFav();}
+  favs.splice(i,1);
+  localStorage.setItem('ht_f',JSON.stringify(favs));
+  renderFavs();playPop();
+}
+
+function done(){
+  playWin();confetti();
+  const m=document.getElementById('mascot');
+  m.classList.remove('pop');void m.offsetWidth;m.classList.add('pop');
+  showToast('えらい！ほんとにえらい！ 🌸');
+}
+function confetti(){
+  const el=document.getElementById('cel');
+  el.innerHTML='';el.classList.add('on');
+  const cols=['#C4B4D8','#E0B8C4','#F0C8A8','#C4D0BC','#B8D4E4','#F4D4DC'];
+  for(let i=0;i<38;i++){
+    const d=document.createElement('div');
+    d.className='dot';
+    const s=6+Math.random()*7;
+    d.style.cssText=`left:${Math.random()*100}vw;top:-14px;width:${s}px;height:${s}px;`
+      +`background:${cols[i%cols.length]};`
+      +`animation-duration:${1.2+Math.random()*.9}s;`
+      +`animation-delay:${Math.random()*.45}s;`;
+    el.appendChild(d);
+  }
+  setTimeout(()=>{el.classList.remove('on');el.innerHTML='';},2500);
+}
+
+function toggleSnd(){
+  soundOn=!soundOn;
+  document.getElementById('sndIco').textContent=soundOn?'🔔':'🔕';
+  document.getElementById('sndTxt').textContent=soundOn?'音あり':'音なし';
+}
+
+let toastTimer=null;
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.classList.add('on');
+  clearTimeout(toastTimer);
+  toastTimer=setTimeout(()=>t.classList.remove('on'),2300);
+}
+
+renderFavs();
+</script>
+</body>
+</html>
