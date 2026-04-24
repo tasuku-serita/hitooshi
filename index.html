@@ -112,7 +112,14 @@ body{
   box-shadow:0 3px 12px rgba(200,154,172,.22);
 }
 .chips.dimmed .chip:not(.on){opacity:.42;transform:scale(.97)}
-.scene-chips .chip:last-child{grid-column:1/-1;flex-direction:row;gap:10px;min-height:48px;padding:10px 16px;justify-content:flex-start}
+.scene-chips .chip:last-child{
+  grid-column: 1 / -1;
+  flex-direction: row;
+  gap: 10px;
+  min-height: 48px;
+  padding: 10px 16px;
+  justify-content: center;
+}
 
 /* ── Main Button ── */
 .btn-wrap{padding:4px 0 18px}
@@ -132,10 +139,11 @@ body{
 
 /* ── Result Card ── */
 .card{
-  background:var(--wh);border-radius:22px;
-  padding:24px 20px 20px;
+  background:#FFFAF5;border-radius:22px;
+  padding:28px 22px 24px;
   margin-bottom:12px;
-  box-shadow:var(--sh);
+  box-shadow:0 8px 36px rgba(200,140,100,.18);
+  border:2.5px solid #E8C8A8;
   display:none;opacity:0;transform:translateY(14px);
   transition:opacity .36s ease,transform .36s ease;
   position:relative;overflow:hidden;
@@ -143,37 +151,38 @@ body{
 .card.vis{display:block}
 .card.in{opacity:1;transform:translateY(0)}
 .card-bar{
-  position:absolute;top:0;left:0;right:0;height:3px;
-  background:linear-gradient(90deg,var(--lv) 0%,var(--pk) 100%);
-  border-radius:22px 22px 0 0;
+  position:absolute;top:0;left:0;right:0;height:10px;
+  background:linear-gradient(90deg,#D4A8C8 0%,#E8B88C 100%);
 }
 .card-body{display:flex;gap:12px;align-items:flex-start}
 .card-texts{flex:1;min-width:0}
 
 /* メッセージ：主役 */
 .c-msg{
-  font-size:15px;line-height:1.82;color:var(--tx);font-weight:500;
-  margin-bottom:16px;min-height:2.2em;
+  font-size:18px;line-height:2.0;color:var(--tx);font-weight:700;
+  margin-bottom:22px;min-height:2.2em;
+  letter-spacing:.02em;
 }
 
 /* 行動提案：次の一歩として視認性強化 */
 .c-act-row{
   display:flex;align-items:stretch;
-  border-radius:12px;overflow:hidden;
-  border:1.5px solid var(--pk);
-  background:var(--pk-l);
+  border-radius:14px;overflow:hidden;
+  border:2px solid #E8C0A0;
+  background:#FFF3E8;
   opacity:0;
   transition:opacity .35s ease;
+  box-shadow:0 3px 12px rgba(220,160,100,.18);
 }
 .c-act-icon{
-  width:34px;flex-shrink:0;
-  background:var(--pk);
+  width:40px;flex-shrink:0;
+  background:linear-gradient(160deg,#E8B88C,#D4A0A0);
   display:flex;align-items:center;justify-content:center;
-  font-size:12px;color:#fff;font-weight:700;
+  font-size:14px;color:#fff;font-weight:700;
 }
 .c-act-text{
-  padding:10px 12px;
-  font-size:13px;color:var(--tx-m);line-height:1.5;font-weight:500;
+  padding:13px 14px;
+  font-size:14px;color:#6A4E3C;line-height:1.6;font-weight:600;
   flex:1;
 }
 
@@ -322,26 +331,6 @@ body{
   padding:3px 10px;font-size:11px;cursor:pointer;margin-left:6px;vertical-align:middle;
 }
 
-/* ── Calendar ── */
-.cal-sec{padding-bottom:44px}
-.cal-toggle{
-  width:100%;background:none;border:none;cursor:pointer;
-  display:flex;align-items:center;gap:7px;
-  font-size:10.5px;font-weight:700;color:var(--tx-s);letter-spacing:.16em;
-  padding:4px 0 16px;-webkit-tap-highlight-color:transparent;
-}
-.cal-toggle::after{content:'';flex:1;height:1px;background:var(--be)}
-.cal-arrow{font-size:10px;transition:transform .25s;margin-left:2px}
-.cal-open .cal-arrow{transform:rotate(180deg)}
-.cal-body{display:none;padding-bottom:8px}
-.cal-body.open{display:block}
-.cal-month-label{font-size:11.5px;font-weight:700;color:var(--tx-m);text-align:center;margin-bottom:10px}
-.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:3px}
-.cal-dow{font-size:9px;color:var(--tx-s);text-align:center;padding-bottom:4px}
-.cal-day{aspect-ratio:1;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;color:var(--tx-s)}
-.cal-day.visited{background:var(--lv-l);color:var(--lv-d);font-weight:600}
-.cal-day.today{outline:1.5px solid var(--lv);outline-offset:1px}
-
 /* ── Onboarding ── */
 .onboard{
   position:fixed;inset:0;z-index:2000;background:var(--cr);
@@ -455,15 +444,6 @@ body{
     <button class="fav-nav-btn" id="favPrev" onclick="navFav(-1)" aria-label="前へ">‹</button>
     <button class="fav-nav-btn" id="favNext" onclick="navFav(1)" aria-label="次へ">›</button>
   </div>
-</div>
-
-<div class="div" style="margin-top:8px"></div>
-<div class="cal-sec">
-  <button class="cal-toggle" id="calToggle" aria-expanded="false" aria-controls="calBody">
-    <span>ここまで来た日</span>
-    <span class="cal-arrow">▾</span>
-  </button>
-  <div class="cal-body" id="calBody" role="region" aria-label="カレンダー"></div>
 </div>
 
 <div class="cel" id="cel" aria-hidden="true"></div>
@@ -686,7 +666,7 @@ document.getElementById('sceneC').addEventListener('click',e=>{
 function go(){
   if(!mood||!scene){showToast('気分と場面を選んでね 🌸');return;}
   vib([10,30,10]);playPop();
-  trackChip('mood',mood);trackChip('scene',scene);trackDay();
+  trackChip('mood',mood);trackChip('scene',scene);
   const d=D[mood][scene];
   cur={mood,scene,...d};
   document.getElementById('appSub').textContent = mood + ' × ' + scene;
@@ -876,40 +856,6 @@ function showToast(msg){
   clearTimeout(toastTimer);
   toastTimer=setTimeout(()=>t.classList.remove('on'),2300);
 }
-
-// ── Calendar ──
-function trackDay(){
-  const today=new Date().toISOString().slice(0,10);
-  const days=JSON.parse(localStorage.getItem('ht_days')||'[]');
-  if(!days.includes(today)){days.push(today);localStorage.setItem('ht_days',JSON.stringify(days));}
-  if(document.getElementById('calBody').classList.contains('open'))renderCalendar();
-}
-function renderCalendar(){
-  const body=document.getElementById('calBody');if(!body)return;
-  const days=new Set(JSON.parse(localStorage.getItem('ht_days')||'[]'));
-  const now=new Date(),y=now.getFullYear(),mo=now.getMonth();
-  const today=now.toISOString().slice(0,10);
-  const firstDow=new Date(y,mo,1).getDay();
-  const dim=new Date(y,mo+1,0).getDate();
-  const mn=['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'];
-  let h=`<div class="cal-month-label">${y}年 ${mn[mo]}</div><div class="cal-grid">
-    ${'日月火水木金土'.split('').map(d=>`<div class="cal-dow">${d}</div>`).join('')}
-    ${'_'.repeat(firstDow).split('').map(()=>'<div class="cal-day"></div>').join('')}`;
-  for(let d=1;d<=dim;d++){
-    const ds=`${y}-${String(mo+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
-    const vis=days.has(ds),tod=ds===today;
-    const cls=['cal-day',vis?'visited':'',tod?'today':''].filter(Boolean).join(' ');
-    h+=`<div class="${cls}">${vis||tod?d:''}</div>`;
-  }
-  body.innerHTML=h+'</div>';
-}
-document.getElementById('calToggle').addEventListener('click',function(){
-  this.classList.toggle('cal-open');
-  const body=document.getElementById('calBody');
-  body.classList.toggle('open');
-  this.setAttribute('aria-expanded',body.classList.contains('open'));
-  if(body.classList.contains('open'))renderCalendar();
-});
 
 // ── Chip frequency sort ──
 function trackChip(type,val){
