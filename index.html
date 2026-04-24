@@ -87,24 +87,32 @@ body{
 .lbl::after{content:'';flex:1;height:1px;background:var(--be)}
 
 /* ── Chips ── */
-.chips{display:flex;flex-wrap:wrap;gap:7px}
+.chips{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 .chip{
-  background:var(--wh);border:1.5px solid var(--be);border-radius:22px;
-  padding:7px 14px;font-size:12.5px;color:var(--tx-m);
+  background:var(--wh);border:1.5px solid var(--be);border-radius:14px;
+  padding:12px 8px 10px;
+  font-size:12px;color:var(--tx-m);
   cursor:pointer;
-  transition:background .16s,border-color .16s,color .16s,box-shadow .16s,transform .1s;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;
+  min-height:62px;
+  transition:background .16s,border-color .16s,color .16s,box-shadow .16s,transform .12s,opacity .16s;
   user-select:none;-webkit-tap-highlight-color:transparent;
   box-shadow:var(--sh-s);
+  line-height:1.3;text-align:center;
 }
-.chip:active{transform:scale(.96)}
+.chip-ico{font-size:22px;line-height:1;display:block}
+.chip-txt{font-size:12px;display:block}
+.chip:active{transform:scale(.95)}
 .mood-chips .chip.on{
-  background:var(--lv);border-color:var(--lv);color:#fff;font-weight:600;
-  box-shadow:0 3px 12px rgba(160,140,210,.34);
+  background:var(--lv-l);border-color:var(--lv);color:var(--lv-d);font-weight:600;
+  box-shadow:0 3px 12px rgba(160,140,210,.22);
 }
 .scene-chips .chip.on{
-  background:var(--pk);border-color:var(--pk);color:#fff;font-weight:600;
-  box-shadow:0 3px 12px rgba(200,154,172,.34);
+  background:var(--pk-l);border-color:var(--pk);color:var(--pk-d);font-weight:600;
+  box-shadow:0 3px 12px rgba(200,154,172,.22);
 }
+.chips.dimmed .chip:not(.on){opacity:.42;transform:scale(.97)}
+.scene-chips .chip:last-child{grid-column:1/-1;flex-direction:row;gap:10px;min-height:48px;padding:10px 16px;justify-content:flex-start}
 
 /* ── Main Button ── */
 .btn-wrap{padding:4px 0 18px}
@@ -381,33 +389,33 @@ body{
   <div class="logo" aria-hidden="true">✦</div>
   <div class="app-name">ヒトオシ</div>
   <div class="app-hook" id="appHook">仕事、ちょっとしんどい？</div>
-  <div class="app-sub">気分と場面を選んで、やさしいひと押しを届けます</div>
+  <div class="app-sub" id="appSub">気分と場面を選んで、やさしいひと押しを届けます</div>
 </header>
 
 <section class="sec">
   <div class="lbl">いまの気分</div>
   <div class="chips mood-chips" id="moodC" role="group" aria-label="気分を選ぶ">
-    <button class="chip" data-v="だるい" aria-pressed="false">😪 だるい</button>
-    <button class="chip" data-v="眠い" aria-pressed="false">💤 眠い</button>
-    <button class="chip" data-v="不安" aria-pressed="false">😰 不安</button>
-    <button class="chip" data-v="行きたくない" aria-pressed="false">🚫 行きたくない</button>
-    <button class="chip" data-v="人に会いたくない" aria-pressed="false">🙈 人に会いたくない</button>
-    <button class="chip" data-v="何もしたくない" aria-pressed="false">🌫️ 何もしたくない</button>
-    <button class="chip" data-v="めんどくさい" aria-pressed="false">😮‍💨 めんどくさい</button>
-    <button class="chip" data-v="緊張する" aria-pressed="false">💦 緊張する</button>
-    <button class="chip" data-v="気分が重い" aria-pressed="false">☁️ 気分が重い</button>
-    <button class="chip" data-v="疲れている" aria-pressed="false">🪫 疲れている</button>
+    <button class="chip" data-v="だるい" aria-pressed="false"><span class="chip-ico">😪</span><span class="chip-txt">だるい</span></button>
+    <button class="chip" data-v="眠い" aria-pressed="false"><span class="chip-ico">💤</span><span class="chip-txt">眠い</span></button>
+    <button class="chip" data-v="不安" aria-pressed="false"><span class="chip-ico">😰</span><span class="chip-txt">不安</span></button>
+    <button class="chip" data-v="行きたくない" aria-pressed="false"><span class="chip-ico">🚫</span><span class="chip-txt">行きたくない</span></button>
+    <button class="chip" data-v="人に会いたくない" aria-pressed="false"><span class="chip-ico">🙈</span><span class="chip-txt">人に会いたくない</span></button>
+    <button class="chip" data-v="何もしたくない" aria-pressed="false"><span class="chip-ico">🌫️</span><span class="chip-txt">何もしたくない</span></button>
+    <button class="chip" data-v="めんどくさい" aria-pressed="false"><span class="chip-ico">😮‍💨</span><span class="chip-txt">めんどくさい</span></button>
+    <button class="chip" data-v="緊張する" aria-pressed="false"><span class="chip-ico">💦</span><span class="chip-txt">緊張する</span></button>
+    <button class="chip" data-v="気分が重い" aria-pressed="false"><span class="chip-ico">☁️</span><span class="chip-txt">気分が重い</span></button>
+    <button class="chip" data-v="疲れている" aria-pressed="false"><span class="chip-ico">🪫</span><span class="chip-txt">疲れている</span></button>
   </div>
 </section>
 
 <section class="sec">
   <div class="lbl">いまどこ？</div>
   <div class="chips scene-chips" id="sceneC" role="group" aria-label="場所を選ぶ">
-    <button class="chip" data-v="出勤前" aria-pressed="false">🌅 出勤前</button>
-    <button class="chip" data-v="通勤中" aria-pressed="false">🚃 通勤中</button>
-    <button class="chip" data-v="仕事前" aria-pressed="false">💼 仕事前</button>
-    <button class="chip" data-v="昼休み中" aria-pressed="false">☕ 昼休み中</button>
-    <button class="chip" data-v="午後つらいとき" aria-pressed="false">🌇 午後つらいとき</button>
+    <button class="chip" data-v="出勤前" aria-pressed="false"><span class="chip-ico">🌅</span><span class="chip-txt">出勤前</span></button>
+    <button class="chip" data-v="通勤中" aria-pressed="false"><span class="chip-ico">🚃</span><span class="chip-txt">通勤中</span></button>
+    <button class="chip" data-v="仕事前" aria-pressed="false"><span class="chip-ico">💼</span><span class="chip-txt">仕事前</span></button>
+    <button class="chip" data-v="昼休み中" aria-pressed="false"><span class="chip-ico">☕</span><span class="chip-txt">昼休み中</span></button>
+    <button class="chip" data-v="午後つらいとき" aria-pressed="false"><span class="chip-ico">🌇</span><span class="chip-txt">午後つらいとき</span></button>
   </div>
 </section>
 
@@ -661,12 +669,14 @@ document.getElementById('moodC').addEventListener('click',e=>{
   const ch=e.target.closest('.chip');if(!ch)return;
   document.querySelectorAll('#moodC .chip').forEach(c=>{c.classList.remove('on');c.setAttribute('aria-pressed','false');});
   ch.classList.add('on');ch.setAttribute('aria-pressed','true');
+  document.getElementById('moodC').classList.add('dimmed');
   mood=ch.dataset.v;playPop();vib(8);
 });
 document.getElementById('sceneC').addEventListener('click',e=>{
   const ch=e.target.closest('.chip');if(!ch)return;
   document.querySelectorAll('#sceneC .chip').forEach(c=>{c.classList.remove('on');c.setAttribute('aria-pressed','false');});
   ch.classList.add('on');ch.setAttribute('aria-pressed','true');
+  document.getElementById('sceneC').classList.add('dimmed');
   scene=ch.dataset.v;playPop();vib(8);
   // 場面に合わせてボタン文言を変化
   document.getElementById('mainBtn').textContent=SCENE_BTN[scene]||DEFAULT_BTN;
@@ -679,6 +689,7 @@ function go(){
   trackChip('mood',mood);trackChip('scene',scene);trackDay();
   const d=D[mood][scene];
   cur={mood,scene,...d};
+  document.getElementById('appSub').textContent = mood + ' × ' + scene;
   document.getElementById('cAct').textContent=d.a;
   faved=favs.some(f=>f.mood===mood&&f.scene===scene);
   syncFav();
