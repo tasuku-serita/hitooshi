@@ -3,16 +3,18 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>ヒトオシ</title>
+<title>ヒトオシ — しんどい日のやさしい1タップ</title>
 <style>
 :root {
   --cr: #FDF5EC;
   --lv: #C4B4D8;
   --lv-l: #EDE8F5;
   --lv-m: #B0A0CC;
+  --lv-d: #9A86B6;
   --pk: #E0B8C4;
   --pk-l: #F8ECF0;
   --pk-m: #C89AAC;
+  --pk-d: #B88A9C;
   --be: #E8DDD0;
   --be-d: #D0C0B0;
   --tx: #4E3E4C;
@@ -38,12 +40,9 @@ body{
 
 /* ── Header ── */
 .hd{
-  padding:36px 4px 28px;
+  padding:36px 4px 26px;
   position:relative;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  gap:6px;
+  display:flex;flex-direction:column;align-items:center;gap:4px;
 }
 .snd-btn{
   position:absolute;top:36px;right:4px;
@@ -55,15 +54,27 @@ body{
 }
 .snd-btn:hover{box-shadow:0 3px 14px rgba(130,90,120,.17)}
 .logo{
-  width:38px;height:38px;
+  width:36px;height:36px;
   background:linear-gradient(135deg,var(--lv) 0%,var(--pk) 100%);
-  border-radius:13px;
+  border-radius:12px;
   display:flex;align-items:center;justify-content:center;
-  font-size:18px;color:#fff;
-  box-shadow:0 3px 12px rgba(170,130,190,.28);
+  font-size:17px;color:#fff;
+  box-shadow:0 3px 10px rgba(170,130,190,.26);
+  margin-bottom:2px;
 }
-.app-name{font-size:27px;font-weight:800;letter-spacing:.18em;color:var(--tx)}
-.app-sub{font-size:11.5px;color:var(--tx-s);letter-spacing:.05em;line-height:1.65;text-align:center}
+.app-name{font-size:26px;font-weight:800;letter-spacing:.18em;color:var(--tx)}
+/* 共感フック：初見3秒で「自分向け」と感じさせる */
+.app-hook{
+  font-size:15px;font-weight:700;color:var(--tx);
+  letter-spacing:.02em;line-height:1.5;text-align:center;
+  margin-top:3px;
+}
+/* ベネフィット説明：短く・理解重視 */
+.app-sub{
+  font-size:11px;color:var(--tx-s);
+  letter-spacing:.03em;line-height:1.6;text-align:center;
+  margin-top:1px;
+}
 
 /* ── Section ── */
 .sec{margin-bottom:20px}
@@ -103,7 +114,7 @@ body{
   border:none;border-radius:26px;
   padding:17px 24px;
   font-size:15.5px;font-weight:700;color:#fff;
-  cursor:pointer;letter-spacing:.09em;
+  cursor:pointer;letter-spacing:.08em;
   transition:transform .15s,box-shadow .15s;
   box-shadow:0 5px 20px rgba(175,125,165,.33);
   -webkit-tap-highlight-color:transparent;
@@ -114,7 +125,7 @@ body{
 /* ── Result Card ── */
 .card{
   background:var(--wh);border-radius:22px;
-  padding:26px 20px 22px;
+  padding:24px 20px 20px;
   margin-bottom:12px;
   box-shadow:var(--sh);
   display:none;opacity:0;transform:translateY(14px);
@@ -128,30 +139,90 @@ body{
   background:linear-gradient(90deg,var(--lv) 0%,var(--pk) 100%);
   border-radius:22px 22px 0 0;
 }
-.card-body{display:flex;gap:14px;align-items:flex-end}
-.card-texts{flex:1}
-.c-msg{font-size:14.5px;line-height:1.82;color:var(--tx);font-weight:500;margin-bottom:15px}
-.c-act-lbl{font-size:9.5px;font-weight:700;color:var(--pk-m);letter-spacing:.12em;margin-bottom:5px}
-.c-act{
-  background:var(--pk-l);border-radius:11px;
-  padding:9px 13px;font-size:12.5px;color:var(--tx-m);line-height:1.5;
+.card-body{display:flex;gap:12px;align-items:flex-start}
+.card-texts{flex:1;min-width:0}
+
+/* メッセージ：主役 */
+.c-msg{
+  font-size:15px;line-height:1.82;color:var(--tx);font-weight:500;
+  margin-bottom:16px;min-height:2.2em;
 }
+
+/* 行動提案：次の一歩として視認性強化 */
+.c-act-row{
+  display:flex;align-items:stretch;
+  border-radius:12px;overflow:hidden;
+  border:1.5px solid var(--pk);
+  background:var(--pk-l);
+  opacity:0;
+  transition:opacity .35s ease;
+}
+.c-act-icon{
+  width:34px;flex-shrink:0;
+  background:var(--pk);
+  display:flex;align-items:center;justify-content:center;
+  font-size:12px;color:#fff;font-weight:700;
+}
+.c-act-text{
+  padding:10px 12px;
+  font-size:13px;color:var(--tx-m);line-height:1.5;font-weight:500;
+  flex:1;
+}
+
+/* マスコット：控えめ・達成時に活きる */
 .mascot-box{
-  width:66px;flex-shrink:0;
+  width:52px;flex-shrink:0;
   display:flex;align-items:flex-end;justify-content:center;
-  padding-bottom:2px;
+  padding-top:4px;padding-bottom:2px;
 }
 .mascot{
-  width:60px;height:60px;
+  width:48px;height:48px;
   object-fit:contain;object-position:center;
+  opacity:.75;transition:opacity .3s;
 }
-.mascot.pop{animation:mpop .55s cubic-bezier(.34,1.56,.64,1)}
+.mascot.pop{animation:mpop .55s cubic-bezier(.34,1.56,.64,1);opacity:1}
 @keyframes mpop{
   0%{transform:scale(1) rotate(0)}
-  38%{transform:scale(1.3) rotate(-7deg)}
-  68%{transform:scale(.93) rotate(3deg)}
+  38%{transform:scale(1.38) rotate(-8deg)}
+  68%{transform:scale(.91) rotate(4deg)}
   100%{transform:scale(1) rotate(0)}
 }
+
+/* ── Particles ── */
+.c-particle{
+  position:absolute;border-radius:50%;
+  opacity:0;pointer-events:none;
+  will-change:transform,opacity;
+  animation:particleUp 1.8s ease-out forwards;
+}
+@keyframes particleUp{
+  0%{opacity:0;transform:translate3d(0,0,0)}
+  20%{opacity:.55}
+  80%{opacity:.35}
+  100%{opacity:0;transform:translate3d(0,-58px,0)}
+}
+
+/* ── Flower ── */
+.flower-svg{
+  position:absolute;top:50%;left:50%;
+  width:100px;height:100px;overflow:visible;
+  transform:translate(-50%,-50%) scale(0);
+  pointer-events:none;z-index:10;
+  animation:flowerBloom .9s cubic-bezier(.34,1.56,.64,1) forwards;
+}
+@keyframes flowerBloom{
+  0%{transform:translate(-50%,-50%) scale(0);opacity:0}
+  12%{opacity:1}
+  75%{opacity:1;transform:translate(-50%,-50%) scale(1)}
+  100%{opacity:0;transform:translate(-50%,-50%) scale(1.06)}
+}
+.f-p{opacity:0;animation:fPIn .55s ease-out forwards}
+.f-p:nth-child(2){animation-delay:.07s}
+.f-p:nth-child(3){animation-delay:.14s}
+.f-p:nth-child(4){animation-delay:.21s}
+.f-p:nth-child(5){animation-delay:.28s}
+.f-ctr{opacity:0;animation:fPIn .4s ease-out .16s forwards}
+@keyframes fPIn{to{opacity:1}}
 
 /* ── Action Buttons ── */
 .act-btns{display:none;gap:9px;margin-bottom:22px}
@@ -168,8 +239,8 @@ body{
   flex:2;
   background:linear-gradient(135deg,#ECD4F4 0%,#F4D4DC 100%);
   border:none;border-radius:18px;
-  padding:11px 8px;
-  font-size:13.5px;font-weight:700;color:var(--tx);
+  padding:12px 8px;
+  font-size:14px;font-weight:700;color:var(--tx);
   cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;
   transition:transform .15s,box-shadow .15s;
   box-shadow:0 4px 14px rgba(175,145,195,.2);
@@ -181,21 +252,39 @@ body{
 /* ── Divider ── */
 .div{height:1px;background:linear-gradient(90deg,transparent,var(--be),transparent);margin:4px 0 22px;display:none}
 
-/* ── Favorites ── */
-.fav-sec{display:none;padding-bottom:44px}
+/* ── Favorites Carousel ── */
+.fav-sec{display:none;padding-bottom:8px}
 .fav-sec.vis{display:block}
-.fav-ttl{font-size:10.5px;font-weight:700;color:var(--tx-s);letter-spacing:.16em;margin-bottom:12px}
-.fav-list{display:flex;flex-direction:column;gap:9px}
-.fav-item{
-  background:var(--wh);border-radius:16px;padding:12px 13px;
-  box-shadow:0 2px 10px rgba(130,90,120,.08);
-  display:flex;align-items:flex-start;gap:9px;
+.fav-ttl{font-size:10.5px;font-weight:700;color:var(--tx-s);letter-spacing:.16em;margin-bottom:10px}
+.fav-indicator{font-size:10px;color:var(--tx-s);margin-bottom:8px;min-height:14px}
+.fav-stage{position:relative;overflow:hidden;transition:opacity .15s ease-out,transform .15s ease-out}
+.fav-card{background:var(--wh);border-radius:16px;padding:14px 13px;box-shadow:0 2px 10px rgba(130,90,120,.08)}
+.fav-card-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:4px}
+.fav-tag{font-size:10px;color:var(--tx-s)}
+.fav-date{font-size:9.5px;color:var(--tx-s);opacity:.7;margin-top:2px}
+.fav-msg{font-size:12.5px;color:var(--tx-m);line-height:1.55;margin:6px 0}
+.fav-bottom{display:flex;align-items:center;justify-content:space-between}
+.fav-step{font-size:10px;color:var(--pk-m)}
+.fav-del{
+  background:none;border:none;color:var(--be-d);cursor:pointer;
+  font-size:16px;line-height:1;padding:2px 4px;
+  transition:color .15s;user-select:none;-webkit-tap-highlight-color:transparent;
 }
-.fav-con{flex:1}
-.fav-tag{font-size:10px;color:var(--tx-s);margin-bottom:3px}
-.fav-msg{font-size:12.5px;color:var(--tx-m);line-height:1.55}
-.fav-del{background:none;border:none;color:var(--be-d);cursor:pointer;font-size:17px;line-height:1;padding:0;flex-shrink:0;transition:color .15s}
 .fav-del:hover{color:var(--pk-m)}
+.fav-save{
+  background:none;border:none;font-size:11px;color:var(--tx-s);
+  cursor:pointer;padding:2px 4px;transition:color .15s;-webkit-tap-highlight-color:transparent;
+}
+.fav-save:hover{color:var(--pk-m)}
+.fav-nav-row{display:flex;justify-content:center;gap:16px;margin-top:10px}
+.fav-nav-btn{
+  background:none;border:1.5px solid var(--be);border-radius:50%;
+  width:30px;height:30px;font-size:15px;color:var(--tx-s);
+  cursor:pointer;display:flex;align-items:center;justify-content:center;
+  transition:all .18s;-webkit-tap-highlight-color:transparent;
+}
+.fav-nav-btn:hover:not(:disabled){border-color:var(--pk);color:var(--pk-m)}
+.fav-nav-btn:disabled{opacity:.28;cursor:default}
 
 /* ── Confetti ── */
 .cel{position:fixed;inset:0;pointer-events:none;z-index:999;display:none}
@@ -219,7 +308,66 @@ body{
   backdrop-filter:blur(8px);white-space:nowrap;
 }
 .toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
+.toast.interact{pointer-events:auto}
+.toast-del-btn{
+  background:var(--pk-m);color:#fff;border:none;border-radius:10px;
+  padding:3px 10px;font-size:11px;cursor:pointer;margin-left:6px;vertical-align:middle;
+}
 
+/* ── Calendar ── */
+.cal-sec{padding-bottom:44px}
+.cal-toggle{
+  width:100%;background:none;border:none;cursor:pointer;
+  display:flex;align-items:center;gap:7px;
+  font-size:10.5px;font-weight:700;color:var(--tx-s);letter-spacing:.16em;
+  padding:4px 0 16px;-webkit-tap-highlight-color:transparent;
+}
+.cal-toggle::after{content:'';flex:1;height:1px;background:var(--be)}
+.cal-arrow{font-size:10px;transition:transform .25s;margin-left:2px}
+.cal-open .cal-arrow{transform:rotate(180deg)}
+.cal-body{display:none;padding-bottom:8px}
+.cal-body.open{display:block}
+.cal-month-label{font-size:11.5px;font-weight:700;color:var(--tx-m);text-align:center;margin-bottom:10px}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:3px}
+.cal-dow{font-size:9px;color:var(--tx-s);text-align:center;padding-bottom:4px}
+.cal-day{aspect-ratio:1;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;color:var(--tx-s)}
+.cal-day.visited{background:var(--lv-l);color:var(--lv-d);font-weight:600}
+.cal-day.today{outline:1.5px solid var(--lv);outline-offset:1px}
+
+/* ── Onboarding ── */
+.onboard{
+  position:fixed;inset:0;z-index:2000;background:var(--cr);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:40px 28px max(40px,env(safe-area-inset-bottom,40px));text-align:center;
+}
+.ob-steps-wrap{position:relative;flex:1;width:100%;display:flex;align-items:center;justify-content:center}
+.ob-step{
+  position:absolute;width:100%;
+  display:flex;flex-direction:column;align-items:center;gap:18px;
+  opacity:0;pointer-events:none;transition:opacity .4s ease;
+}
+.ob-step.on{opacity:1;pointer-events:auto}
+.ob-icon{font-size:46px}
+.ob-txt{font-size:19px;font-weight:800;color:var(--tx);line-height:1.55;letter-spacing:.02em}
+.ob-chips-demo{display:flex;flex-wrap:wrap;gap:6px;justify-content:center}
+.ob-chip{background:var(--wh);border:1.5px solid var(--be);border-radius:20px;padding:5px 12px;font-size:12px;color:var(--tx-m)}
+.ob-chip.hi{background:var(--lv);border-color:var(--lv);color:#fff}
+.ob-bottom{display:flex;flex-direction:column;align-items:center;gap:12px;width:100%}
+.ob-dots{display:flex;gap:8px}
+.ob-dot{width:7px;height:7px;border-radius:50%;background:var(--be);transition:background .3s}
+.ob-dot.on{background:var(--lv)}
+.ob-start{
+  width:100%;max-width:260px;
+  background:linear-gradient(135deg,var(--lv-m),var(--pk-m));
+  border:none;border-radius:22px;padding:14px 24px;
+  font-size:15px;font-weight:700;color:#fff;cursor:pointer;
+  box-shadow:0 4px 16px rgba(175,125,165,.3);-webkit-tap-highlight-color:transparent;
+}
+.ob-skip{background:none;border:none;font-size:11.5px;color:var(--tx-s);cursor:pointer;padding:4px}
+
+@media(prefers-reduced-motion:reduce){
+  *{animation-duration:.01s!important;animation-delay:0s!important;transition-duration:.01s!important}
+}
 @media(min-width:480px){body{padding-bottom:52px}.hd{padding-top:48px}}
 @media(max-width:360px){.chip{font-size:12px;padding:6px 12px}.app-name{font-size:24px}}
 </style>
@@ -227,52 +375,55 @@ body{
 <body>
 
 <header class="hd">
-  <button class="snd-btn" id="sndBtn" onclick="toggleSnd()">
-    <span id="sndIco">🔔</span><span id="sndTxt">音あり</span>
+  <button class="snd-btn" id="sndBtn" onclick="toggleSnd()" aria-label="応援音切替">
+    <span id="sndIco">🔔</span><span id="sndTxt">応援あり</span>
   </button>
-  <div class="logo">✦</div>
+  <div class="logo" aria-hidden="true">✦</div>
   <div class="app-name">ヒトオシ</div>
-  <div class="app-sub">仕事に行きたくない朝の<br>やさしい 1 タップ応援</div>
+  <div class="app-hook" id="appHook">仕事、ちょっとしんどい？</div>
+  <div class="app-sub">気分と場面を選んで、やさしいひと押しを届けます</div>
 </header>
 
 <section class="sec">
   <div class="lbl">いまの気分</div>
-  <div class="chips mood-chips" id="moodC">
-    <button class="chip" data-v="だるい">😪 だるい</button>
-    <button class="chip" data-v="眠い">💤 眠い</button>
-    <button class="chip" data-v="不安">😰 不安</button>
-    <button class="chip" data-v="行きたくない">🚫 行きたくない</button>
-    <button class="chip" data-v="人に会いたくない">🙈 人に会いたくない</button>
-    <button class="chip" data-v="何もしたくない">🌫️ 何もしたくない</button>
-    <button class="chip" data-v="めんどくさい">😮‍💨 めんどくさい</button>
-    <button class="chip" data-v="緊張する">💦 緊張する</button>
-    <button class="chip" data-v="気分が重い">☁️ 気分が重い</button>
-    <button class="chip" data-v="疲れている">🪫 疲れている</button>
+  <div class="chips mood-chips" id="moodC" role="group" aria-label="気分を選ぶ">
+    <button class="chip" data-v="だるい" aria-pressed="false">😪 だるい</button>
+    <button class="chip" data-v="眠い" aria-pressed="false">💤 眠い</button>
+    <button class="chip" data-v="不安" aria-pressed="false">😰 不安</button>
+    <button class="chip" data-v="行きたくない" aria-pressed="false">🚫 行きたくない</button>
+    <button class="chip" data-v="人に会いたくない" aria-pressed="false">🙈 人に会いたくない</button>
+    <button class="chip" data-v="何もしたくない" aria-pressed="false">🌫️ 何もしたくない</button>
+    <button class="chip" data-v="めんどくさい" aria-pressed="false">😮‍💨 めんどくさい</button>
+    <button class="chip" data-v="緊張する" aria-pressed="false">💦 緊張する</button>
+    <button class="chip" data-v="気分が重い" aria-pressed="false">☁️ 気分が重い</button>
+    <button class="chip" data-v="疲れている" aria-pressed="false">🪫 疲れている</button>
   </div>
 </section>
 
 <section class="sec">
   <div class="lbl">いまどこ？</div>
-  <div class="chips scene-chips" id="sceneC">
-    <button class="chip" data-v="出勤前">🌅 出勤前</button>
-    <button class="chip" data-v="通勤中">🚃 通勤中</button>
-    <button class="chip" data-v="仕事前">💼 仕事前</button>
-    <button class="chip" data-v="昼休み中">☕ 昼休み中</button>
-    <button class="chip" data-v="午後つらいとき">🌇 午後つらいとき</button>
+  <div class="chips scene-chips" id="sceneC" role="group" aria-label="場所を選ぶ">
+    <button class="chip" data-v="出勤前" aria-pressed="false">🌅 出勤前</button>
+    <button class="chip" data-v="通勤中" aria-pressed="false">🚃 通勤中</button>
+    <button class="chip" data-v="仕事前" aria-pressed="false">💼 仕事前</button>
+    <button class="chip" data-v="昼休み中" aria-pressed="false">☕ 昼休み中</button>
+    <button class="chip" data-v="午後つらいとき" aria-pressed="false">🌇 午後つらいとき</button>
   </div>
 </section>
 
 <div class="btn-wrap">
-  <button class="main-btn" onclick="go()">そっと背中を押して ✦</button>
+  <button class="main-btn" id="mainBtn" onclick="go()">そっと背中を押して ✦</button>
 </div>
 
 <div class="card" id="card">
   <div class="card-bar"></div>
   <div class="card-body">
     <div class="card-texts">
-      <div class="c-msg" id="cMsg"></div>
-      <div class="c-act-lbl">✦ ちいさな一歩</div>
-      <div class="c-act" id="cAct"></div>
+      <div class="c-msg" id="cMsg" aria-live="polite"></div>
+      <div class="c-act-row" id="cActRow">
+        <div class="c-act-icon">▷</div>
+        <div class="c-act-text" id="cAct"></div>
+      </div>
     </div>
     <div class="mascot-box">
       <img src="mascot.png" alt="" class="mascot" id="mascot" onerror="this.parentElement.style.display='none'">
@@ -281,99 +432,126 @@ body{
 </div>
 
 <div class="act-btns" id="actBtns">
-  <button class="btn-fav" id="favBtn" onclick="toggleFav()">
-    <span id="favIco">♡</span> お気に入り
+  <button class="btn-fav" id="favBtn" onclick="toggleFav()" aria-label="お気に入りに追加">
+    <span id="favIco" aria-hidden="true">♡</span> お気に入り
   </button>
   <button class="btn-done" onclick="done()">✓ できた！</button>
 </div>
 
 <div class="div" id="div"></div>
 <div class="fav-sec" id="favSec">
-  <div class="fav-ttl">✦ お気に入り</div>
-  <div class="fav-list" id="favList"></div>
+  <div class="fav-ttl">✦ ここまでのヒトオシ</div>
+  <div class="fav-indicator" id="favIndicator"></div>
+  <div class="fav-stage" id="favStage"></div>
+  <div class="fav-nav-row">
+    <button class="fav-nav-btn" id="favPrev" onclick="navFav(-1)" aria-label="前へ">‹</button>
+    <button class="fav-nav-btn" id="favNext" onclick="navFav(1)" aria-label="次へ">›</button>
+  </div>
 </div>
 
-<div class="cel" id="cel"></div>
-<div class="toast" id="toast"></div>
+<div class="div" style="margin-top:8px"></div>
+<div class="cal-sec">
+  <button class="cal-toggle" id="calToggle" aria-expanded="false" aria-controls="calBody">
+    <span>ここまで来た日</span>
+    <span class="cal-arrow">▾</span>
+  </button>
+  <div class="cal-body" id="calBody" role="region" aria-label="カレンダー"></div>
+</div>
+
+<div class="cel" id="cel" aria-hidden="true"></div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <script>
+// ── Message Data ──
 const D = {
   "だるい":{
-    "出勤前":      {m:"だるいままでいいよ。だるいまま着替えた人、えらい。",           a:"服を1枚だけ選んでみる"},
-    "通勤中":      {m:"だるいまま乗れてるじゃん。それだけで今日の主役。",            a:"窓の外を5秒だけぼーっと見てみる"},
-    "仕事前":      {m:"だるくても席についてれば、それでOKです今日は。",             a:"お茶かお水をひとくち飲む"},
-    "昼休み中":    {m:"午前中よく来たよ。だるいのに来たんだから。",                 a:"目を5秒だけ閉じてみる"},
-    "午後つらいとき":{m:"あとちょっとだけ、だるいまま座ってればいい。",             a:"背筋だけちょっと伸ばしてみる"}
+    "出勤前":        {m:"だるいままでいいよ。だるいまま着替えた人、えらい。",           a:"服を1枚だけ選んでみる"},
+    "通勤中":        {m:"だるいまま乗れてるじゃん。それだけで今日の主役。",            a:"窓の外を5秒だけぼーっと見てみる"},
+    "仕事前":        {m:"だるくても席についてれば、それでOKです今日は。",             a:"お茶かお水をひとくち飲む"},
+    "昼休み中":      {m:"午前中よく来たよ。だるいのに来たんだから。",                 a:"目を5秒だけ閉じてみる"},
+    "午後つらいとき": {m:"あとちょっとだけ、だるいまま座ってればいい。",              a:"背筋だけちょっと伸ばしてみる"}
   },
   "眠い":{
-    "出勤前":      {m:"眠いのは夜ちゃんと生きた証拠。えらいよ。",                  a:"顔を洗うか、冷たい水を飲む"},
-    "通勤中":      {m:"眠いまま乗れてる、すごいよ。寝ててもいいよ途中まで。",        a:"目を閉じて揺られてていい"},
-    "仕事前":      {m:"眠たい目で画面見てるの、がんばってるよ。",                  a:"水かお茶を飲んで、深呼吸1回"},
-    "昼休み中":    {m:"眠いなら寝ていい。昼休みは合法的な充電タイム。",             a:"15分だけ目を閉じてみる"},
-    "午後つらいとき":{m:"眠いまま午後突入、今日のあなたほんとにえらい。",           a:"席を立ってちょっとだけ歩く"}
+    "出勤前":        {m:"眠いのは夜ちゃんと生きた証拠。えらいよ。",                   a:"顔を洗うか、冷たい水を飲む"},
+    "通勤中":        {m:"眠いまま乗れてる、すごいよ。寝ててもいいよ途中まで。",        a:"目を閉じて揺られてていい"},
+    "仕事前":        {m:"眠たい目で画面見てるの、がんばってるよ。",                   a:"水かお茶を飲んで、深呼吸1回"},
+    "昼休み中":      {m:"眠いなら寝ていい。昼休みは合法的な充電タイム。",              a:"15分だけ目を閉じてみる"},
+    "午後つらいとき": {m:"眠いまま午後突入、今日のあなたほんとにえらい。",            a:"席を立ってちょっとだけ歩く"}
   },
   "不安":{
-    "出勤前":      {m:"不安なまま行く、それが一番つよい。",                        a:"深呼吸を3回だけしてみる"},
-    "通勤中":      {m:"不安のままで着けばいい。揺られながらそれでいい。",            a:"好きな音楽を1曲だけかけてみる"},
-    "仕事前":      {m:"不安なのは、ちゃんと考えてる人の証拠かもね。",               a:"まず1つだけ、小さいこと片付けてみる"},
-    "昼休み中":    {m:"不安な午前中を乗り越えたね。よく乗り越えた。",               a:"空や外の景色を少し眺めてみる"},
-    "午後つらいとき":{m:"不安なままここまで来た、それだけで十分すごい。",            a:"肩の力を抜いて、深呼吸1回"}
+    "出勤前":        {m:"不安なまま行く、それが一番つよい。",                         a:"深呼吸を3回だけしてみる"},
+    "通勤中":        {m:"不安のままで着けばいい。揺られながらそれでいい。",             a:"好きな音楽を1曲だけかけてみる"},
+    "仕事前":        {m:"不安なのは、ちゃんと考えてる人の証拠かもね。",                a:"まず1つだけ、小さいこと片付けてみる"},
+    "昼休み中":      {m:"不安な午前中を乗り越えたね。よく乗り越えた。",                a:"空や外の景色を少し眺めてみる"},
+    "午後つらいとき": {m:"不安なままここまで来た、それだけで十分すごい。",             a:"肩の力を抜いて、深呼吸1回"}
   },
   "行きたくない":{
-    "出勤前":      {m:"行きたくないのわかる。でもカバン持てたじゃん。",              a:"カバンを玄関まで持っていく、それだけ"},
-    "通勤中":      {m:"行きたくなかったのに電車乗ってる、もうすごい。",              a:"今日帰ったら何しようかだけ考える"},
-    "仕事前":      {m:"行きたくなかったのにいる。今日の自分に拍手。",               a:"まず5分だけ、時計を見ながらやってみる"},
-    "昼休み中":    {m:"行きたくなかったのに午前中こなした、偉すぎる。",              a:"今夜の自分へのご褒美を決めてみる"},
-    "午後つらいとき":{m:"行きたくなかった日に帰れたら、それは勝ちです。",           a:"退勤後の楽しみをスマホのメモに書く"}
+    "出勤前":        {m:"行きたくないのわかる。でもカバン持てたじゃん。",               a:"カバンを玄関まで持っていく、それだけ"},
+    "通勤中":        {m:"行きたくなかったのに電車乗ってる、もうすごい。",               a:"今日帰ったら何しようかだけ考える"},
+    "仕事前":        {m:"行きたくなかったのにいる。今日の自分に拍手。",                 a:"まず5分だけ、時計を見ながらやってみる"},
+    "昼休み中":      {m:"行きたくなかったのに午前中こなした、偉すぎる。",               a:"今夜の自分へのご褒美を決めてみる"},
+    "午後つらいとき": {m:"行きたくなかった日に帰れたら、それは勝ちです。",             a:"退勤後の楽しみをスマホのメモに書く"}
   },
   "人に会いたくない":{
-    "出勤前":      {m:"挨拶だけでいいよ。それだけでじゅうぶん。",                  a:"最低限の挨拶だけにする、と心の中で決める"},
-    "通勤中":      {m:"イヤホンという壁、最高の発明だよね。",                      a:"好きなプレイリストで自分の世界に入る"},
-    "仕事前":      {m:"今日は必要最低限だけ返事すればいい日にしよう。",             a:"必要な人だけに挨拶、と心の中で決める"},
-    "昼休み中":    {m:"一人で食べてもいい。それが最高の休息の日もある。",            a:"一人でこっそり好きなものを食べる"},
-    "午後つらいとき":{m:"会いたくない日に会い続けた自分、えらすぎ。もう少し。",     a:"帰ったら誰にも連絡しない時間を作る、と決める"}
+    "出勤前":        {m:"挨拶だけでいいよ。それだけでじゅうぶん。",                    a:"最低限の挨拶だけにする、と心の中で決める"},
+    "通勤中":        {m:"イヤホンという壁、最高の発明だよね。",                        a:"好きなプレイリストで自分の世界に入る"},
+    "仕事前":        {m:"今日は必要最低限だけ返事すればいい日にしよう。",               a:"必要な人だけに挨拶、と心の中で決める"},
+    "昼休み中":      {m:"一人で食べてもいい。それが最高の休息の日もある。",             a:"一人でこっそり好きなものを食べる"},
+    "午後つらいとき": {m:"会いたくない日に会い続けた自分、えらすぎ。もう少し。",       a:"帰ったら誰にも連絡しない時間を作る、と決める"}
   },
   "何もしたくない":{
-    "出勤前":      {m:"何もしたくないのにここまで起きた、すでに偉い。",             a:"着替えるだけ着替えてみる、それだけでいい"},
-    "通勤中":      {m:"何もしたくないまま乗れてる。輸送されてるだけでえらい。",      a:"窓の外をぼーっと見てていい"},
-    "仕事前":      {m:"何もしたくない時ほど、小さいことをひとつだけ。",             a:"いちばん簡単なタスクを1個だけやる"},
-    "昼休み中":    {m:"何もしたくない昼休みは、何もしなくていい。",                 a:"ただ座って、好きな音楽を聴く"},
-    "午後つらいとき":{m:"何もしたくないのにここまで来た。今日はそれだけで合格。",   a:"5分だけ席を離れて、外の空気を吸う"}
+    "出勤前":        {m:"何もしたくないのにここまで起きた、すでに偉い。",               a:"着替えるだけ着替えてみる、それだけでいい"},
+    "通勤中":        {m:"何もしたくないまま乗れてる。輸送されてるだけでえらい。",       a:"窓の外をぼーっと見てていい"},
+    "仕事前":        {m:"何もしたくない時ほど、小さいことをひとつだけ。",               a:"いちばん簡単なタスクを1個だけやる"},
+    "昼休み中":      {m:"何もしたくない昼休みは、何もしなくていい。",                   a:"ただ座って、好きな音楽を聴く"},
+    "午後つらいとき": {m:"何もしたくないのにここまで来た。今日はそれだけで合格。",     a:"5分だけ席を離れて、外の空気を吸う"}
   },
   "めんどくさい":{
-    "出勤前":      {m:"めんどくさい気持ち、正直でいいよ。でも体だけ動かしてみよ。", a:"まず靴だけ履いてみる"},
-    "通勤中":      {m:"めんどくさいのに乗ってる、それが今日一番の仕事かも。",       a:"今日終わったら何を食べるか決めておく"},
-    "仕事前":      {m:"めんどくさいの全部わかる。でもとりあえず1個だけね。",        a:"いちばん小さなタスクをひとつだけ片す"},
-    "昼休み中":    {m:"午前よくやった。午後もめんどくさいままでいいよ。",           a:"好きなものを食べてエネルギーチャージ"},
-    "午後つらいとき":{m:"めんどくさい気持ち、正直で好き。あとちょっと。",          a:"退勤まであと何時間か確認してみる"}
+    "出勤前":        {m:"めんどくさい気持ち、正直でいいよ。でも体だけ動かしてみよ。",   a:"まず靴だけ履いてみる"},
+    "通勤中":        {m:"めんどくさいのに乗ってる、それが今日一番の仕事かも。",         a:"今日終わったら何を食べるか決めておく"},
+    "仕事前":        {m:"めんどくさいの全部わかる。でもとりあえず1個だけね。",          a:"いちばん小さなタスクをひとつだけ片す"},
+    "昼休み中":      {m:"午前よくやった。午後もめんどくさいままでいいよ。",             a:"好きなものを食べてエネルギーチャージ"},
+    "午後つらいとき": {m:"めんどくさい気持ち、正直で好き。あとちょっと。",             a:"退勤まであと何時間か確認してみる"}
   },
   "緊張する":{
-    "出勤前":      {m:"緊張するってことは、ちゃんと向き合ってる証拠。",             a:"深呼吸：4秒吸って6秒かけて吐く"},
-    "通勤中":      {m:"緊張したまま向かえてる、それだけで十分つよい。",             a:"肩の力を抜いて、遠くを見てみる"},
-    "仕事前":      {m:"緊張しててOK。みんなそれなりに緊張してるよ。",              a:"手のひらに「大丈夫」と書いて握る（内緒で）"},
-    "昼休み中":    {m:"緊張した午前中を乗り越えたね、よくやった。",                a:"温かいものを飲んで、少しだけ体を緩める"},
-    "午後つらいとき":{m:"緊張しながらここまで来た。今日のあなたほんとにすごい。",   a:"ゆっくり深呼吸して、肩を回してみる"}
+    "出勤前":        {m:"緊張するってことは、ちゃんと向き合ってる証拠。",               a:"深呼吸：4秒吸って6秒かけて吐く"},
+    "通勤中":        {m:"緊張したまま向かえてる、それだけで十分つよい。",               a:"肩の力を抜いて、遠くを見てみる"},
+    "仕事前":        {m:"緊張しててOK。みんなそれなりに緊張してるよ。",                a:"手のひらに「大丈夫」と書いて握る（内緒で）"},
+    "昼休み中":      {m:"緊張した午前中を乗り越えたね、よくやった。",                  a:"温かいものを飲んで、少しだけ体を緩める"},
+    "午後つらいとき": {m:"緊張しながらここまで来た。今日のあなたほんとにすごい。",     a:"ゆっくり深呼吸して、肩を回してみる"}
   },
   "気分が重い":{
-    "出勤前":      {m:"気分が重い日は、体だけ動かせばいい。頭は後から追いつく。",   a:"着替えだけしてみる、それだけでいい"},
-    "通勤中":      {m:"重いまま乗れてる、それだけでもう今日は合格点。",             a:"目を閉じて音楽を聴く"},
-    "仕事前":      {m:"気分が重くても体は来てる。今日の自分、えらい。",             a:"お茶をゆっくり飲む、それだけでいい"},
-    "昼休み中":    {m:"重い気分で午前中乗り切ったね、それ相当すごいよ。",           a:"外に出て5分だけぼーっとする"},
-    "午後つらいとき":{m:"気分が重い日こそ、終わった時の軽さが待ってるよ。",        a:"退勤後の好きなことをひとつ決めておく"}
+    "出勤前":        {m:"気分が重い日は、体だけ動かせばいい。頭は後から追いつく。",     a:"着替えだけしてみる、それだけでいい"},
+    "通勤中":        {m:"重いまま乗れてる、それだけでもう今日は合格点。",               a:"目を閉じて音楽を聴く"},
+    "仕事前":        {m:"気分が重くても体は来てる。今日の自分、えらい。",               a:"お茶をゆっくり飲む、それだけでいい"},
+    "昼休み中":      {m:"重い気分で午前中乗り切ったね、それ相当すごいよ。",             a:"外に出て5分だけぼーっとする"},
+    "午後つらいとき": {m:"気分が重い日こそ、終わった時の軽さが待ってるよ。",           a:"退勤後の好きなことをひとつ決めておく"}
   },
   "疲れている":{
-    "出勤前":      {m:"疲れてるのに起きてる、もうそれで十分すごい。",              a:"水をひとくち飲んで、深呼吸する"},
-    "通勤中":      {m:"疲れてるのに来てる、今日もあなたはすごい人です。",           a:"座れたら目を閉じて、ぼーっとしていい"},
-    "仕事前":      {m:"疲れたまま来た、それが今日一番の仕事。",                   a:"いちばん簡単なことから始める"},
-    "昼休み中":    {m:"疲れてるから昼休みがある。今日はしっかり休んで。",           a:"横になれなくても、目を閉じるだけでもいい"},
-    "午後つらいとき":{m:"疲れてるまま午後も来た、ほんとに偉い。あとちょっとだけ。",a:"今夜は早く寝る、と決めておく"}
+    "出勤前":        {m:"疲れてるのに起きてる、もうそれで十分すごい。",                a:"水をひとくち飲んで、深呼吸する"},
+    "通勤中":        {m:"疲れてるのに来てる、今日もあなたはすごい人です。",             a:"座れたら目を閉じて、ぼーっとしていい"},
+    "仕事前":        {m:"疲れたまま来た、それが今日一番の仕事。",                       a:"いちばん簡単なことから始める"},
+    "昼休み中":      {m:"疲れてるから昼休みがある。今日はしっかり休んで。",             a:"横になれなくても、目を閉じるだけでもいい"},
+    "午後つらいとき": {m:"疲れてるまま午後も来た、ほんとに偉い。あとちょっとだけ。",  a:"今夜は早く寝る、と決めておく"}
   }
 };
 
+// 場面別ボタン文言
+const SCENE_BTN = {
+  "出勤前":        "そっと送り出してもらう ✦",
+  "通勤中":        "いまの私にひと押し ✦",
+  "仕事前":        "仕事前に、整えてもらう ✦",
+  "昼休み中":      "午後に向けて、整える ✦",
+  "午後つらいとき": "もうひと息だけ支えてもらう ✦"
+};
+const DEFAULT_BTN = "そっと背中を押して ✦";
+
+// ── State ──
 let mood=null, scene=null, soundOn=true, cur=null, faved=false;
 let favs=JSON.parse(localStorage.getItem('ht_f')||'[]');
-let actx=null;
+let actx=null, typeTimer=null, toastTimer=null, favIdx=0, lpTimer=null;
 
+// ── Audio ──
 function ac(){
   if(!actx) actx=new(window.AudioContext||window.webkitAudioContext)();
   return actx;
@@ -382,8 +560,7 @@ function playPop(){
   if(!soundOn)return;
   try{
     const c=ac(),o=c.createOscillator(),g=c.createGain();
-    o.connect(g);g.connect(c.destination);
-    o.type='sine';
+    o.connect(g);g.connect(c.destination);o.type='sine';
     o.frequency.setValueAtTime(680,c.currentTime);
     o.frequency.exponentialRampToValueAtTime(960,c.currentTime+.07);
     g.gain.setValueAtTime(.2,c.currentTime);
@@ -397,83 +574,264 @@ function playWin(){
     const c=ac();
     [523,659,784,1047].forEach((f,i)=>{
       const o=c.createOscillator(),g=c.createGain();
-      o.connect(g);g.connect(c.destination);
-      o.type='sine';o.frequency.value=f;
+      o.connect(g);g.connect(c.destination);o.type='sine';o.frequency.value=f;
       const t=c.currentTime+i*.11;
-      g.gain.setValueAtTime(0,t);
-      g.gain.linearRampToValueAtTime(.16,t+.03);
+      g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(.16,t+.03);
       g.gain.exponentialRampToValueAtTime(.001,t+.38);
       o.start(t);o.stop(t+.38);
     });
   }catch(e){}
 }
 
+// ── Haptics ──
+function vib(pat){if(!soundOn||!navigator.vibrate)return;navigator.vibrate(pat);}
+
+// ── Typewriter：速度改善・行動提案は65%タイミングで表示 ──
+function typeWriter(el, text, onMidway){
+  if(typeTimer){clearTimeout(typeTimer);typeTimer=null;}
+  el.textContent='';
+  document.getElementById('cActRow').style.opacity='0';
+  let i=0, midFired=false;
+  const speed=20, midAt=Math.floor(text.length*.65);
+  function next(){
+    if(i<text.length){
+      el.textContent+=text[i++];
+      if(!midFired&&i>=midAt){midFired=true;if(onMidway)onMidway();}
+      typeTimer=setTimeout(next,speed);
+    } else {
+      typeTimer=null;
+      if(!midFired&&onMidway)onMidway();
+    }
+  }
+  next();
+}
+
+// ── Particles ──
+function showParticles(){
+  const card=document.getElementById('card');
+  card.querySelectorAll('.c-particle').forEach(p=>p.remove());
+  const cols=['var(--lv)','var(--pk)','var(--lv-m)','var(--pk-m)'];
+  for(let i=0;i<7;i++){
+    const p=document.createElement('div');p.className='c-particle';
+    const sz=4+Math.random()*4;
+    p.style.cssText=`left:${10+Math.random()*80}%;bottom:${15+Math.random()*50}%;`
+      +`width:${sz}px;height:${sz}px;background:${cols[i%cols.length]};`
+      +`animation-delay:${Math.random()*.7}s;`;
+    card.appendChild(p);
+  }
+  setTimeout(()=>card.querySelectorAll('.c-particle').forEach(p=>p.remove()),2600);
+}
+
+// ── Flower SVG ──
+function showFlower(){
+  const card=document.getElementById('card');
+  const svg=document.createElementNS('http://www.w3.org/2000/svg','svg');
+  svg.setAttribute('class','flower-svg');svg.setAttribute('viewBox','-50 -50 100 100');svg.setAttribute('aria-hidden','true');
+  const uid='flg'+Date.now();
+  svg.innerHTML=`<defs><linearGradient id="${uid}" x1="0%" y1="0%" x2="0%" y2="100%">
+    <stop offset="0%" stop-color="#C4B4D8"/><stop offset="100%" stop-color="#E0B8C4"/>
+  </linearGradient></defs>
+  ${[0,72,144,216,288].map((deg,i)=>
+    `<ellipse class="f-p" cx="0" cy="-22" rx="9" ry="16"
+      fill="url(#${uid})" opacity=".85" transform="rotate(${deg})"
+      style="animation-delay:${i*.07}s"/>`
+  ).join('')}
+  <circle class="f-ctr" r="9" fill="#C4B4D8"/>`;
+  card.appendChild(svg);
+  setTimeout(()=>{if(svg.parentNode)svg.remove();},1100);
+}
+
+// ── Date label ──
+function formatGentleDate(ts){
+  if(!ts)return'';
+  const diff=Date.now()-ts, days=diff/86400000;
+  const h=new Date(ts).getHours();
+  const tod=h>=5&&h<10?'朝':h>=10&&h<14?'お昼ごろ':h>=14&&h<18?'午後':h>=18&&h<22?'夜':'夜中';
+  if(diff<120000)return'さっき';
+  if(days<1)return`今日の${tod}`;
+  if(days<2)return`昨日の${tod}`;
+  if(days<4)return`${Math.floor(days)}日前の${tod}`;
+  if(days<8)return`先週の${tod}`;
+  if(days<15)return`2週間前の${tod}`;
+  return`少し前の${tod}`;
+}
+
+// ── Chips ──
 document.getElementById('moodC').addEventListener('click',e=>{
   const ch=e.target.closest('.chip');if(!ch)return;
-  document.querySelectorAll('#moodC .chip').forEach(c=>c.classList.remove('on'));
-  ch.classList.add('on');mood=ch.dataset.v;playPop();
+  document.querySelectorAll('#moodC .chip').forEach(c=>{c.classList.remove('on');c.setAttribute('aria-pressed','false');});
+  ch.classList.add('on');ch.setAttribute('aria-pressed','true');
+  mood=ch.dataset.v;playPop();vib(8);
 });
 document.getElementById('sceneC').addEventListener('click',e=>{
   const ch=e.target.closest('.chip');if(!ch)return;
-  document.querySelectorAll('#sceneC .chip').forEach(c=>c.classList.remove('on'));
-  ch.classList.add('on');scene=ch.dataset.v;playPop();
+  document.querySelectorAll('#sceneC .chip').forEach(c=>{c.classList.remove('on');c.setAttribute('aria-pressed','false');});
+  ch.classList.add('on');ch.setAttribute('aria-pressed','true');
+  scene=ch.dataset.v;playPop();vib(8);
+  // 場面に合わせてボタン文言を変化
+  document.getElementById('mainBtn').textContent=SCENE_BTN[scene]||DEFAULT_BTN;
 });
 
+// ── Main go ──
 function go(){
   if(!mood||!scene){showToast('気分と場面を選んでね 🌸');return;}
-  playPop();
+  vib([10,30,10]);playPop();
+  trackChip('mood',mood);trackChip('scene',scene);trackDay();
   const d=D[mood][scene];
   cur={mood,scene,...d};
-  document.getElementById('cMsg').textContent=d.m;
   document.getElementById('cAct').textContent=d.a;
   faved=favs.some(f=>f.mood===mood&&f.scene===scene);
   syncFav();
   const card=document.getElementById('card');
-  card.classList.remove('in');
-  card.classList.add('vis');
+  card.classList.remove('in');card.classList.add('vis');
   document.getElementById('actBtns').classList.add('vis');
-  requestAnimationFrame(()=>requestAnimationFrame(()=>card.classList.add('in')));
+  requestAnimationFrame(()=>requestAnimationFrame(()=>{
+    card.classList.add('in');
+    showParticles();
+    typeWriter(document.getElementById('cMsg'),d.m,()=>{
+      const row=document.getElementById('cActRow');
+      row.style.transition='opacity .35s ease';
+      row.style.opacity='1';
+    });
+  }));
   setTimeout(()=>card.scrollIntoView({behavior:'smooth',block:'nearest'}),50);
 }
 
+// ── Fav ──
 function toggleFav(){
-  if(!cur)return;
-  playPop();
+  if(!cur)return;vib(8);playPop();
   const i=favs.findIndex(f=>f.mood===cur.mood&&f.scene===cur.scene);
   if(i>=0){favs.splice(i,1);faved=false;showToast('お気に入りから外したよ');}
-  else{favs.unshift({...cur});faved=true;showToast('お気に入りに追加したよ 💕');}
+  else{favs.unshift({...cur,savedAt:Date.now()});faved=true;showToast('お気に入りに追加したよ 💕');}
   localStorage.setItem('ht_f',JSON.stringify(favs));
-  syncFav();renderFavs();
+  syncFav();renderFavCarousel();
 }
 function syncFav(){
-  const btn=document.getElementById('favBtn');
-  btn.classList.toggle('on',faved);
+  document.getElementById('favBtn').classList.toggle('on',faved);
   document.getElementById('favIco').textContent=faved?'♥':'♡';
 }
-function renderFavs(){
-  const sec=document.getElementById('favSec');
-  const dv=document.getElementById('div');
-  const list=document.getElementById('favList');
+
+// ── Carousel ──
+function renderFavCarousel(){
+  const sec=document.getElementById('favSec'),dv=document.getElementById('div');
   if(!favs.length){sec.classList.remove('vis');dv.style.display='none';return;}
   sec.classList.add('vis');dv.style.display='block';
-  list.innerHTML=favs.map((f,i)=>`
-    <div class="fav-item">
-      <div class="fav-con">
-        <div class="fav-tag">${f.mood} × ${f.scene}</div>
-        <div class="fav-msg">${f.m}</div>
-      </div>
-      <button class="fav-del" onclick="delFav(${i})">×</button>
-    </div>`).join('');
+  favIdx=Math.min(favIdx,favs.length-1);
+  document.getElementById('favIndicator').textContent=`ひと押しの記録 ${favIdx+1} / ${favs.length}`;
+  const stage=document.getElementById('favStage');
+  stage.style.opacity='1';stage.style.transform='';stage.style.transition='';
+  stage.innerHTML=buildFavCard(favs[favIdx],favIdx);
+  bindFavCard(stage,favIdx);
+  document.getElementById('favPrev').disabled=favIdx===0;
+  document.getElementById('favNext').disabled=favIdx===favs.length-1;
 }
-function delFav(i){
-  if(cur&&favs[i].mood===cur.mood&&favs[i].scene===cur.scene){faved=false;syncFav();}
-  favs.splice(i,1);
+function buildFavCard(f,idx){
+  const dt=formatGentleDate(f.savedAt);
+  return`<div class="fav-card">
+    <div class="fav-card-top">
+      <div>
+        <div class="fav-tag">${f.mood} × ${f.scene}</div>
+        ${dt?`<div class="fav-date">${dt}</div>`:''}
+      </div>
+      <button class="fav-save" onclick="saveCardAsImage(${idx})" aria-label="画像で保存">🖼</button>
+    </div>
+    <div class="fav-msg">${f.m}</div>
+    <div class="fav-bottom">
+      <div class="fav-step">✦ ${f.a}</div>
+      <button class="fav-del" aria-label="削除（長押し）">×</button>
+    </div>
+  </div>`;
+}
+function bindFavCard(stage,idx){
+  const del=stage.querySelector('.fav-del');
+  if(del){
+    del.addEventListener('touchstart',()=>startLP(idx),{passive:true});
+    del.addEventListener('mousedown',()=>startLP(idx));
+    ['touchend','mouseup','mouseleave','touchmove'].forEach(ev=>del.addEventListener(ev,cancelLP,{passive:true}));
+  }
+  bindSwipe(stage);
+}
+function startLP(idx){cancelLP();lpTimer=setTimeout(()=>confirmDel(idx),600);}
+function cancelLP(){if(lpTimer){clearTimeout(lpTimer);lpTimer=null;}}
+function navFav(dir){
+  const ni=favIdx+dir;if(ni<0||ni>=favs.length)return;vib(8);
+  const stage=document.getElementById('favStage');
+  stage.style.transition='opacity .16s ease-out,transform .16s ease-out';
+  stage.style.opacity='0';stage.style.transform=`translateX(${dir>0?'-20px':'20px'})`;
+  setTimeout(()=>{
+    favIdx=ni;
+    document.getElementById('favIndicator').textContent=`ひと押しの記録 ${favIdx+1} / ${favs.length}`;
+    document.getElementById('favPrev').disabled=favIdx===0;
+    document.getElementById('favNext').disabled=favIdx===favs.length-1;
+    stage.innerHTML=buildFavCard(favs[favIdx],favIdx);bindFavCard(stage,favIdx);
+    stage.style.transition='none';stage.style.transform=`translateX(${dir>0?'20px':'-20px'})`;
+    requestAnimationFrame(()=>requestAnimationFrame(()=>{
+      stage.style.transition='opacity .28s ease-out,transform .28s ease-out';
+      stage.style.opacity='1';stage.style.transform='translateX(0)';
+    }));
+  },180);
+}
+function bindSwipe(el){
+  let sx=null;
+  el.addEventListener('touchstart',e=>{sx=e.touches[0].clientX;},{passive:true});
+  el.addEventListener('touchend',e=>{
+    if(sx===null)return;const dx=e.changedTouches[0].clientX-sx;sx=null;
+    if(Math.abs(dx)<40)return;navFav(dx<0?1:-1);
+  },{passive:true});
+}
+function confirmDel(idx){
+  const t=document.getElementById('toast');
+  clearTimeout(toastTimer);t.classList.add('interact');
+  t.innerHTML=`消しますか？ <button class="toast-del-btn" onclick="doDel(${idx})">消す</button>`;
+  t.classList.add('on');
+  toastTimer=setTimeout(()=>{t.classList.remove('on','interact');setTimeout(()=>{if(!t.classList.contains('on'))t.textContent='';},300);},3500);
+}
+function doDel(idx){
+  const t=document.getElementById('toast');
+  clearTimeout(toastTimer);t.classList.remove('on','interact');
+  setTimeout(()=>{t.textContent='';},300);
+  if(cur&&favs[idx]&&favs[idx].mood===cur.mood&&favs[idx].scene===cur.scene){faved=false;syncFav();}
+  favs.splice(idx,1);if(favIdx>=favs.length)favIdx=Math.max(0,favs.length-1);
   localStorage.setItem('ht_f',JSON.stringify(favs));
-  renderFavs();playPop();
+  renderFavCarousel();playPop();setTimeout(()=>showToast('そっと消したよ'),100);
 }
 
+// ── Image save ──
+function saveCardAsImage(idx){
+  const f=favs[idx];if(!f)return;
+  function doSave(){
+    const el=document.createElement('div');
+    Object.assign(el.style,{position:'fixed',left:'-9999px',top:'0',width:'320px',
+      background:'#fff',borderRadius:'16px',padding:'20px 18px',
+      fontFamily:"-apple-system,'Hiragino Sans',sans-serif",boxSizing:'border-box',color:'#4E3E4C'});
+    el.innerHTML=`
+      <div style="height:3px;background:linear-gradient(90deg,#C4B4D8,#E0B8C4);margin:-20px -18px 14px;border-radius:16px 16px 0 0"></div>
+      <div style="font-size:10px;color:#A898A8;margin-bottom:6px">${f.mood} × ${f.scene}</div>
+      <div style="font-size:13.5px;line-height:1.8;margin-bottom:12px">${f.m}</div>
+      <div style="display:flex;border-radius:10px;overflow:hidden;border:1.5px solid #E0B8C4;margin-bottom:10px">
+        <div style="width:32px;background:#E0B8C4;display:flex;align-items:center;justify-content:center;font-size:12px;color:#fff;font-weight:700">▷</div>
+        <div style="padding:8px 11px;font-size:12px;color:#7A6878">${f.a}</div>
+      </div>
+      <div style="text-align:right;font-size:9.5px;color:#A898A8">ヒトオシ ✦</div>`;
+    document.body.appendChild(el);
+    html2canvas(el,{backgroundColor:'#ffffff',scale:2}).then(canvas=>{
+      const a=document.createElement('a');
+      a.download='hitooshi.png';a.href=canvas.toDataURL('image/png');a.click();
+      document.body.removeChild(el);showToast('画像を保存したよ 💕');
+    }).catch(()=>{document.body.removeChild(el);showToast('保存できなかった…ごめんね');});
+  }
+  if(typeof html2canvas==='undefined'){
+    showToast('読み込み中…');
+    const s=document.createElement('script');
+    s.src='https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js';
+    s.onload=doSave;s.onerror=()=>showToast('接続が必要です');
+    document.head.appendChild(s);
+  } else doSave();
+}
+
+// ── Done ──
 function done(){
-  playWin();confetti();
+  vib([14,40,14,40,20]);playWin();confetti();showFlower();
   const m=document.getElementById('mascot');
   m.classList.remove('pop');void m.offsetWidth;m.classList.add('pop');
   showToast('えらい！ほんとにえらい！ 🌸');
@@ -482,34 +840,158 @@ function confetti(){
   const el=document.getElementById('cel');
   el.innerHTML='';el.classList.add('on');
   const cols=['#C4B4D8','#E0B8C4','#F0C8A8','#C4D0BC','#B8D4E4','#F4D4DC'];
-  for(let i=0;i<38;i++){
-    const d=document.createElement('div');
-    d.className='dot';
+  for(let i=0;i<28;i++){
+    const d=document.createElement('div');d.className='dot';
     const s=6+Math.random()*7;
     d.style.cssText=`left:${Math.random()*100}vw;top:-14px;width:${s}px;height:${s}px;`
       +`background:${cols[i%cols.length]};`
-      +`animation-duration:${1.2+Math.random()*.9}s;`
-      +`animation-delay:${Math.random()*.45}s;`;
+      +`animation-duration:${1.2+Math.random()*.9}s;animation-delay:${Math.random()*.45}s;`;
     el.appendChild(d);
   }
   setTimeout(()=>{el.classList.remove('on');el.innerHTML='';},2500);
 }
 
+// ── Sound ──
 function toggleSnd(){
   soundOn=!soundOn;
   document.getElementById('sndIco').textContent=soundOn?'🔔':'🔕';
-  document.getElementById('sndTxt').textContent=soundOn?'音あり':'音なし';
+  document.getElementById('sndTxt').textContent=soundOn?'応援あり':'そっと';
 }
 
-let toastTimer=null;
+// ── Toast ──
 function showToast(msg){
   const t=document.getElementById('toast');
-  t.textContent=msg;t.classList.add('on');
+  t.textContent=msg;t.classList.remove('interact');t.classList.add('on');
   clearTimeout(toastTimer);
   toastTimer=setTimeout(()=>t.classList.remove('on'),2300);
 }
 
-renderFavs();
+// ── Calendar ──
+function trackDay(){
+  const today=new Date().toISOString().slice(0,10);
+  const days=JSON.parse(localStorage.getItem('ht_days')||'[]');
+  if(!days.includes(today)){days.push(today);localStorage.setItem('ht_days',JSON.stringify(days));}
+  if(document.getElementById('calBody').classList.contains('open'))renderCalendar();
+}
+function renderCalendar(){
+  const body=document.getElementById('calBody');if(!body)return;
+  const days=new Set(JSON.parse(localStorage.getItem('ht_days')||'[]'));
+  const now=new Date(),y=now.getFullYear(),mo=now.getMonth();
+  const today=now.toISOString().slice(0,10);
+  const firstDow=new Date(y,mo,1).getDay();
+  const dim=new Date(y,mo+1,0).getDate();
+  const mn=['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'];
+  let h=`<div class="cal-month-label">${y}年 ${mn[mo]}</div><div class="cal-grid">
+    ${'日月火水木金土'.split('').map(d=>`<div class="cal-dow">${d}</div>`).join('')}
+    ${'_'.repeat(firstDow).split('').map(()=>'<div class="cal-day"></div>').join('')}`;
+  for(let d=1;d<=dim;d++){
+    const ds=`${y}-${String(mo+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    const vis=days.has(ds),tod=ds===today;
+    const cls=['cal-day',vis?'visited':'',tod?'today':''].filter(Boolean).join(' ');
+    h+=`<div class="${cls}">${vis||tod?d:''}</div>`;
+  }
+  body.innerHTML=h+'</div>';
+}
+document.getElementById('calToggle').addEventListener('click',function(){
+  this.classList.toggle('cal-open');
+  const body=document.getElementById('calBody');
+  body.classList.toggle('open');
+  this.setAttribute('aria-expanded',body.classList.contains('open'));
+  if(body.classList.contains('open'))renderCalendar();
+});
+
+// ── Chip frequency sort ──
+function trackChip(type,val){
+  const k=type==='mood'?'ht_mood_count':'ht_scene_count';
+  const c=JSON.parse(localStorage.getItem(k)||'{}');
+  c[val]=(c[val]||0)+1;localStorage.setItem(k,JSON.stringify(c));
+}
+function sortChips(){
+  [['moodC','ht_mood_count'],['sceneC','ht_scene_count']].forEach(([cid,k])=>{
+    const counts=JSON.parse(localStorage.getItem(k)||'{}');
+    const wrap=document.getElementById(cid);
+    [...wrap.querySelectorAll('.chip')]
+      .sort((a,b)=>(counts[b.dataset.v]||0)-(counts[a.dataset.v]||0))
+      .forEach(c=>wrap.appendChild(c));
+  });
+}
+
+// ── 時間帯グリーティング（appHookを差し替え） ──
+function initGreeting(){
+  const h=new Date().getHours();
+  const el=document.getElementById('appHook');
+  if(h>=5&&h<10)       el.textContent='おはよう。来てくれてありがとう。';
+  else if(h>=10&&h<14)  el.textContent='仕事、ちょっとしんどい？';
+  else if(h>=14&&h<18)  el.textContent='午後もがんばってるね、えらい。';
+  else if(h>=18&&h<23)  el.textContent='今日もお疲れさまでした。';
+  // 23〜5時はデフォルト（仕事、ちょっとしんどい？）のまま
+}
+
+// ── Onboarding ──
+function showOnboarding(){
+  if(localStorage.getItem('ht_onboarded'))return;
+  let step=0;
+  const ob=document.createElement('div');
+  ob.className='onboard';ob.id='onboarding';
+  ob.setAttribute('role','dialog');ob.setAttribute('aria-modal','true');
+  ob.innerHTML=`
+    <div class="ob-steps-wrap">
+      <div class="ob-step on" id="ob0">
+        <div class="ob-icon">✦</div>
+        <div class="ob-txt">ちょっとしんどい日に、<br>来てくれてありがとう。</div>
+      </div>
+      <div class="ob-step" id="ob1">
+        <div class="ob-txt">気分と、いまどこ、<br>を選ぶだけ。</div>
+        <div class="ob-chips-demo">
+          <div class="ob-chip hi">😪 だるい</div>
+          <div class="ob-chip">💤 眠い</div>
+          <div class="ob-chip hi">🚃 通勤中</div>
+          <div class="ob-chip">☕ 昼休み中</div>
+        </div>
+      </div>
+      <div class="ob-step" id="ob2">
+        <div class="ob-icon">🌸</div>
+        <div class="ob-txt">✦ 無理しない、<br>が合言葉です。</div>
+        <button class="ob-start" onclick="closeOb()">はじめる</button>
+      </div>
+    </div>
+    <div class="ob-bottom">
+      <div class="ob-dots">
+        <div class="ob-dot on"></div><div class="ob-dot"></div><div class="ob-dot"></div>
+      </div>
+      <button class="ob-skip" onclick="closeOb()">スキップ</button>
+    </div>`;
+  document.body.appendChild(ob);
+  ob.addEventListener('click',e=>{
+    if(e.target.closest('.ob-start')||e.target.closest('.ob-skip'))return;
+    if(step<2)goOb(ob,++step);
+  });
+  setTimeout(()=>{if(step===0)goOb(ob,++step);},3000);
+}
+function goOb(ob,s){
+  ob.querySelectorAll('.ob-step').forEach(el=>el.classList.remove('on'));
+  ob.querySelectorAll('.ob-dot').forEach((d,i)=>d.classList.toggle('on',i===s));
+  const el=ob.querySelector(`#ob${s}`);if(el)el.classList.add('on');
+}
+function closeOb(){
+  localStorage.setItem('ht_onboarded','1');
+  const ob=document.getElementById('onboarding');if(!ob)return;
+  ob.style.transition='opacity .4s';ob.style.opacity='0';
+  setTimeout(()=>ob.remove(),400);
+}
+
+// ── Init ──
+sortChips();
+initGreeting();
+renderFavCarousel();
+showOnboarding();
 </script>
 </body>
 </html>
+<!-- STORAGE KEYS
+  ht_f          … お気に入り [{mood,scene,m,a,savedAt?}, ...]
+  ht_onboarded  … オンボーディング完了 ("1")
+  ht_days       … 押した日付 ["YYYY-MM-DD", ...]
+  ht_mood_count … 気分チップ頻度 {value: count}
+  ht_scene_count… 場所チップ頻度 {value: count}
+-->
