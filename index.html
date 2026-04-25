@@ -1262,6 +1262,7 @@ function closeOb(){
   ob.style.transition='opacity .4s';ob.style.opacity='0';
   setTimeout(()=>{
     ob.remove();
+    // オンボーディング直後は通知許可を出さない。次回訪問時に maybeAskNotifPermission() が走る。
     if(!localStorage.getItem('ht_snd_tip_shown')){
       localStorage.setItem('ht_snd_tip_shown','1');
       setTimeout(()=>showToast('音と振動の切替だよ 🔔'),400);
@@ -1308,6 +1309,114 @@ function showToastLong(msg){
   toastTimer=setTimeout(()=>t.classList.remove('on'),4000);
 }
 
+// ── 通知システム ──────────────────────────────────────────────
+// ストレージキー
+//   ht_notif_asked   … 通知許可を1度でも尋ねた ("1")
+//   ht_notif_on      … 通知ON ("1") / OFF ("0")
+//   ht_notif_sched   … 最後にスケジュールした日付 "YYYY-MM-DD"
+
+const MORNING_MSGS = [
+  'おはよう。来てくれてありがとう。今日もそっと押すよ。',
+  '今日もしんどかったら、いつでも来て。待ってるよ。',
+  'おはよう。無理しなくていい日だよ、今日も。',
+  'また来てくれたね。それだけでえらい。',
+  '今日のあなたに、ひと押し届けたくて。'
+];
+
+function getGreetingMsg() {
+  const h = new Date().getHours();
+  if (h >= 5 && h < 10)  return MORNING_MSGS[Math.floor(Math.random() * MORNING_MSGS.length)];
+  if (h >= 10 && h < 14) return '仕事、ちょっとしんどい？いつでも来て。';
+  if (h >= 14 && h < 18) return '午後もがんばってるね。ひと息ついてね。';
+  return '今日もお疲れさまでした。ゆっくり休んでね。';
+}
+
+function getReviewPayload() {
+  const fs = JSON.parse(localStorage.getItem('ht_f') || '[]');
+  if (!fs.length) return null;
+  const f = fs[Math.floor(Math.random() * fs.length)];
+  const msg = Array.isArray(f.m) ? f.m[0] : f.m;
+  return {
+    msg: `先週あなたが受け取った言葉。「${msg}」`,
+    tag: `${f.mood} × ${f.scene}`
+  };
+}
+
+async function registerSW() {
+  if (!('serviceWorker' in navigator) || !('Notification' in window)) return;
+  try {
+    await navigator.serviceWorker.register('/sw.js');
+  } catch(e) {}
+}
+
+async function scheduleNotifications() {
+  if (!('serviceWorker' in navigator)) return;
+  if (localStorage.getItem('ht_notif_on') !== '1') return;
+
+  const today = new Date().toISOString().slice(0, 10);
+  if (localStorage.getItem('ht_notif_sched') === today) return;
+
+  const reg = await navigator.serviceWorker.ready;
+  if (!reg.active) return;
+
+  const review = getReviewPayload();
+  reg.active.postMessage({
+    type: 'SCHEDULE_NOTIFICATIONS',
+    payload: {
+      morningMsg: getGreetingMsg(),
+      reviewMsg: review ? review.msg : null,
+      reviewTag: review ? review.tag : null
+    }
+  });
+  localStorage.setItem('ht_notif_sched', today);
+}
+
+async function maybeAskNotifPermission() {
+  if (!('Notification' in window)) return;
+  if (Notification.permission !== 'default') {
+    if (Notification.permission === 'granted') {
+      localStorage.setItem('ht_notif_on', '1');
+      await scheduleNotifications();
+    }
+    return;
+  }
+  if (!localStorage.getItem('ht_onboarded')) return;
+  if (localStorage.getItem('ht_notif_asked')) return;
+
+  setTimeout(() => { showNotifPrompt(); }, 3000);
+}
+
+function showNotifPrompt() {
+  const t = document.getElementById('toast');
+  clearTimeout(toastTimer);
+  t.classList.add('interact');
+  t.innerHTML = `出勤前に届けてもいい？
+    <button class="toast-del-btn" onclick="requestNotifPermission()">はい</button>`;
+  t.classList.add('on');
+  toastTimer = setTimeout(() => {
+    t.classList.remove('on', 'interact');
+    setTimeout(() => { if (!t.classList.contains('on')) t.textContent = ''; }, 300);
+  }, 6000);
+  localStorage.setItem('ht_notif_asked', '1');
+}
+
+async function requestNotifPermission() {
+  const t = document.getElementById('toast');
+  clearTimeout(toastTimer);
+  t.classList.remove('on', 'interact');
+  setTimeout(() => { if (!t.classList.contains('on')) t.textContent = ''; }, 300);
+
+  const perm = await Notification.requestPermission();
+  if (perm === 'granted') {
+    localStorage.setItem('ht_notif_on', '1');
+    await scheduleNotifications();
+    setTimeout(() => showToast('平日 7:30 にそっと届けるね 🌸'), 400);
+  } else {
+    localStorage.setItem('ht_notif_on', '0');
+    setTimeout(() => showToast('いつでも設定から変えられるよ'), 400);
+  }
+}
+
 // ── Init ──
 sortChips();
 initGreeting();
@@ -1319,6 +1428,7 @@ if(sessionStorage.getItem('ht_mood_expanded')){
   document.getElementById('moodC').classList.add('mood-expanded');
   document.getElementById('moodMore').textContent='閉じる ▴';
 }
+registerSW().then(() => maybeAskNotifPermission());
 showOnboarding();
 </script>
 </body>
@@ -1331,6 +1441,9 @@ showOnboarding();
   ht_combo_count  … 組み合わせ頻度 {"mood×scene": count}
   ht_total        … 累計押した回数
   ht_today_done   … 今日ヒトオシした日付 "YYYY-MM-DD"
+  ht_notif_asked  … 通知許可を一度でも尋ねた ("1")
+  ht_notif_on     … 通知ON ("1") / OFF ("0")
+  ht_notif_sched  … 最後にスケジュールした日付 "YYYY-MM-DD"
   ht_milestones   … 達成済みマイルストーン回数の配列 [5, 10, ...]
   ht_mood_count   … 気分チップ頻度 {value: count}
   ht_scene_count  … 場所チップ頻度 {value: count}
