@@ -33,7 +33,7 @@ body{
   font-family:-apple-system,'Hiragino Sans','Hiragino Kaku Gothic ProN','Noto Sans JP',sans-serif;
   color:var(--tx);
   min-height:100vh;
-  padding:0 16px max(32px,env(safe-area-inset-bottom,32px));
+  padding:0 16px calc(64px + max(8px,env(safe-area-inset-bottom,8px)));
   max-width:480px;
   margin:0 auto;
 }
@@ -422,14 +422,120 @@ body{
 }
 .ob-skip{background:none;border:none;font-size:11.5px;color:var(--tx-s);cursor:pointer;padding:4px}
 
+/* ── Tab Bar ── */
+.tab-bar{
+  position:fixed;bottom:0;left:50%;transform:translateX(-50%);
+  width:100%;max-width:480px;
+  display:flex;
+  background:rgba(253,245,236,.94);
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  border-top:1px solid var(--be);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+  z-index:100;
+}
+.tab-btn{
+  flex:1;display:flex;flex-direction:column;align-items:center;
+  gap:3px;padding:10px 4px 8px;
+  background:none;border:none;cursor:pointer;
+  font-size:10px;color:var(--tx-s);letter-spacing:.04em;
+  transition:color .18s;-webkit-tap-highlight-color:transparent;
+}
+.tab-btn.active{color:var(--lv-d);font-weight:700}
+.tab-ico{font-size:20px;line-height:1;display:block}
+.tab-badge{
+  position:absolute;top:6px;right:calc(50% - 18px);
+  background:var(--pk-m);color:#fff;
+  font-size:9px;font-weight:700;border-radius:8px;
+  padding:1px 5px;min-width:14px;text-align:center;
+  display:none;
+}
+.tab-badge.vis{display:block}
+
+/* ── Tab Pages ── */
+.tab-page{display:none}
+.tab-page.active{display:block}
+
+/* お気に入りページ専用 */
+.fav-page-header{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:18px;
+}
+.fav-page-title{font-size:18px;font-weight:800;color:var(--tx);letter-spacing:.04em}
+.fav-page-count{font-size:11px;color:var(--tx-s)}
+.fav-list{display:flex;flex-direction:column;gap:10px}
+.fav-list-card{
+  background:var(--wh);border-radius:16px;padding:14px 16px;
+  box-shadow:var(--sh-s);
+  position:relative;
+}
+.fav-list-tag{font-size:10px;color:var(--tx-s);margin-bottom:6px}
+.fav-list-msg{font-size:13.5px;color:var(--tx);line-height:1.7;font-weight:600;margin-bottom:8px}
+.fav-list-act{
+  font-size:11.5px;color:var(--tx-m);
+  background:var(--lv-l);border-radius:8px;padding:6px 10px;
+  display:inline-block;
+}
+.fav-list-footer{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-top:10px;
+}
+.fav-list-date{font-size:9.5px;color:var(--tx-s)}
+.fav-list-del{
+  background:none;border:none;color:var(--be-d);cursor:pointer;
+  font-size:15px;padding:2px 4px;transition:color .15s;
+  -webkit-tap-highlight-color:transparent;
+}
+.fav-list-del:hover{color:var(--pk-m)}
+.fav-empty{
+  text-align:center;padding:48px 16px;
+  color:var(--tx-s);font-size:13px;line-height:1.8;
+}
+.fav-empty-ico{font-size:36px;margin-bottom:12px;opacity:.5}
+
+/* あしあとページ */
+.ashiato-section{margin-bottom:24px}
+.ashiato-title{font-size:18px;font-weight:800;color:var(--tx);letter-spacing:.04em;margin-bottom:16px}
+
+.praise-hero{
+  background:var(--wh);border-radius:20px;
+  padding:24px 20px;margin-bottom:12px;
+  box-shadow:var(--sh);text-align:center;
+}
+.praise-hero-num{
+  font-size:52px;font-weight:800;color:var(--lv-d);
+  line-height:1;letter-spacing:-.02em;margin-bottom:6px;
+}
+.praise-hero-msg{
+  font-size:15px;font-weight:700;color:var(--tx);
+  line-height:1.6;
+}
+
+.praise-cards{display:flex;flex-direction:column;gap:10px}
+.praise-card{
+  background:var(--wh);border-radius:16px;
+  padding:16px 18px;box-shadow:var(--sh-s);
+}
+.praise-card-body{
+  font-size:14px;color:var(--tx);
+  line-height:1.7;font-weight:600;
+}
+.praise-card-sub{
+  font-size:11px;color:var(--tx-s);
+  margin-top:6px;
+}
+
 @media(prefers-reduced-motion:reduce){
   *{animation-duration:.01s!important;animation-delay:0s!important;transition-duration:.01s!important}
 }
-@media(min-width:480px){body{padding-bottom:52px}.hd{padding-top:48px}}
+@media(min-width:480px){.hd{padding-top:48px}}
 @media(max-width:360px){.chip{font-size:12px;padding:6px 12px}.app-name{font-size:24px}}
+
 </style>
 </head>
 <body>
+
+<!-- ── タブ: ひと押し ── -->
+<div class="tab-page active" id="page-home">
 
 <header class="hd">
   <button class="snd-btn" id="sndBtn" onclick="toggleSnd()" aria-label="応援音切替">
@@ -498,26 +604,44 @@ body{
   <button class="btn-done" onclick="done()">✦ 受け取った</button>
 </div>
 
-<div class="scroll-link-wrap" id="scrollLinkWrap">
-  <button class="scroll-link" onclick="scrollToHistory()">↓ ここまでのヒトオシを見る (<span id="scrollLinkCount">0</span>件)</button>
+</div><!-- /page-home -->
+
+<!-- ── タブ: お気に入り ── -->
+<div class="tab-page" id="page-fav">
+  <header class="hd" style="padding-bottom:16px">
+    <div class="fav-page-header" style="width:100%">
+      <div class="fav-page-title">♡ お気に入り</div>
+      <div class="fav-page-count" id="favPageCount"></div>
+    </div>
+  </header>
+  <div id="favListArea"></div>
 </div>
 
-<div class="div" id="div"></div>
-
-<div class="history-sec" id="historySec">
-  <div class="lbl">ヒトオシの記録</div>
-  <div id="historyContent"></div>
-</div>
-
-<div class="fav-sec" id="favSec">
-  <div class="fav-ttl">✦ ここまでのヒトオシ</div>
-  <div class="fav-indicator" id="favIndicator"></div>
-  <div class="fav-stage" id="favStage"></div>
-  <div class="fav-nav-row">
-    <button class="fav-nav-btn" id="favPrev" onclick="navFav(-1)" aria-label="前へ">‹</button>
-    <button class="fav-nav-btn" id="favNext" onclick="navFav(1)" aria-label="次へ">›</button>
+<!-- ── タブ: あしあと ── -->
+<div class="tab-page" id="page-ashiato">
+  <header class="hd" style="padding-bottom:16px">
+    <div style="width:100%">
+      <div class="ashiato-title">あしあと</div>
+    </div>
+  </header>
+  <div class="ashiato-section">
+    <div id="ashiatoContent"></div>
   </div>
 </div>
+
+<!-- ── タブバー ── -->
+<nav class="tab-bar" role="tablist">
+  <button class="tab-btn active" id="tab-home" onclick="switchTab('home')" role="tab" aria-selected="true">
+    <span class="tab-ico">✦</span>ひと押し
+  </button>
+  <button class="tab-btn" id="tab-fav" onclick="switchTab('fav')" role="tab" aria-selected="false" style="position:relative">
+    <span class="tab-ico">♡</span>お気に入り
+    <span class="tab-badge" id="favBadge"></span>
+  </button>
+  <button class="tab-btn" id="tab-ashiato" onclick="switchTab('ashiato')" role="tab" aria-selected="false">
+    <span class="tab-ico">○</span>あしあと
+  </button>
+</nav>
 
 <div class="cel" id="cel" aria-hidden="true"></div>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
@@ -927,8 +1051,6 @@ function go(){
     });
   }));
   setTimeout(()=>card.scrollIntoView({behavior:'smooth',block:'nearest'}),50);
-  renderHistory();
-  updateScrollLink();
 }
 
 // ── Retry message (改修2) ──
@@ -961,7 +1083,7 @@ function toggleFav(){
     faved=true;showToast('お気に入りに追加したよ 💕');
   }
   localStorage.setItem('ht_f',JSON.stringify(favs));
-  syncFav();renderFavCarousel();updateScrollLink();
+  syncFav();renderFavCarousel();updateFavBadge();renderFavList();
 }
 function syncFav(){
   document.getElementById('favBtn').classList.toggle('on',faved);
@@ -971,9 +1093,11 @@ function syncFav(){
 // ── Scroll link (改修6) ──
 function updateScrollLink(){
   const wrap=document.getElementById('scrollLinkWrap');
+  if(!wrap)return;
   if(favs.length>=1){
     wrap.style.display='block';
-    document.getElementById('scrollLinkCount').textContent=favs.length;
+    const cnt=document.getElementById('scrollLinkCount');
+    if(cnt)cnt.textContent=favs.length;
   } else {
     wrap.style.display='none';
   }
@@ -987,6 +1111,7 @@ function scrollToHistory(){
 // ── Carousel ──
 function renderFavCarousel(){
   const sec=document.getElementById('favSec'),dv=document.getElementById('div');
+  if(!sec||!dv)return;
   if(!favs.length){sec.classList.remove('vis');dv.style.display='none';return;}
   sec.classList.add('vis');dv.style.display='block';
   favIdx=Math.min(favIdx,favs.length-1);
@@ -1068,7 +1193,7 @@ function doDel(idx){
   if(cur&&favs[idx]&&favs[idx].mood===cur.mood&&favs[idx].scene===cur.scene&&(favs[idx].msgIdx||0)===(cur.msgIdx||0)){faved=false;syncFav();}
   favs.splice(idx,1);if(favIdx>=favs.length)favIdx=Math.max(0,favs.length-1);
   localStorage.setItem('ht_f',JSON.stringify(favs));
-  renderFavCarousel();updateScrollLink();playPop();setTimeout(()=>showToast('そっと消したよ'),100);
+  renderFavCarousel();renderFavList();playPop();setTimeout(()=>showToast('そっと消したよ'),100);
 }
 
 // ── Image save (改修9) ──
@@ -1164,6 +1289,7 @@ function trackTotal(){
 function renderHistory(){
   const total=parseInt(localStorage.getItem('ht_total')||'0');
   const sec=document.getElementById('historySec');
+  if(!sec)return;
   if(total===0){sec.style.display='none';return;}
   sec.style.display='block';
   const days=JSON.parse(localStorage.getItem('ht_days')||'[]');
@@ -1262,7 +1388,6 @@ function closeOb(){
   ob.style.transition='opacity .4s';ob.style.opacity='0';
   setTimeout(()=>{
     ob.remove();
-    // オンボーディング直後は通知許可を出さない。次回訪問時に maybeAskNotifPermission() が走る。
     if(!localStorage.getItem('ht_snd_tip_shown')){
       localStorage.setItem('ht_snd_tip_shown','1');
       setTimeout(()=>showToast('音と振動の切替だよ 🔔'),400);
@@ -1309,126 +1434,148 @@ function showToastLong(msg){
   toastTimer=setTimeout(()=>t.classList.remove('on'),4000);
 }
 
-// ── 通知システム ──────────────────────────────────────────────
-// ストレージキー
-//   ht_notif_asked   … 通知許可を1度でも尋ねた ("1")
-//   ht_notif_on      … 通知ON ("1") / OFF ("0")
-//   ht_notif_sched   … 最後にスケジュールした日付 "YYYY-MM-DD"
-
-const MORNING_MSGS = [
-  'おはよう。来てくれてありがとう。今日もそっと押すよ。',
-  '今日もしんどかったら、いつでも来て。待ってるよ。',
-  'おはよう。無理しなくていい日だよ、今日も。',
-  'また来てくれたね。それだけでえらい。',
-  '今日のあなたに、ひと押し届けたくて。'
-];
-
-function getGreetingMsg() {
-  const h = new Date().getHours();
-  if (h >= 5 && h < 10)  return MORNING_MSGS[Math.floor(Math.random() * MORNING_MSGS.length)];
-  if (h >= 10 && h < 14) return '仕事、ちょっとしんどい？いつでも来て。';
-  if (h >= 14 && h < 18) return '午後もがんばってるね。ひと息ついてね。';
-  return '今日もお疲れさまでした。ゆっくり休んでね。';
-}
-
-function getReviewPayload() {
-  const fs = JSON.parse(localStorage.getItem('ht_f') || '[]');
-  if (!fs.length) return null;
-  const f = fs[Math.floor(Math.random() * fs.length)];
-  const msg = Array.isArray(f.m) ? f.m[0] : f.m;
-  return {
-    msg: `先週あなたが受け取った言葉。「${msg}」`,
-    tag: `${f.mood} × ${f.scene}`
-  };
-}
-
-async function registerSW() {
-  if (!('serviceWorker' in navigator) || !('Notification' in window)) return;
-  try {
-    await navigator.serviceWorker.register('/sw.js');
-  } catch(e) {}
-}
-
-async function scheduleNotifications() {
-  if (!('serviceWorker' in navigator)) return;
-  if (localStorage.getItem('ht_notif_on') !== '1') return;
-
-  const today = new Date().toISOString().slice(0, 10);
-  if (localStorage.getItem('ht_notif_sched') === today) return;
-
-  const reg = await navigator.serviceWorker.ready;
-  if (!reg.active) return;
-
-  const review = getReviewPayload();
-  reg.active.postMessage({
-    type: 'SCHEDULE_NOTIFICATIONS',
-    payload: {
-      morningMsg: getGreetingMsg(),
-      reviewMsg: review ? review.msg : null,
-      reviewTag: review ? review.tag : null
-    }
+// ── タブ切り替え ──
+function switchTab(name){
+  ['home','fav','ashiato'].forEach(t=>{
+    document.getElementById('page-'+t).classList.toggle('active', t===name);
+    const btn=document.getElementById('tab-'+t);
+    btn.classList.toggle('active', t===name);
+    btn.setAttribute('aria-selected', t===name ? 'true' : 'false');
   });
-  localStorage.setItem('ht_notif_sched', today);
+  if(name==='fav') renderFavList();
+  if(name==='ashiato') renderAshiato();
 }
 
-async function maybeAskNotifPermission() {
-  if (!('Notification' in window)) return;
-  if (Notification.permission !== 'default') {
-    if (Notification.permission === 'granted') {
-      localStorage.setItem('ht_notif_on', '1');
-      await scheduleNotifications();
-    }
+// ── お気に入りリスト（縦スクロール）──
+function renderFavList(){
+  const area=document.getElementById('favListArea');
+  const countEl=document.getElementById('favPageCount');
+  if(!favs.length){
+    countEl.textContent='';
+    area.innerHTML=`<div class="fav-empty"><div class="fav-empty-ico">♡</div>気に入った言葉を<br>ひと押し後に保存すると<br>ここに並ぶよ</div>`;
+    updateFavBadge();
     return;
   }
-  if (!localStorage.getItem('ht_onboarded')) return;
-  if (localStorage.getItem('ht_notif_asked')) return;
-
-  setTimeout(() => { showNotifPrompt(); }, 3000);
+  countEl.textContent=favs.length+'件';
+  area.innerHTML=favs.map((f,i)=>{
+    const msg=Array.isArray(f.m)?f.m[0]:f.m;
+    const act=Array.isArray(f.a)?f.a[0]:f.a;
+    const dt=formatGentleDate(f.savedAt);
+    return`<div class="fav-list-card">
+      <div class="fav-list-tag">${f.mood} × ${f.scene}</div>
+      <div class="fav-list-msg">${msg}</div>
+      <div class="fav-list-act">✦ ${act}</div>
+      <div class="fav-list-footer">
+        <span class="fav-list-date">${dt}</span>
+        <button class="fav-list-del" aria-label="削除" onclick="delFavItem(${i})">×</button>
+      </div>
+    </div>`;
+  }).join('');
+  updateFavBadge();
 }
 
-function showNotifPrompt() {
-  const t = document.getElementById('toast');
-  clearTimeout(toastTimer);
-  t.classList.add('interact');
-  t.innerHTML = `出勤前に届けてもいい？
-    <button class="toast-del-btn" onclick="requestNotifPermission()">はい</button>`;
-  t.classList.add('on');
-  toastTimer = setTimeout(() => {
-    t.classList.remove('on', 'interact');
-    setTimeout(() => { if (!t.classList.contains('on')) t.textContent = ''; }, 300);
-  }, 6000);
-  localStorage.setItem('ht_notif_asked', '1');
-}
-
-async function requestNotifPermission() {
-  const t = document.getElementById('toast');
-  clearTimeout(toastTimer);
-  t.classList.remove('on', 'interact');
-  setTimeout(() => { if (!t.classList.contains('on')) t.textContent = ''; }, 300);
-
-  const perm = await Notification.requestPermission();
-  if (perm === 'granted') {
-    localStorage.setItem('ht_notif_on', '1');
-    await scheduleNotifications();
-    setTimeout(() => showToast('平日 7:30 にそっと届けるね 🌸'), 400);
-  } else {
-    localStorage.setItem('ht_notif_on', '0');
-    setTimeout(() => showToast('いつでも設定から変えられるよ'), 400);
+function delFavItem(idx){
+  if(cur&&favs[idx]&&favs[idx].mood===cur.mood&&favs[idx].scene===cur.scene&&(favs[idx].msgIdx||0)===(cur.msgIdx||0)){
+    faved=false;syncFav();
   }
+  favs.splice(idx,1);
+  localStorage.setItem('ht_f',JSON.stringify(favs));
+  renderFavList();
+  showToast('そっと消したよ');
+}
+
+function updateFavBadge(){
+  const badge=document.getElementById('favBadge');
+  if(favs.length>0){
+    badge.textContent=favs.length>99?'99+':favs.length;
+    badge.classList.add('vis');
+  } else {
+    badge.classList.remove('vis');
+  }
+}
+
+// ── あしあとページ ──
+function renderAshiato(){
+  const total=parseInt(localStorage.getItem('ht_total')||'0');
+  const el=document.getElementById('ashiatoContent');
+  if(total===0){
+    el.innerHTML=`<div class="fav-empty"><div class="fav-empty-ico">✦</div>まだ記録がないよ。<br>ひと押しするたびに<br>ここに積み重なっていくよ</div>`;
+    return;
+  }
+
+  const days=JSON.parse(localStorage.getItem('ht_days')||'[]');
+  const combos=JSON.parse(localStorage.getItem('ht_combo_count')||'{}');
+  const today=new Date();
+
+  // 直近7日の訪問数
+  let week=0;
+  for(let i=0;i<7;i++){
+    const d=new Date(today);d.setDate(d.getDate()-i);
+    if(days.includes(d.toISOString().slice(0,10)))week++;
+  }
+
+  // 一番多いコンボ
+  let topCombo='',topCount=0;
+  Object.entries(combos).forEach(([k,v])=>{if(v>topCount){topCount=v;topCombo=k;}});
+
+  // ── ヒーロー文言：total に応じて変化 ──
+  function heroMsg(n){
+    if(n===1)  return 'はじめての一歩、ちゃんと踏み出した。';
+    if(n<5)    return 'しんどい日に、ちゃんと来た。それだけでいい。';
+    if(n<10)   return 'もう何度も乗り越えてきたね。';
+    if(n<20)   return `${n}回。しんどい日を${n}回、越えてきた。`;
+    if(n<50)   return `${n}回も、自分を助けに来た。えらい。`;
+    if(n<100)  return `${n}回。ここまで来たあなた、本当にすごい。`;
+    return `${n}回。もう「自分を大切にする人」だよ、あなたは。`;
+  }
+
+  // ── 週の文言 ──
+  function weekMsg(n){
+    if(n===0) return null;
+    if(n===1) return {body:'先週も1日、来てくれた。',sub:'来なかった日も、それはそれでいい。'};
+    if(n<=3)  return {body:`先週は${n}日、来てくれたね。`,sub:'しんどい中で来られた日のことを、ちゃんと覚えておいて。'};
+    if(n<=5)  return {body:`先週は${n}日も来た。`,sub:'それだけ自分のことを気にかけてたってこと。'};
+    return {body:'先週はほぼ毎日来てくれた。',sub:'毎日しんどかったかもしれないけど、毎日ちゃんと向き合ってた。'};
+  }
+
+  // ── コンボ文言 ──
+  function comboMsg(combo,count){
+    if(!combo||count<2) return null;
+    const [mood]=combo.split('×');
+    return {
+      body:`「${combo.trim()}」が${count}回いちばん多い。`,
+      sub:`${mood.trim()}な日でも、来ようとしてたんだね。`
+    };
+  }
+
+  const wMsg=weekMsg(week);
+  const cMsg=comboMsg(topCombo,topCount);
+
+  const cards=[wMsg,cMsg].filter(Boolean).map(c=>`
+    <div class="praise-card">
+      <div class="praise-card-body">${c.body}</div>
+      <div class="praise-card-sub">${c.sub}</div>
+    </div>
+  `).join('');
+
+  el.innerHTML=`
+    <div class="praise-hero">
+      <div class="praise-hero-num">${total}</div>
+      <div class="praise-hero-msg">${heroMsg(total)}</div>
+    </div>
+    ${cards?`<div class="praise-cards">${cards}</div>`:''}
+  `;
 }
 
 // ── Init ──
 sortChips();
 initGreeting();
-renderFavCarousel();
-renderHistory();
-updateScrollLink();
 updateCounter();
+updateFavBadge();
 if(sessionStorage.getItem('ht_mood_expanded')){
   document.getElementById('moodC').classList.add('mood-expanded');
   document.getElementById('moodMore').textContent='閉じる ▴';
 }
-registerSW().then(() => maybeAskNotifPermission());
 showOnboarding();
 </script>
 </body>
@@ -1441,9 +1588,6 @@ showOnboarding();
   ht_combo_count  … 組み合わせ頻度 {"mood×scene": count}
   ht_total        … 累計押した回数
   ht_today_done   … 今日ヒトオシした日付 "YYYY-MM-DD"
-  ht_notif_asked  … 通知許可を一度でも尋ねた ("1")
-  ht_notif_on     … 通知ON ("1") / OFF ("0")
-  ht_notif_sched  … 最後にスケジュールした日付 "YYYY-MM-DD"
   ht_milestones   … 達成済みマイルストーン回数の配列 [5, 10, ...]
   ht_mood_count   … 気分チップ頻度 {value: count}
   ht_scene_count  … 場所チップ頻度 {value: count}
