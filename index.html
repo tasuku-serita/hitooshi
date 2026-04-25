@@ -63,13 +63,11 @@ body{
   margin-bottom:2px;
 }
 .app-name{font-size:26px;font-weight:800;letter-spacing:.18em;color:var(--tx)}
-/* 共感フック：初見3秒で「自分向け」と感じさせる */
 .app-hook{
   font-size:15px;font-weight:700;color:var(--tx);
   letter-spacing:.02em;line-height:1.5;text-align:center;
   margin-top:3px;
 }
-/* ベネフィット説明：短く・理解重視 */
 .app-sub{
   font-size:11px;color:var(--tx-s);
   letter-spacing:.03em;line-height:1.6;text-align:center;
@@ -120,6 +118,17 @@ body{
   padding: 10px 16px;
   justify-content: center;
 }
+.chip-hidden{display:none}
+.mood-expanded .chip-hidden{display:flex}
+.chip-more{
+  width:100%;margin-top:6px;
+  background:none;border:1.5px dashed var(--be-d);border-radius:12px;
+  padding:8px;font-size:12px;color:var(--tx-s);
+  cursor:pointer;text-align:center;
+  transition:background .15s,border-color .15s;
+  -webkit-tap-highlight-color:transparent;
+}
+.chip-more:hover{background:var(--lv-l);border-color:var(--lv)}
 
 /* ── Main Button ── */
 .btn-wrap{padding:4px 0 18px}
@@ -156,15 +165,11 @@ body{
 }
 .card-body{display:flex;gap:12px;align-items:flex-start}
 .card-texts{flex:1;min-width:0}
-
-/* メッセージ：主役 */
 .c-msg{
   font-size:18px;line-height:2.0;color:var(--tx);font-weight:700;
   margin-bottom:22px;min-height:2.2em;
   letter-spacing:.02em;
 }
-
-/* 行動提案：次の一歩として視認性強化 */
 .c-act-row{
   display:flex;align-items:stretch;
   border-radius:14px;overflow:hidden;
@@ -185,8 +190,19 @@ body{
   font-size:14px;color:#6A4E3C;line-height:1.6;font-weight:600;
   flex:1;
 }
+.retry-btn{
+  display:none;align-items:center;justify-content:center;gap:5px;
+  margin-top:10px;
+  background:none;border:1.5px dashed #D0B8A8;border-radius:10px;
+  padding:8px 14px;font-size:12px;color:#8A6858;
+  cursor:pointer;width:100%;
+  transition:background .15s,border-color .15s;
+  -webkit-tap-highlight-color:transparent;
+}
+.retry-btn.vis{display:flex}
+.retry-btn:hover{background:#FFF3E8;border-color:#C0A090}
 
-/* マスコット：控えめ・達成時に活きる */
+/* マスコット */
 .mascot-box{
   width:52px;flex-shrink:0;
   display:flex;align-items:flex-end;justify-content:center;
@@ -242,7 +258,7 @@ body{
 @keyframes fPIn{to{opacity:1}}
 
 /* ── Action Buttons ── */
-.act-btns{display:none;gap:9px;margin-bottom:22px}
+.act-btns{display:none;gap:9px;margin-bottom:14px}
 .act-btns.vis{display:flex}
 .btn-fav{
   flex:1;background:var(--wh);border:1.5px solid var(--be);border-radius:18px;
@@ -266,8 +282,30 @@ body{
 .btn-done:hover{transform:translateY(-1px);box-shadow:0 6px 18px rgba(175,145,195,.3)}
 .btn-done:active{transform:translateY(1px)}
 
+/* ── Scroll link ── */
+.scroll-link-wrap{text-align:center;margin-bottom:16px;display:none}
+.scroll-link{
+  background:none;border:none;
+  font-size:12px;color:var(--tx-s);cursor:pointer;
+  padding:4px 8px;
+  -webkit-tap-highlight-color:transparent;
+  text-decoration:underline;text-underline-offset:3px;
+}
+
 /* ── Divider ── */
 .div{height:1px;background:linear-gradient(90deg,transparent,var(--be),transparent);margin:4px 0 22px;display:none}
+
+/* ── History ── */
+.history-sec{margin-bottom:18px;display:none}
+.history-stats{display:flex;gap:10px;margin-bottom:6px}
+.hist-item{
+  background:var(--wh);border-radius:14px;padding:12px 16px;
+  display:flex;flex-direction:column;align-items:center;flex:1;
+  box-shadow:var(--sh-s);
+}
+.hist-num{font-size:24px;font-weight:800;color:var(--lv-d);line-height:1.1}
+.hist-label{font-size:10px;color:var(--tx-s);margin-top:2px;text-align:center}
+.hist-combo{font-size:11px;color:var(--tx-m);padding:8px 12px;background:var(--lv-l);border-radius:10px;margin-top:6px}
 
 /* ── Favorites Carousel ── */
 .fav-sec{display:none;padding-bottom:8px}
@@ -349,9 +387,17 @@ body{
 .ob-chips-demo{display:flex;flex-wrap:wrap;gap:6px;justify-content:center}
 .ob-chip{background:var(--wh);border:1.5px solid var(--be);border-radius:20px;padding:5px 12px;font-size:12px;color:var(--tx-m)}
 .ob-chip.hi{background:var(--lv);border-color:var(--lv);color:#fff}
+.ob-next{
+  background:var(--lv-l);border:1.5px solid var(--lv);border-radius:16px;
+  padding:10px 28px;font-size:14px;font-weight:700;color:var(--lv-d);
+  cursor:pointer;margin-top:4px;
+  -webkit-tap-highlight-color:transparent;
+  transition:background .15s;
+}
+.ob-next:hover{background:var(--lv)}
 .ob-bottom{display:flex;flex-direction:column;align-items:center;gap:12px;width:100%}
 .ob-dots{display:flex;gap:8px}
-.ob-dot{width:7px;height:7px;border-radius:50%;background:var(--be);transition:background .3s}
+.ob-dot{width:7px;height:7px;border-radius:50%;background:var(--be);transition:background .3s;cursor:pointer}
 .ob-dot.on{background:var(--lv)}
 .ob-start{
   width:100%;max-width:260px;
@@ -385,16 +431,17 @@ body{
   <div class="lbl">いまの気分</div>
   <div class="chips mood-chips" id="moodC" role="group" aria-label="気分を選ぶ">
     <button class="chip" data-v="だるい" aria-pressed="false"><span class="chip-ico">😪</span><span class="chip-txt">だるい</span></button>
-    <button class="chip" data-v="眠い" aria-pressed="false"><span class="chip-ico">💤</span><span class="chip-txt">眠い</span></button>
-    <button class="chip" data-v="不安" aria-pressed="false"><span class="chip-ico">😰</span><span class="chip-txt">不安</span></button>
-    <button class="chip" data-v="行きたくない" aria-pressed="false"><span class="chip-ico">🚫</span><span class="chip-txt">行きたくない</span></button>
-    <button class="chip" data-v="人に会いたくない" aria-pressed="false"><span class="chip-ico">🙈</span><span class="chip-txt">人に会いたくない</span></button>
-    <button class="chip" data-v="何もしたくない" aria-pressed="false"><span class="chip-ico">🌫️</span><span class="chip-txt">何もしたくない</span></button>
-    <button class="chip" data-v="めんどくさい" aria-pressed="false"><span class="chip-ico">😮‍💨</span><span class="chip-txt">めんどくさい</span></button>
-    <button class="chip" data-v="緊張する" aria-pressed="false"><span class="chip-ico">💦</span><span class="chip-txt">緊張する</span></button>
-    <button class="chip" data-v="気分が重い" aria-pressed="false"><span class="chip-ico">☁️</span><span class="chip-txt">気分が重い</span></button>
     <button class="chip" data-v="疲れている" aria-pressed="false"><span class="chip-ico">🪫</span><span class="chip-txt">疲れている</span></button>
+    <button class="chip" data-v="不安" aria-pressed="false"><span class="chip-ico">😰</span><span class="chip-txt">不安</span></button>
+    <button class="chip" data-v="めんどくさい" aria-pressed="false"><span class="chip-ico">😮‍💨</span><span class="chip-txt">めんどくさい</span></button>
+    <button class="chip" data-v="何もしたくない" aria-pressed="false"><span class="chip-ico">🌫️</span><span class="chip-txt">何もしたくない</span></button>
+    <button class="chip" data-v="行きたくない" aria-pressed="false"><span class="chip-ico">🚫</span><span class="chip-txt">行きたくない</span></button>
+    <button class="chip chip-hidden" data-v="眠い" aria-pressed="false"><span class="chip-ico">💤</span><span class="chip-txt">眠い</span></button>
+    <button class="chip chip-hidden" data-v="人に会いたくない" aria-pressed="false"><span class="chip-ico">🙈</span><span class="chip-txt">人に会いたくない</span></button>
+    <button class="chip chip-hidden" data-v="緊張する" aria-pressed="false"><span class="chip-ico">💦</span><span class="chip-txt">緊張する</span></button>
+    <button class="chip chip-hidden" data-v="気分が重い" aria-pressed="false"><span class="chip-ico">☁️</span><span class="chip-txt">気分が重い</span></button>
   </div>
+  <button class="chip-more" id="moodMore" onclick="toggleMoodExpand()">他の気分も見る ▾</button>
 </section>
 
 <section class="sec">
@@ -421,6 +468,7 @@ body{
         <div class="c-act-icon">▷</div>
         <div class="c-act-text" id="cAct"></div>
       </div>
+      <button class="retry-btn" id="retryBtn" onclick="retryMsg()">↻ 別の言葉ももらう</button>
     </div>
     <div class="mascot-box">
       <img src="mascot.png" alt="" class="mascot" id="mascot" onerror="this.parentElement.style.display='none'">
@@ -432,10 +480,20 @@ body{
   <button class="btn-fav" id="favBtn" onclick="toggleFav()" aria-label="お気に入りに追加">
     <span id="favIco" aria-hidden="true">♡</span> お気に入り
   </button>
-  <button class="btn-done" onclick="done()">✓ できた！</button>
+  <button class="btn-done" onclick="done()">✦ 受け取った</button>
+</div>
+
+<div class="scroll-link-wrap" id="scrollLinkWrap">
+  <button class="scroll-link" onclick="scrollToHistory()">↓ ここまでのヒトオシを見る (<span id="scrollLinkCount">0</span>件)</button>
 </div>
 
 <div class="div" id="div"></div>
+
+<div class="history-sec" id="historySec">
+  <div class="lbl">ヒトオシの記録</div>
+  <div id="historyContent"></div>
+</div>
+
 <div class="fav-sec" id="favSec">
   <div class="fav-ttl">✦ ここまでのヒトオシ</div>
   <div class="fav-indicator" id="favIndicator"></div>
@@ -453,74 +511,224 @@ body{
 // ── Message Data ──
 const D = {
   "だるい":{
-    "出勤前":        {m:"だるいままでいいよ。だるいまま着替えた人、えらい。",           a:"服を1枚だけ選んでみる"},
-    "通勤中":        {m:"だるいまま乗れてるじゃん。それだけで今日の主役。",            a:"窓の外を5秒だけぼーっと見てみる"},
-    "仕事前":        {m:"だるくても席についてれば、それでOKです今日は。",             a:"お茶かお水をひとくち飲む"},
-    "昼休み中":      {m:"午前中よく来たよ。だるいのに来たんだから。",                 a:"目を5秒だけ閉じてみる"},
-    "午後つらいとき": {m:"あとちょっとだけ、だるいまま座ってればいい。",              a:"背筋だけちょっと伸ばしてみる"}
+    "出勤前":{
+      m:["だるいままでいいよ。だるいまま着替えた人、えらい。","体が重くて当然。それでも動こうとしてるだけで十分。","だるいのは休んだ証拠でもある。今日もゆっくりいこう。"],
+      a:["服を1枚だけ選んでみる","顔だけ洗ってみる","水をひとくち飲む"]
+    },
+    "通勤中":{
+      m:["だるいまま乗れてるじゃん。それだけで今日の主役。","電車の中でだるいのは正常。乗れてるだけで合格。","だるいまま向かってる、それだけでえらい。"],
+      a:["窓の外を5秒だけぼーっと見てみる","目を閉じて揺られてていい","好きな音楽を聴く"]
+    },
+    "仕事前":{
+      m:["だるくても席についてれば、それでOKです今日は。","席にいるだけで十分。だるいまま、ただいてくれればいい。","だるさを感じながらも来た、それが今日の最大の成果。"],
+      a:["お茶かお水をひとくち飲む","まず深呼吸を1回","机を少しだけ整える"]
+    },
+    "昼休み中":{
+      m:["午前中よく来たよ。だるいのに来たんだから。","だるい午前中を乗り越えたね。それだけで十分偉い。","午前中のだるさ、ちゃんと乗り越えてきたじゃん。"],
+      a:["目を5秒だけ閉じてみる","好きなものをゆっくり食べる","横になれたら少しだけ目を閉じる"]
+    },
+    "午後つらいとき":{
+      m:["あとちょっとだけ、だるいまま座ってればいい。","だるいまま午後まで来た、ほんとにえらい。","あと少し。だるいままで全然いいよ。"],
+      a:["背筋だけちょっと伸ばしてみる","退勤後の楽しみをひとつ決める","水を飲んでひと息つく"]
+    }
   },
   "眠い":{
-    "出勤前":        {m:"眠いのは夜ちゃんと生きた証拠。えらいよ。",                   a:"顔を洗うか、冷たい水を飲む"},
-    "通勤中":        {m:"眠いまま乗れてる、すごいよ。寝ててもいいよ途中まで。",        a:"目を閉じて揺られてていい"},
-    "仕事前":        {m:"眠たい目で画面見てるの、がんばってるよ。",                   a:"水かお茶を飲んで、深呼吸1回"},
-    "昼休み中":      {m:"眠いなら寝ていい。昼休みは合法的な充電タイム。",              a:"15分だけ目を閉じてみる"},
-    "午後つらいとき": {m:"眠いまま午後突入、今日のあなたほんとにえらい。",            a:"席を立ってちょっとだけ歩く"}
+    "出勤前":{
+      m:["眠いのは夜ちゃんと生きた証拠。えらいよ。","眠くても起きてる、それだけで今日はすごい。","眠たい目をこすって来てくれてありがとう。"],
+      a:["顔を洗うか、冷たい水を飲む","外の空気を少し吸う","コーヒーか温かいものを飲む"]
+    },
+    "通勤中":{
+      m:["眠いまま乗れてる、すごいよ。寝ててもいいよ途中まで。","眠いまま電車に乗れてる、それだけで合格。","うとうとしながらでも向かってる、えらいよ。"],
+      a:["目を閉じて揺られてていい","イヤホンして好きな音楽を聴く","窓にもたれてひと息つく"]
+    },
+    "仕事前":{
+      m:["眠たい目で画面見てるの、がんばってるよ。","眠たいまま仕事場にいる、十分すぎるくらい偉い。","眠い状態でここまで来た、今日はそれが一番えらい。"],
+      a:["水かお茶を飲んで、深呼吸1回","席で少しだけ伸びをする","目薬をさすか目を少し閉じる"]
+    },
+    "昼休み中":{
+      m:["眠いなら寝ていい。昼休みは合法的な充電タイム。","眠い午前中を乗り越えた、よくやった。","眠くても午前中こなしてきた、えらいよ。"],
+      a:["15分だけ目を閉じてみる","目を閉じて好きな音楽を聴く","横になれたら少しだけ寝る"]
+    },
+    "午後つらいとき":{
+      m:["眠いまま午後突入、今日のあなたほんとにえらい。","眠い中で午後まで来た、これは本当にすごい。","眠たいまま今日もここまで来た、あとちょっとだけ。"],
+      a:["席を立ってちょっとだけ歩く","冷たい水を飲む","トイレで顔を洗う"]
+    }
   },
   "不安":{
-    "出勤前":        {m:"不安なまま行く、それが一番つよい。",                         a:"深呼吸を3回だけしてみる"},
-    "通勤中":        {m:"不安のままで着けばいい。揺られながらそれでいい。",             a:"好きな音楽を1曲だけかけてみる"},
-    "仕事前":        {m:"不安なのは、ちゃんと考えてる人の証拠かもね。",                a:"まず1つだけ、小さいこと片付けてみる"},
-    "昼休み中":      {m:"不安な午前中を乗り越えたね。よく乗り越えた。",                a:"空や外の景色を少し眺めてみる"},
-    "午後つらいとき": {m:"不安なままここまで来た、それだけで十分すごい。",             a:"肩の力を抜いて、深呼吸1回"}
+    "出勤前":{
+      m:["不安なまま行く、それが一番つよい。","不安を感じてる自分は、ちゃんと真剣に向き合ってる証拠。","不安でいいよ。不安のまま動ける人って、実はすごい。"],
+      a:["深呼吸を3回だけしてみる","好きな音楽を1曲かけながら準備する","肩の力を抜いて、まず1歩"]
+    },
+    "通勤中":{
+      m:["不安のままで着けばいい。揺られながらそれでいい。","不安を抱えながら電車に乗れてる、それだけで十分つよい。","不安な気持ちと一緒に向かってる、えらいよ。"],
+      a:["好きな音楽を1曲だけかけてみる","窓の外をぼーっと眺めてみる","目を閉じて深呼吸する"]
+    },
+    "仕事前":{
+      m:["不安なのは、ちゃんと考えてる人の証拠かもね。","不安があるのは、それだけ大事にしてるから。","不安なまま来た、それだけでもう十分すごい。"],
+      a:["まず1つだけ、小さいこと片付けてみる","深呼吸を3回してみる","温かいものをひとくち飲む"]
+    },
+    "昼休み中":{
+      m:["不安な午前中を乗り越えたね。よく乗り越えた。","不安の中でも午前中こなしてきた、すごいよ。","不安と戦いながらここまで来た、えらい。"],
+      a:["空や外の景色を少し眺めてみる","好きなものをゆっくり食べる","温かいものを飲んでひと息つく"]
+    },
+    "午後つらいとき":{
+      m:["不安なままここまで来た、それだけで十分すごい。","不安を抱えたまま午後まで来た、本当に偉い。","不安な気持ちと一緒に今日もここまで来た。えらいよ。"],
+      a:["肩の力を抜いて、深呼吸1回","退勤後の楽しみをひとつ考える","ゆっくり水を飲む"]
+    }
   },
   "行きたくない":{
-    "出勤前":        {m:"行きたくないのわかる。でもカバン持てたじゃん。",               a:"カバンを玄関まで持っていく、それだけ"},
-    "通勤中":        {m:"行きたくなかったのに電車乗ってる、もうすごい。",               a:"今日帰ったら何しようかだけ考える"},
-    "仕事前":        {m:"行きたくなかったのにいる。今日の自分に拍手。",                 a:"まず5分だけ、時計を見ながらやってみる"},
-    "昼休み中":      {m:"行きたくなかったのに午前中こなした、偉すぎる。",               a:"今夜の自分へのご褒美を決めてみる"},
-    "午後つらいとき": {m:"行きたくなかった日に帰れたら、それは勝ちです。",             a:"退勤後の楽しみをスマホのメモに書く"}
+    "出勤前":{
+      m:["行きたくないのわかる。でもカバン持てたじゃん。","行きたくない気持ち、正直でいいよ。でもそこに立ってるだけえらい。","行きたくなくて当然。そんな日でも動こうとしてる自分、すごい。"],
+      a:["カバンを玄関まで持っていく、それだけ","靴だけ履いてみる","まず玄関まで出る、それだけ"]
+    },
+    "通勤中":{
+      m:["行きたくなかったのに電車乗ってる、もうすごい。","行きたくなかったのに、ちゃんと動いてる。それだけで今日は合格。","行きたくなかった日に電車に乗れた、それはもう今日の勝ち。"],
+      a:["今日帰ったら何しようかだけ考える","好きな音楽を聴きながら揺られる","今夜のご褒美をひとつ決める"]
+    },
+    "仕事前":{
+      m:["行きたくなかったのにいる。今日の自分に拍手。","行きたくなかったのに来た。もうそれだけで今日は十分。","行きたくなかったのにここにいる自分、本当にえらい。"],
+      a:["まず5分だけ、時計を見ながらやってみる","一番簡単なことを1個だけやる","深呼吸して、まずひとつだけ"]
+    },
+    "昼休み中":{
+      m:["行きたくなかったのに午前中こなした、偉すぎる。","行きたくなかった日に午前中乗り越えた、本当にすごい。","行きたくなかったのに来て、午前中もこなした。えらすぎる。"],
+      a:["今夜の自分へのご褒美を決めてみる","好きなものをゆっくり食べる","少しだけ外の空気を吸う"]
+    },
+    "午後つらいとき":{
+      m:["行きたくなかった日に帰れたら、それは勝ちです。","行きたくなかった日に、ここまで来た。それだけで十分すごい。","行きたくなかったのに今日もここまで来た、本当にえらい。"],
+      a:["退勤後の楽しみをスマホのメモに書く","帰ったらやりたいことをひとつ決める","あと少し、今日の自分に声をかける"]
+    }
   },
   "人に会いたくない":{
-    "出勤前":        {m:"挨拶だけでいいよ。それだけでじゅうぶん。",                    a:"最低限の挨拶だけにする、と心の中で決める"},
-    "通勤中":        {m:"イヤホンという壁、最高の発明だよね。",                        a:"好きなプレイリストで自分の世界に入る"},
-    "仕事前":        {m:"今日は必要最低限だけ返事すればいい日にしよう。",               a:"必要な人だけに挨拶、と心の中で決める"},
-    "昼休み中":      {m:"一人で食べてもいい。それが最高の休息の日もある。",             a:"一人でこっそり好きなものを食べる"},
-    "午後つらいとき": {m:"会いたくない日に会い続けた自分、えらすぎ。もう少し。",       a:"帰ったら誰にも連絡しない時間を作る、と決める"}
+    "出勤前":{
+      m:["挨拶だけでいいよ。それだけでじゅうぶん。","会いたくない日に来てる自分、十分すぎるくらいえらい。","人に会いたくない気持ち、正直でいいよ。最低限でいい。"],
+      a:["最低限の挨拶だけにする、と心の中で決める","イヤホンを準備する","一人の時間を確保できる場所を考えておく"]
+    },
+    "通勤中":{
+      m:["イヤホンという壁、最高の発明だよね。","自分の世界に入っていい。それが今日の生存戦略。","人との距離を保ちながら向かってる、それでいいよ。"],
+      a:["好きなプレイリストで自分の世界に入る","イヤホンをして外を眺める","好きなポッドキャストを聴く"]
+    },
+    "仕事前":{
+      m:["今日は必要最低限だけ返事すればいい日にしよう。","全員と話さなくていい。今日はそれだけで十分。","会いたくない日に来てる、それだけで今日の自分はえらい。"],
+      a:["必要な人だけに挨拶、と心の中で決める","一人作業できる仕事を優先する","なるべく席で完結できるようにする"]
+    },
+    "昼休み中":{
+      m:["一人で食べてもいい。それが最高の休息の日もある。","昼休みは自分の時間。一人でいていい。","会いたくない日に、午前中もちゃんとこなした。えらい。"],
+      a:["一人でこっそり好きなものを食べる","静かな場所でぼーっとする","イヤホンして好きな音楽を聴く"]
+    },
+    "午後つらいとき":{
+      m:["会いたくない日に会い続けた自分、えらすぎ。もう少し。","会いたくない日に、ここまで来た。本当にすごい。","今日も人と関わり続けた自分、本当にお疲れさま。"],
+      a:["帰ったら誰にも連絡しない時間を作る、と決める","一人の時間の計画をたてる","今夜は静かに過ごす、と決める"]
+    }
   },
   "何もしたくない":{
-    "出勤前":        {m:"何もしたくないのにここまで起きた、すでに偉い。",               a:"着替えるだけ着替えてみる、それだけでいい"},
-    "通勤中":        {m:"何もしたくないまま乗れてる。輸送されてるだけでえらい。",       a:"窓の外をぼーっと見てていい"},
-    "仕事前":        {m:"何もしたくない時ほど、小さいことをひとつだけ。",               a:"いちばん簡単なタスクを1個だけやる"},
-    "昼休み中":      {m:"何もしたくない昼休みは、何もしなくていい。",                   a:"ただ座って、好きな音楽を聴く"},
-    "午後つらいとき": {m:"何もしたくないのにここまで来た。今日はそれだけで合格。",     a:"5分だけ席を離れて、外の空気を吸う"}
+    "出勤前":{
+      m:["何もしたくないのにここまで起きた、すでに偉い。","何もしたくない朝に起きてる、それだけで今日の主役。","何もしたくない気持ち、正直でいいよ。でも起きてる自分えらい。"],
+      a:["着替えるだけ着替えてみる、それだけでいい","水を一杯飲む","まず立ち上がるだけ"]
+    },
+    "通勤中":{
+      m:["何もしたくないまま乗れてる。輸送されてるだけでえらい。","何もしたくないのに電車に乗れてる、それだけで今日は合格。","何もしたくない中で動いてる、それがすでにすごい。"],
+      a:["窓の外をぼーっと見てていい","目を閉じて揺られてていい","今夜の楽しみをひとつ考える"]
+    },
+    "仕事前":{
+      m:["何もしたくない時ほど、小さいことをひとつだけ。","何もしたくない日に来た、それだけで十分えらい。","何もしたくないのにここにいる自分、すごいよ。"],
+      a:["いちばん簡単なタスクを1個だけやる","お茶をゆっくり飲む","深呼吸をして、まずひとつだけ"]
+    },
+    "昼休み中":{
+      m:["何もしたくない昼休みは、何もしなくていい。","午前中よくこなした。昼休みは何もしなくていい。","何もしたくない中で午前中来た、えらいよ。"],
+      a:["ただ座って、好きな音楽を聴く","目を閉じてぼーっとする","好きなものをゆっくり食べる"]
+    },
+    "午後つらいとき":{
+      m:["何もしたくないのにここまで来た。今日はそれだけで合格。","何もしたくない日に午後まで来た、本当にすごい。","何もしたくないのに今日もここまで来た。えらいよ。"],
+      a:["5分だけ席を離れて、外の空気を吸う","水を飲んでひと息つく","退勤後の楽しみをひとつ決める"]
+    }
   },
   "めんどくさい":{
-    "出勤前":        {m:"めんどくさい気持ち、正直でいいよ。でも体だけ動かしてみよ。",   a:"まず靴だけ履いてみる"},
-    "通勤中":        {m:"めんどくさいのに乗ってる、それが今日一番の仕事かも。",         a:"今日終わったら何を食べるか決めておく"},
-    "仕事前":        {m:"めんどくさいの全部わかる。でもとりあえず1個だけね。",          a:"いちばん小さなタスクをひとつだけ片す"},
-    "昼休み中":      {m:"午前よくやった。午後もめんどくさいままでいいよ。",             a:"好きなものを食べてエネルギーチャージ"},
-    "午後つらいとき": {m:"めんどくさい気持ち、正直で好き。あとちょっと。",             a:"退勤まであと何時間か確認してみる"}
+    "出勤前":{
+      m:["めんどくさい気持ち、正直でいいよ。でも体だけ動かしてみよ。","めんどくさいのわかる。でも起きてる自分えらい。","めんどくさい朝に動こうとしてる、それだけで十分。"],
+      a:["まず靴だけ履いてみる","着替えだけしてみる","カバンだけ持ってみる"]
+    },
+    "通勤中":{
+      m:["めんどくさいのに乗ってる、それが今日一番の仕事かも。","めんどくさい中で動いてる、それだけで今日は偉い。","めんどくさいのに電車に乗れてる、すごいよ。"],
+      a:["今日終わったら何を食べるか決めておく","好きな音楽を聴きながら揺られる","今夜のご褒美をひとつ決める"]
+    },
+    "仕事前":{
+      m:["めんどくさいの全部わかる。でもとりあえず1個だけね。","めんどくさいまま来た、それだけで今日は十分。","めんどくさいのにここに来た、えらいよ。"],
+      a:["いちばん小さなタスクをひとつだけ片す","深呼吸してから始める","まず5分だけやってみる"]
+    },
+    "昼休み中":{
+      m:["午前よくやった。午後もめんどくさいままでいいよ。","めんどくさい中で午前中こなした、えらいよ。","めんどくさいのに午前中来た、それだけで十分偉い。"],
+      a:["好きなものを食べてエネルギーチャージ","ゆっくり休む","少しだけ外に出てみる"]
+    },
+    "午後つらいとき":{
+      m:["めんどくさい気持ち、正直で好き。あとちょっと。","めんどくさいまま午後も来た、本当にえらい。","めんどくさいのに今日もここまで来た。あとちょっとだけ。"],
+      a:["退勤まであと何時間か確認してみる","帰ったらやりたいことをひとつ決める","水を飲んでひと息つく"]
+    }
   },
   "緊張する":{
-    "出勤前":        {m:"緊張するってことは、ちゃんと向き合ってる証拠。",               a:"深呼吸：4秒吸って6秒かけて吐く"},
-    "通勤中":        {m:"緊張したまま向かえてる、それだけで十分つよい。",               a:"肩の力を抜いて、遠くを見てみる"},
-    "仕事前":        {m:"緊張しててOK。みんなそれなりに緊張してるよ。",                a:"手のひらに「大丈夫」と書いて握る（内緒で）"},
-    "昼休み中":      {m:"緊張した午前中を乗り越えたね、よくやった。",                  a:"温かいものを飲んで、少しだけ体を緩める"},
-    "午後つらいとき": {m:"緊張しながらここまで来た。今日のあなたほんとにすごい。",     a:"ゆっくり深呼吸して、肩を回してみる"}
+    "出勤前":{
+      m:["緊張するってことは、ちゃんと向き合ってる証拠。","緊張してる自分は、真剣に取り組んでる証拠。","緊張するのは、大事にしてるから。それでいいよ。"],
+      a:["深呼吸：4秒吸って6秒かけて吐く","肩を回してから出る","好きな音楽を聴きながら準備する"]
+    },
+    "通勤中":{
+      m:["緊張したまま向かえてる、それだけで十分つよい。","緊張しながらも電車に乗れてる、えらいよ。","緊張したまま動いてる自分、十分すごい。"],
+      a:["肩の力を抜いて、遠くを見てみる","深呼吸を3回してみる","好きな音楽で気持ちを整える"]
+    },
+    "仕事前":{
+      m:["緊張しててOK。みんなそれなりに緊張してるよ。","緊張してる自分を責めなくていい。みんな緊張してる。","緊張は集中力の証。うまく使えばいい。"],
+      a:["手のひらに「大丈夫」と書いて握る（内緒で）","深呼吸を3回してみる","水をゆっくり飲む"]
+    },
+    "昼休み中":{
+      m:["緊張した午前中を乗り越えたね、よくやった。","緊張しながら午前中こなした、本当にえらい。","緊張の中で午前中乗り越えた、すごいよ。"],
+      a:["温かいものを飲んで、少しだけ体を緩める","肩の力を抜いてひと息つく","外の景色を眺めてみる"]
+    },
+    "午後つらいとき":{
+      m:["緊張しながらここまで来た。今日のあなたほんとにすごい。","緊張しながら午後まで来た、本当にえらい。","緊張の中で今日もここまで来た。あとちょっとだけ。"],
+      a:["ゆっくり深呼吸して、肩を回してみる","水を飲んでひと息つく","退勤後の楽しみをひとつ決める"]
+    }
   },
   "気分が重い":{
-    "出勤前":        {m:"気分が重い日は、体だけ動かせばいい。頭は後から追いつく。",     a:"着替えだけしてみる、それだけでいい"},
-    "通勤中":        {m:"重いまま乗れてる、それだけでもう今日は合格点。",               a:"目を閉じて音楽を聴く"},
-    "仕事前":        {m:"気分が重くても体は来てる。今日の自分、えらい。",               a:"お茶をゆっくり飲む、それだけでいい"},
-    "昼休み中":      {m:"重い気分で午前中乗り切ったね、それ相当すごいよ。",             a:"外に出て5分だけぼーっとする"},
-    "午後つらいとき": {m:"気分が重い日こそ、終わった時の軽さが待ってるよ。",           a:"退勤後の好きなことをひとつ決めておく"}
+    "出勤前":{
+      m:["気分が重い日は、体だけ動かせばいい。頭は後から追いつく。","気分が重くて当然。でも動こうとしてる体、えらいよ。","気分が重い朝に起きてる、それだけで今日はすごい。"],
+      a:["着替えだけしてみる、それだけでいい","水をひとくち飲む","顔を洗うだけでいい"]
+    },
+    "通勤中":{
+      m:["重いまま乗れてる、それだけでもう今日は合格点。","気分が重いのに電車に乗れてる、えらいよ。","重い気分を引きずりながらも向かってる、十分すごい。"],
+      a:["目を閉じて音楽を聴く","窓の外をぼーっと眺める","好きなプレイリストで気持ちを包む"]
+    },
+    "仕事前":{
+      m:["気分が重くても体は来てる。今日の自分、えらい。","気分が重いのに来た、それが今日一番えらいこと。","気分が重いまま来た自分に、まず拍手。"],
+      a:["お茶をゆっくり飲む、それだけでいい","深呼吸を1回してみる","机を少し整える"]
+    },
+    "昼休み中":{
+      m:["重い気分で午前中乗り切ったね、それ相当すごいよ。","気分が重い中で午前中こなした、本当にえらい。","重い気分のまま午前中来た、すごいよ。"],
+      a:["外に出て5分だけぼーっとする","好きなものをゆっくり食べる","目を閉じてひと息つく"]
+    },
+    "午後つらいとき":{
+      m:["気分が重い日こそ、終わった時の軽さが待ってるよ。","重い気分で午後まで来た、本当にえらい。","気分が重いのに今日もここまで来た。あとちょっとだけ。"],
+      a:["退勤後の好きなことをひとつ決めておく","水を飲んでひと息つく","あと少し、今日の自分に声をかける"]
+    }
   },
   "疲れている":{
-    "出勤前":        {m:"疲れてるのに起きてる、もうそれで十分すごい。",                a:"水をひとくち飲んで、深呼吸する"},
-    "通勤中":        {m:"疲れてるのに来てる、今日もあなたはすごい人です。",             a:"座れたら目を閉じて、ぼーっとしていい"},
-    "仕事前":        {m:"疲れたまま来た、それが今日一番の仕事。",                       a:"いちばん簡単なことから始める"},
-    "昼休み中":      {m:"疲れてるから昼休みがある。今日はしっかり休んで。",             a:"横になれなくても、目を閉じるだけでもいい"},
-    "午後つらいとき": {m:"疲れてるまま午後も来た、ほんとに偉い。あとちょっとだけ。",  a:"今夜は早く寝る、と決めておく"}
+    "出勤前":{
+      m:["疲れてるのに起きてる、もうそれで十分すごい。","疲れた体で起きてる、それだけで今日はもう偉い。","疲れてるのに動こうとしてる、えらいよ。"],
+      a:["水をひとくち飲んで、深呼吸する","顔を洗う","外の空気をひと息吸う"]
+    },
+    "通勤中":{
+      m:["疲れてるのに来てる、今日もあなたはすごい人です。","疲れた体で電車に乗れてる、えらいよ。","疲れてるのに向かってる自分、十分すぎるくらいすごい。"],
+      a:["座れたら目を閉じて、ぼーっとしていい","イヤホンして好きな音楽を聴く","今夜の楽しみをひとつ考える"]
+    },
+    "仕事前":{
+      m:["疲れたまま来た、それが今日一番の仕事。","疲れてるのに来た、それだけで今日は十分。","疲れた体を連れてきてくれた自分、えらいよ。"],
+      a:["いちばん簡単なことから始める","深呼吸をひとつしてから始める","お茶をゆっくり飲む"]
+    },
+    "昼休み中":{
+      m:["疲れてるから昼休みがある。今日はしっかり休んで。","疲れた体で午前中こなした、えらいよ。","疲れながら午前中来た、本当にすごい。"],
+      a:["横になれなくても、目を閉じるだけでもいい","好きなものをゆっくり食べる","静かな場所でひと息つく"]
+    },
+    "午後つらいとき":{
+      m:["疲れてるまま午後も来た、ほんとに偉い。あとちょっとだけ。","疲れた体で午後まで来た、本当にえらい。","疲れながら今日もここまで来た。あとちょっとだけ。"],
+      a:["今夜は早く寝る、と決めておく","退勤後の楽しみをひとつ決める","水を飲んでひと息つく"]
+    }
   }
 };
 
@@ -574,7 +782,7 @@ function playWin(){
 // ── Haptics ──
 function vib(pat){if(!soundOn||!navigator.vibrate)return;navigator.vibrate(pat);}
 
-// ── Typewriter：速度改善・行動提案は65%タイミングで表示 ──
+// ── Typewriter ──
 function typeWriter(el, text, onMidway){
   if(typeTimer){clearTimeout(typeTimer);typeTimer=null;}
   el.textContent='';
@@ -658,48 +866,100 @@ document.getElementById('sceneC').addEventListener('click',e=>{
   ch.classList.add('on');ch.setAttribute('aria-pressed','true');
   document.getElementById('sceneC').classList.add('dimmed');
   scene=ch.dataset.v;playPop();vib(8);
-  // 場面に合わせてボタン文言を変化
   document.getElementById('mainBtn').textContent=SCENE_BTN[scene]||DEFAULT_BTN;
 });
+
+// ── Mood expand (改修5) ──
+function toggleMoodExpand(){
+  const expanded=document.getElementById('moodC').classList.toggle('mood-expanded');
+  sessionStorage.setItem('ht_mood_expanded',expanded?'1':'');
+  document.getElementById('moodMore').textContent=expanded?'閉じる ▴':'他の気分も見る ▾';
+}
 
 // ── Main go ──
 function go(){
   if(!mood||!scene){showToast('気分と場面を選んでね 🌸');return;}
   vib([10,30,10]);playPop();
   trackChip('mood',mood);trackChip('scene',scene);
+  trackDay();trackCombo(mood,scene);trackTotal();
   const d=D[mood][scene];
-  cur={mood,scene,...d};
-  document.getElementById('appSub').textContent = mood + ' × ' + scene;
-  document.getElementById('cAct').textContent=d.a;
-  faved=favs.some(f=>f.mood===mood&&f.scene===scene);
+  const mArr=Array.isArray(d.m)?d.m:[d.m];
+  const aArr=Array.isArray(d.a)?d.a:[d.a];
+  cur={mood,scene,m:mArr[0],a:aArr[0],msgIdx:0,_mArr:mArr,_aArr:aArr};
+  document.getElementById('appSub').textContent=mood+' × '+scene;
+  document.getElementById('cAct').textContent=cur.a;
+  faved=favs.some(f=>f.mood===mood&&f.scene===scene&&(f.msgIdx||0)===0);
   syncFav();
+  const retryBtn=document.getElementById('retryBtn');
+  retryBtn.classList.toggle('vis',mArr.length>1);
   const card=document.getElementById('card');
   card.classList.remove('in');card.classList.add('vis');
   document.getElementById('actBtns').classList.add('vis');
   requestAnimationFrame(()=>requestAnimationFrame(()=>{
     card.classList.add('in');
     showParticles();
-    typeWriter(document.getElementById('cMsg'),d.m,()=>{
+    typeWriter(document.getElementById('cMsg'),cur.m,()=>{
       const row=document.getElementById('cActRow');
       row.style.transition='opacity .35s ease';
       row.style.opacity='1';
     });
   }));
   setTimeout(()=>card.scrollIntoView({behavior:'smooth',block:'nearest'}),50);
+  renderHistory();
+  updateScrollLink();
+}
+
+// ── Retry message (改修2) ──
+function retryMsg(){
+  if(!cur||!cur._mArr)return;
+  vib(8);playPop();
+  const nextIdx=(cur.msgIdx+1)%cur._mArr.length;
+  cur.msgIdx=nextIdx;
+  cur.m=cur._mArr[nextIdx];
+  cur.a=cur._aArr[nextIdx%cur._aArr.length];
+  document.getElementById('cAct').textContent=cur.a;
+  faved=favs.some(f=>f.mood===cur.mood&&f.scene===cur.scene&&(f.msgIdx||0)===nextIdx);
+  syncFav();
+  document.getElementById('cActRow').style.opacity='0';
+  typeWriter(document.getElementById('cMsg'),cur.m,()=>{
+    const row=document.getElementById('cActRow');
+    row.style.transition='opacity .35s ease';
+    row.style.opacity='1';
+  });
 }
 
 // ── Fav ──
 function toggleFav(){
   if(!cur)return;vib(8);playPop();
-  const i=favs.findIndex(f=>f.mood===cur.mood&&f.scene===cur.scene);
+  const idx=cur.msgIdx||0;
+  const i=favs.findIndex(f=>f.mood===cur.mood&&f.scene===cur.scene&&(f.msgIdx||0)===idx);
   if(i>=0){favs.splice(i,1);faved=false;showToast('お気に入りから外したよ');}
-  else{favs.unshift({...cur,savedAt:Date.now()});faved=true;showToast('お気に入りに追加したよ 💕');}
+  else{
+    favs.unshift({mood:cur.mood,scene:cur.scene,m:cur.m,a:cur.a,msgIdx:idx,savedAt:Date.now()});
+    faved=true;showToast('お気に入りに追加したよ 💕');
+  }
   localStorage.setItem('ht_f',JSON.stringify(favs));
-  syncFav();renderFavCarousel();
+  syncFav();renderFavCarousel();updateScrollLink();
 }
 function syncFav(){
   document.getElementById('favBtn').classList.toggle('on',faved);
   document.getElementById('favIco').textContent=faved?'♥':'♡';
+}
+
+// ── Scroll link (改修6) ──
+function updateScrollLink(){
+  const wrap=document.getElementById('scrollLinkWrap');
+  if(favs.length>=1){
+    wrap.style.display='block';
+    document.getElementById('scrollLinkCount').textContent=favs.length;
+  } else {
+    wrap.style.display='none';
+  }
+}
+function scrollToHistory(){
+  const hs=document.getElementById('historySec');
+  const target=(hs&&hs.style.display!=='none')?hs:document.getElementById('favSec');
+  if(target)target.scrollIntoView({behavior:'smooth',block:'start'});
 }
 
 // ── Carousel ──
@@ -718,6 +978,8 @@ function renderFavCarousel(){
 }
 function buildFavCard(f,idx){
   const dt=formatGentleDate(f.savedAt);
+  const msg=Array.isArray(f.m)?f.m[0]:f.m;
+  const act=Array.isArray(f.a)?f.a[0]:f.a;
   return`<div class="fav-card">
     <div class="fav-card-top">
       <div>
@@ -726,9 +988,9 @@ function buildFavCard(f,idx){
       </div>
       <button class="fav-save" onclick="saveCardAsImage(${idx})" aria-label="画像で保存">🖼</button>
     </div>
-    <div class="fav-msg">${f.m}</div>
+    <div class="fav-msg">${msg}</div>
     <div class="fav-bottom">
-      <div class="fav-step">✦ ${f.a}</div>
+      <div class="fav-step">✦ ${act}</div>
       <button class="fav-del" aria-label="削除（長押し）">×</button>
     </div>
   </div>`;
@@ -781,15 +1043,17 @@ function doDel(idx){
   const t=document.getElementById('toast');
   clearTimeout(toastTimer);t.classList.remove('on','interact');
   setTimeout(()=>{t.textContent='';},300);
-  if(cur&&favs[idx]&&favs[idx].mood===cur.mood&&favs[idx].scene===cur.scene){faved=false;syncFav();}
+  if(cur&&favs[idx]&&favs[idx].mood===cur.mood&&favs[idx].scene===cur.scene&&(favs[idx].msgIdx||0)===(cur.msgIdx||0)){faved=false;syncFav();}
   favs.splice(idx,1);if(favIdx>=favs.length)favIdx=Math.max(0,favs.length-1);
   localStorage.setItem('ht_f',JSON.stringify(favs));
-  renderFavCarousel();playPop();setTimeout(()=>showToast('そっと消したよ'),100);
+  renderFavCarousel();updateScrollLink();playPop();setTimeout(()=>showToast('そっと消したよ'),100);
 }
 
-// ── Image save ──
+// ── Image save (改修9) ──
 function saveCardAsImage(idx){
   const f=favs[idx];if(!f)return;
+  const msg=Array.isArray(f.m)?f.m[0]:f.m;
+  const act=Array.isArray(f.a)?f.a[0]:f.a;
   function doSave(){
     const el=document.createElement('div');
     Object.assign(el.style,{position:'fixed',left:'-9999px',top:'0',width:'320px',
@@ -798,12 +1062,12 @@ function saveCardAsImage(idx){
     el.innerHTML=`
       <div style="height:3px;background:linear-gradient(90deg,#C4B4D8,#E0B8C4);margin:-20px -18px 14px;border-radius:16px 16px 0 0"></div>
       <div style="font-size:10px;color:#A898A8;margin-bottom:6px">${f.mood} × ${f.scene}</div>
-      <div style="font-size:13.5px;line-height:1.8;margin-bottom:12px">${f.m}</div>
+      <div style="font-size:13.5px;line-height:1.8;margin-bottom:12px">${msg}</div>
       <div style="display:flex;border-radius:10px;overflow:hidden;border:1.5px solid #E0B8C4;margin-bottom:10px">
         <div style="width:32px;background:#E0B8C4;display:flex;align-items:center;justify-content:center;font-size:12px;color:#fff;font-weight:700">▷</div>
-        <div style="padding:8px 11px;font-size:12px;color:#7A6878">${f.a}</div>
+        <div style="padding:8px 11px;font-size:12px;color:#7A6878">${act}</div>
       </div>
-      <div style="text-align:right;font-size:9.5px;color:#A898A8">ヒトオシ ✦</div>`;
+      <div style="text-align:right;font-size:9.5px;color:#A898A8">#ヒトオシ ✦</div>`;
     document.body.appendChild(el);
     html2canvas(el,{backgroundColor:'#ffffff',scale:2}).then(canvas=>{
       const a=document.createElement('a');
@@ -820,12 +1084,12 @@ function saveCardAsImage(idx){
   } else doSave();
 }
 
-// ── Done ──
+// ── Done (改修4) ──
 function done(){
   vib([14,40,14,40,20]);playWin();confetti();showFlower();
   const m=document.getElementById('mascot');
   m.classList.remove('pop');void m.offsetWidth;m.classList.add('pop');
-  showToast('えらい！ほんとにえらい！ 🌸');
+  showToast('ありがとう、届いたよ 🌸');
 }
 function confetti(){
   const el=document.getElementById('cel');
@@ -857,6 +1121,47 @@ function showToast(msg){
   toastTimer=setTimeout(()=>t.classList.remove('on'),2300);
 }
 
+// ── History (改修1 + 改修10) ──
+function trackDay(){
+  const today=new Date().toISOString().slice(0,10);
+  const days=JSON.parse(localStorage.getItem('ht_days')||'[]');
+  if(!days.includes(today))days.unshift(today);
+  const cutoff=new Date();cutoff.setDate(cutoff.getDate()-30);
+  const cutStr=cutoff.toISOString().slice(0,10);
+  localStorage.setItem('ht_days',JSON.stringify(days.filter(d=>d>=cutStr)));
+}
+function trackCombo(m,s){
+  const c=JSON.parse(localStorage.getItem('ht_combo_count')||'{}');
+  const k=`${m}×${s}`;c[k]=(c[k]||0)+1;
+  localStorage.setItem('ht_combo_count',JSON.stringify(c));
+}
+function trackTotal(){
+  const t=parseInt(localStorage.getItem('ht_total')||'0')+1;
+  localStorage.setItem('ht_total',String(t));
+}
+function renderHistory(){
+  const total=parseInt(localStorage.getItem('ht_total')||'0');
+  const sec=document.getElementById('historySec');
+  if(total===0){sec.style.display='none';return;}
+  sec.style.display='block';
+  const days=JSON.parse(localStorage.getItem('ht_days')||'[]');
+  const combos=JSON.parse(localStorage.getItem('ht_combo_count')||'{}');
+  const today=new Date();
+  let visitedCount=0;
+  for(let i=0;i<7;i++){
+    const d=new Date(today);d.setDate(d.getDate()-i);
+    if(days.includes(d.toISOString().slice(0,10)))visitedCount++;
+  }
+  let topCombo='',topCount=0;
+  Object.entries(combos).forEach(([k,v])=>{if(v>topCount){topCount=v;topCombo=k;}});
+  document.getElementById('historyContent').innerHTML=`
+    <div class="history-stats">
+      <div class="hist-item"><span class="hist-num">${total}</span><span class="hist-label">回のヒトオシ</span></div>
+      <div class="hist-item"><span class="hist-num">${visitedCount}</span><span class="hist-label">日 / 直近7日間</span></div>
+    </div>
+    ${topCount>=3?`<div class="hist-combo">よく選ぶ組み合わせ: ${topCombo} (${topCount}回)</div>`:''}`;
+}
+
 // ── Chip frequency sort ──
 function trackChip(type,val){
   const k=type==='mood'?'ht_mood_count':'ht_scene_count';
@@ -867,13 +1172,15 @@ function sortChips(){
   [['moodC','ht_mood_count'],['sceneC','ht_scene_count']].forEach(([cid,k])=>{
     const counts=JSON.parse(localStorage.getItem(k)||'{}');
     const wrap=document.getElementById(cid);
-    [...wrap.querySelectorAll('.chip')]
-      .sort((a,b)=>(counts[b.dataset.v]||0)-(counts[a.dataset.v]||0))
+    const visible=[...wrap.querySelectorAll('.chip:not(.chip-hidden)')];
+    const hidden=[...wrap.querySelectorAll('.chip.chip-hidden')];
+    visible.sort((a,b)=>(counts[b.dataset.v]||0)-(counts[a.dataset.v]||0))
       .forEach(c=>wrap.appendChild(c));
+    hidden.forEach(c=>wrap.appendChild(c));
   });
 }
 
-// ── 時間帯グリーティング（appHookを差し替え） ──
+// ── 時間帯グリーティング ──
 function initGreeting(){
   const h=new Date().getHours();
   const el=document.getElementById('appHook');
@@ -881,13 +1188,11 @@ function initGreeting(){
   else if(h>=10&&h<14)  el.textContent='仕事、ちょっとしんどい？';
   else if(h>=14&&h<18)  el.textContent='午後もがんばってるね、えらい。';
   else if(h>=18&&h<23)  el.textContent='今日もお疲れさまでした。';
-  // 23〜5時はデフォルト（仕事、ちょっとしんどい？）のまま
 }
 
-// ── Onboarding ──
+// ── Onboarding (改修7 + 改修8) ──
 function showOnboarding(){
   if(localStorage.getItem('ht_onboarded'))return;
-  let step=0;
   const ob=document.createElement('div');
   ob.className='onboard';ob.id='onboarding';
   ob.setAttribute('role','dialog');ob.setAttribute('aria-modal','true');
@@ -896,6 +1201,7 @@ function showOnboarding(){
       <div class="ob-step on" id="ob0">
         <div class="ob-icon">✦</div>
         <div class="ob-txt">ちょっとしんどい日に、<br>来てくれてありがとう。</div>
+        <button class="ob-next" onclick="goOb(document.getElementById('onboarding'),1)">つぎへ →</button>
       </div>
       <div class="ob-step" id="ob1">
         <div class="ob-txt">気分と、いまどこ、<br>を選ぶだけ。</div>
@@ -905,6 +1211,7 @@ function showOnboarding(){
           <div class="ob-chip hi">🚃 通勤中</div>
           <div class="ob-chip">☕ 昼休み中</div>
         </div>
+        <button class="ob-next" onclick="goOb(document.getElementById('onboarding'),2)">つぎへ →</button>
       </div>
       <div class="ob-step" id="ob2">
         <div class="ob-icon">🌸</div>
@@ -914,16 +1221,13 @@ function showOnboarding(){
     </div>
     <div class="ob-bottom">
       <div class="ob-dots">
-        <div class="ob-dot on"></div><div class="ob-dot"></div><div class="ob-dot"></div>
+        <div class="ob-dot on" onclick="goOb(document.getElementById('onboarding'),0)"></div>
+        <div class="ob-dot" onclick="goOb(document.getElementById('onboarding'),1)"></div>
+        <div class="ob-dot" onclick="goOb(document.getElementById('onboarding'),2)"></div>
       </div>
       <button class="ob-skip" onclick="closeOb()">スキップ</button>
     </div>`;
   document.body.appendChild(ob);
-  ob.addEventListener('click',e=>{
-    if(e.target.closest('.ob-start')||e.target.closest('.ob-skip'))return;
-    if(step<2)goOb(ob,++step);
-  });
-  setTimeout(()=>{if(step===0)goOb(ob,++step);},3000);
 }
 function goOb(ob,s){
   ob.querySelectorAll('.ob-step').forEach(el=>el.classList.remove('on'));
@@ -934,21 +1238,36 @@ function closeOb(){
   localStorage.setItem('ht_onboarded','1');
   const ob=document.getElementById('onboarding');if(!ob)return;
   ob.style.transition='opacity .4s';ob.style.opacity='0';
-  setTimeout(()=>ob.remove(),400);
+  setTimeout(()=>{
+    ob.remove();
+    if(!localStorage.getItem('ht_snd_tip_shown')){
+      localStorage.setItem('ht_snd_tip_shown','1');
+      setTimeout(()=>showToast('音と振動の切替だよ 🔔'),400);
+    }
+  },400);
 }
 
 // ── Init ──
 sortChips();
 initGreeting();
 renderFavCarousel();
+renderHistory();
+updateScrollLink();
+if(sessionStorage.getItem('ht_mood_expanded')){
+  document.getElementById('moodC').classList.add('mood-expanded');
+  document.getElementById('moodMore').textContent='閉じる ▴';
+}
 showOnboarding();
 </script>
 </body>
 </html>
 <!-- STORAGE KEYS
-  ht_f          … お気に入り [{mood,scene,m,a,savedAt?}, ...]
-  ht_onboarded  … オンボーディング完了 ("1")
-  ht_days       … 押した日付 ["YYYY-MM-DD", ...]
-  ht_mood_count … 気分チップ頻度 {value: count}
-  ht_scene_count… 場所チップ頻度 {value: count}
+  ht_f            … お気に入り [{mood,scene,m,a,msgIdx,savedAt}, ...]
+  ht_onboarded    … オンボーディング完了 ("1")
+  ht_snd_tip_shown… 音ツールチップ表示済 ("1")
+  ht_days         … 押した日付 ["YYYY-MM-DD", ...] 30日ローリング
+  ht_combo_count  … 組み合わせ頻度 {"mood×scene": count}
+  ht_total        … 累計押した回数
+  ht_mood_count   … 気分チップ頻度 {value: count}
+  ht_scene_count  … 場所チップ頻度 {value: count}
 -->
