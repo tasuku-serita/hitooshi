@@ -73,6 +73,20 @@ body{
   letter-spacing:.03em;line-height:1.6;text-align:center;
   margin-top:1px;
 }
+.counter-line{
+  font-size:11px;color:var(--tx-s);letter-spacing:.04em;
+  margin-top:4px;display:none;
+}
+#counterNum{
+  display:inline-block;
+  transition:color .3s;
+}
+#counterNum.bump{animation:numBump .55s cubic-bezier(.34,1.56,.64,1)}
+@keyframes numBump{
+  0%{transform:translateY(0) scale(1);opacity:1}
+  35%{transform:translateY(-5px) scale(1.18);opacity:.7}
+  100%{transform:translateY(0) scale(1);opacity:1}
+}
 
 /* ── Section ── */
 .sec{margin-bottom:20px}
@@ -425,6 +439,7 @@ body{
   <div class="app-name">ヒトオシ</div>
   <div class="app-hook" id="appHook">仕事、ちょっとしんどい？</div>
   <div class="app-sub" id="appSub">気分と場面を選んで、やさしいひと押しを届けます</div>
+  <div class="counter-line" id="counterLine">これまでに <span id="counterNum"></span> 回、受け取ってきたね</div>
 </header>
 
 <section class="sec">
@@ -882,6 +897,13 @@ function go(){
   vib([10,30,10]);playPop();
   trackChip('mood',mood);trackChip('scene',scene);
   trackDay();trackCombo(mood,scene);trackTotal();
+  const todayStr=new Date().toISOString().slice(0,10);
+  const isFirstToday=localStorage.getItem('ht_today_done')!==todayStr;
+  if(isFirstToday)localStorage.setItem('ht_today_done',todayStr);
+  const totalNow=parseInt(localStorage.getItem('ht_total')||'0');
+  updateCounter();
+  if(isFirstToday)setTimeout(animateCounter,420);
+  setTimeout(()=>checkMilestone(totalNow),isFirstToday?1600:0);
   const d=D[mood][scene];
   const mArr=Array.isArray(d.m)?d.m:[d.m];
   const aArr=Array.isArray(d.a)?d.a:[d.a];
@@ -1247,12 +1269,52 @@ function closeOb(){
   },400);
 }
 
+// ── Counter (改修11) ──
+const MILESTONES={
+  5:'5回、ヒトオシを受け取ってきたね。それだけでいい。',
+  10:'10回。しんどい日を10回、越えてきた。',
+  20:'20回。あなたはちゃんと、自分を労ってる。',
+  50:'50回。ほんとうに、えらい。',
+  100:'100回目。ここまで来てくれて、ありがとう。'
+};
+function updateCounter(){
+  const total=parseInt(localStorage.getItem('ht_total')||'0');
+  const line=document.getElementById('counterLine');
+  const num=document.getElementById('counterNum');
+  if(total===0){line.style.display='none';return;}
+  line.style.display='block';
+  num.textContent=total;
+}
+function animateCounter(){
+  const num=document.getElementById('counterNum');
+  if(!num)return;
+  num.classList.remove('bump');
+  void num.offsetWidth;
+  num.classList.add('bump');
+  setTimeout(()=>num.classList.remove('bump'),700);
+}
+function checkMilestone(total){
+  if(!MILESTONES[total])return;
+  const done=JSON.parse(localStorage.getItem('ht_milestones')||'[]');
+  if(done.includes(total))return;
+  done.push(total);
+  localStorage.setItem('ht_milestones',JSON.stringify(done));
+  showToastLong(MILESTONES[total]);
+}
+function showToastLong(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.classList.remove('interact');t.classList.add('on');
+  clearTimeout(toastTimer);
+  toastTimer=setTimeout(()=>t.classList.remove('on'),4000);
+}
+
 // ── Init ──
 sortChips();
 initGreeting();
 renderFavCarousel();
 renderHistory();
 updateScrollLink();
+updateCounter();
 if(sessionStorage.getItem('ht_mood_expanded')){
   document.getElementById('moodC').classList.add('mood-expanded');
   document.getElementById('moodMore').textContent='閉じる ▴';
@@ -1268,6 +1330,8 @@ showOnboarding();
   ht_days         … 押した日付 ["YYYY-MM-DD", ...] 30日ローリング
   ht_combo_count  … 組み合わせ頻度 {"mood×scene": count}
   ht_total        … 累計押した回数
+  ht_today_done   … 今日ヒトオシした日付 "YYYY-MM-DD"
+  ht_milestones   … 達成済みマイルストーン回数の配列 [5, 10, ...]
   ht_mood_count   … 気分チップ頻度 {value: count}
   ht_scene_count  … 場所チップ頻度 {value: count}
 -->
