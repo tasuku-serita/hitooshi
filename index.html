@@ -512,16 +512,64 @@ body{
 
 .praise-cards{display:flex;flex-direction:column;gap:10px}
 .praise-card{
-  background:var(--wh);border-radius:16px;
-  padding:16px 18px;box-shadow:var(--sh-s);
+  background:var(--wh);
+  border-left:3px solid var(--lv);
+  border-radius:0 16px 16px 0;
+  padding:14px 16px;box-shadow:var(--sh-s);
 }
 .praise-card-body{
-  font-size:14px;color:var(--tx);
+  font-size:13px;color:var(--tx);
   line-height:1.7;font-weight:600;
 }
 .praise-card-sub{
   font-size:11px;color:var(--tx-s);
-  margin-top:6px;
+  margin-top:5px;
+}
+
+/* 過去の言葉カード */
+.mirror-card{
+  background:var(--lv-l);
+  border-radius:16px;padding:16px 18px;
+  margin-bottom:10px;
+}
+.mirror-label{
+  font-size:10px;color:var(--tx-s);
+  letter-spacing:.1em;margin-bottom:10px;
+}
+.mirror-quote{
+  font-size:15px;font-weight:700;color:var(--tx);
+  line-height:1.75;margin-bottom:8px;
+}
+.mirror-tag{font-size:10px;color:var(--tx-s)}
+.mirror-refresh{
+  background:none;border:none;
+  font-size:11px;color:var(--lv-d);
+  cursor:pointer;padding:0;margin-top:10px;
+  -webkit-tap-highlight-color:transparent;
+}
+
+/* 花ドット */
+.dots-section{margin-top:14px}
+.dots-label{
+  font-size:10px;color:var(--tx-s);
+  letter-spacing:.1em;margin-bottom:10px;
+}
+.dots-grid{
+  display:grid;
+  grid-template-columns:repeat(10,1fr);
+  gap:5px;
+}
+.flower-dot{
+  aspect-ratio:1;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:13px;
+}
+.flower-dot.on{background:var(--lv-l)}
+.flower-dot.off{background:var(--be-l,#F0E8E0);opacity:.5}
+.dots-note{
+  font-size:10px;color:var(--tx-s);
+  text-align:center;margin-top:10px;
+  line-height:1.6;
 }
 
 @media(prefers-reduced-motion:reduce){
@@ -1051,6 +1099,8 @@ function go(){
     });
   }));
   setTimeout(()=>card.scrollIntoView({behavior:'smooth',block:'nearest'}),50);
+  renderHistory();
+  updateScrollLink();
 }
 
 // ── Retry message (改修2) ──
@@ -1518,7 +1568,7 @@ function renderAshiato(){
   let topCombo='',topCount=0;
   Object.entries(combos).forEach(([k,v])=>{if(v>topCount){topCount=v;topCombo=k;}});
 
-  // ── ヒーロー文言：total に応じて変化 ──
+  // ── ヒーロー文言 ──
   function heroMsg(n){
     if(n===1)  return 'はじめての一歩、ちゃんと踏み出した。';
     if(n<5)    return 'しんどい日に、ちゃんと来た。それだけでいい。';
@@ -1548,23 +1598,69 @@ function renderAshiato(){
     };
   }
 
+  // ── 過去の言葉：お気に入りからランダム ──
+  function mirrorCard(){
+    const f=JSON.parse(localStorage.getItem('ht_f')||'[]');
+    if(!f.length) return '';
+    const item=f[Math.floor(Math.random()*f.length)];
+    const msg=Array.isArray(item.m)?item.m[0]:item.m;
+    const tag=`${item.mood} × ${item.scene}`;
+    return `
+      <div class="mirror-card" id="mirrorCard">
+        <div class="mirror-label">あのとき受け取った言葉</div>
+        <div class="mirror-quote">${msg}</div>
+        <div class="mirror-tag">${tag}</div>
+        <button class="mirror-refresh" onclick="refreshMirror()">↻ 別の言葉を見る</button>
+      </div>`;
+  }
+
+  // ── 花ドット30日 ──
+  function flowerDots(){
+    const dots=[];
+    for(let i=29;i>=0;i--){
+      const d=new Date(today);
+      d.setDate(d.getDate()-i);
+      const key=d.toISOString().slice(0,10);
+      const on=days.includes(key);
+      dots.push(`<div class="flower-dot ${on?'on':'off'}">${on?'✿':'·'}</div>`);
+    }
+    return `
+      <div class="dots-section">
+        <div class="dots-label">直近30日のあしあと</div>
+        <div class="dots-grid">${dots.join('')}</div>
+        <div class="dots-note">花が咲いている日は、ちゃんと来た日だよ。<br>来られなかった日も、それでいい。</div>
+      </div>`;
+  }
+
   const wMsg=weekMsg(week);
   const cMsg=comboMsg(topCombo,topCount);
-
   const cards=[wMsg,cMsg].filter(Boolean).map(c=>`
     <div class="praise-card">
       <div class="praise-card-body">${c.body}</div>
       <div class="praise-card-sub">${c.sub}</div>
-    </div>
-  `).join('');
+    </div>`).join('');
 
   el.innerHTML=`
     <div class="praise-hero">
       <div class="praise-hero-num">${total}</div>
       <div class="praise-hero-msg">${heroMsg(total)}</div>
     </div>
+    ${mirrorCard()}
     ${cards?`<div class="praise-cards">${cards}</div>`:''}
+    ${flowerDots()}
   `;
+}
+
+// 過去の言葉をシャッフル
+function refreshMirror(){
+  const f=JSON.parse(localStorage.getItem('ht_f')||'[]');
+  if(f.length<2) return;
+  const card=document.getElementById('mirrorCard');
+  if(!card) return;
+  const item=f[Math.floor(Math.random()*f.length)];
+  const msg=Array.isArray(item.m)?item.m[0]:item.m;
+  card.querySelector('.mirror-quote').textContent=msg;
+  card.querySelector('.mirror-tag').textContent=`${item.mood} × ${item.scene}`;
 }
 
 // ── Init ──
