@@ -455,7 +455,7 @@ body{
 .tab-page{display:none}
 .tab-page.active{display:block}
 
-/* お気に入りページ専用 */
+/* お守りページ専用 */
 .fav-page-header{
   display:flex;align-items:center;justify-content:space-between;
   margin-bottom:18px;
@@ -465,19 +465,26 @@ body{
 .fav-list{display:flex;flex-direction:column;gap:10px}
 .fav-list-card{
   background:var(--wh);border-radius:16px;padding:14px 16px;
-  box-shadow:var(--sh-s);
-  position:relative;
+  box-shadow:var(--sh-s);position:relative;
 }
 .fav-list-tag{font-size:10px;color:var(--tx-s);margin-bottom:6px}
 .fav-list-msg{font-size:13.5px;color:var(--tx);line-height:1.7;font-weight:600;margin-bottom:8px}
 .fav-list-act{
   font-size:11.5px;color:var(--tx-m);
   background:var(--lv-l);border-radius:8px;padding:6px 10px;
-  display:inline-block;
+  display:inline-block;margin-bottom:8px;
 }
+.fav-list-replay{
+  width:100%;margin-top:6px;
+  background:none;border:1.5px dashed var(--lv);border-radius:10px;
+  padding:8px;font-size:12px;color:var(--lv-d);
+  cursor:pointer;text-align:center;
+  transition:background .15s;-webkit-tap-highlight-color:transparent;
+}
+.fav-list-replay:hover{background:var(--lv-l)}
 .fav-list-footer{
   display:flex;align-items:center;justify-content:space-between;
-  margin-top:10px;
+  margin-top:8px;
 }
 .fav-list-date{font-size:9.5px;color:var(--tx-s)}
 .fav-list-del{
@@ -496,6 +503,33 @@ body{
 .ashiato-section{margin-bottom:24px}
 .ashiato-title{font-size:18px;font-weight:800;color:var(--tx);letter-spacing:.04em;margin-bottom:16px}
 
+/* 今日カード */
+.today-card{
+  background:var(--wh);border-radius:18px;
+  padding:18px 18px 16px;margin-bottom:12px;
+  box-shadow:var(--sh-s);
+  border-left:4px solid var(--lv);
+}
+.today-card-label{font-size:10px;color:var(--tx-s);letter-spacing:.12em;margin-bottom:8px}
+.today-card-main{font-size:14px;font-weight:700;color:var(--tx);line-height:1.6;margin-bottom:10px}
+.today-card-row{display:flex;gap:6px;flex-wrap:wrap}
+.today-chip{
+  font-size:11px;color:var(--tx-m);
+  background:var(--lv-l);border-radius:8px;padding:4px 10px;
+}
+.today-card-act{
+  font-size:12px;color:var(--tx-m);
+  margin-top:10px;padding:8px 12px;
+  background:#FFF8F0;border-radius:10px;
+}
+.today-empty{
+  background:var(--wh);border-radius:18px;
+  padding:18px 18px 16px;margin-bottom:12px;
+  box-shadow:var(--sh-s);text-align:center;
+}
+.today-empty-main{font-size:13px;font-weight:600;color:var(--tx-s);line-height:1.7}
+
+/* ヒーロー */
 .praise-hero{
   background:var(--wh);border-radius:20px;
   padding:24px 20px;margin-bottom:12px;
@@ -505,72 +539,68 @@ body{
   font-size:52px;font-weight:800;color:var(--lv-d);
   line-height:1;letter-spacing:-.02em;margin-bottom:6px;
 }
-.praise-hero-msg{
-  font-size:15px;font-weight:700;color:var(--tx);
-  line-height:1.6;
-}
+.praise-hero-msg{font-size:15px;font-weight:700;color:var(--tx);line-height:1.6;}
 
-.praise-cards{display:flex;flex-direction:column;gap:10px}
-.praise-card{
-  background:var(--wh);
-  border-left:3px solid var(--lv);
-  border-radius:0 16px 16px 0;
-  padding:14px 16px;box-shadow:var(--sh-s);
+/* 週まとめ */
+.week-card{
+  background:var(--wh);border-radius:16px;
+  padding:16px 18px;margin-bottom:12px;
+  box-shadow:var(--sh-s);
 }
-.praise-card-body{
-  font-size:13px;color:var(--tx);
-  line-height:1.7;font-weight:600;
-}
-.praise-card-sub{
-  font-size:11px;color:var(--tx-s);
-  margin-top:5px;
-}
+.week-card-head{font-size:10px;color:var(--tx-s);letter-spacing:.1em;margin-bottom:8px}
+.week-card-body{font-size:13.5px;font-weight:700;color:var(--tx);line-height:1.65;margin-bottom:4px}
+.week-card-sub{font-size:11.5px;color:var(--tx-s);line-height:1.55}
 
-/* 過去の言葉カード */
+/* 過去のことば */
 .mirror-card{
-  background:var(--lv-l);
-  border-radius:16px;padding:16px 18px;
-  margin-bottom:10px;
+  background:var(--lv-l);border-radius:16px;
+  padding:16px 18px;margin-bottom:12px;
 }
-.mirror-label{
-  font-size:10px;color:var(--tx-s);
-  letter-spacing:.1em;margin-bottom:10px;
-}
-.mirror-quote{
-  font-size:15px;font-weight:700;color:var(--tx);
-  line-height:1.75;margin-bottom:8px;
-}
+.mirror-label{font-size:10px;color:var(--tx-s);letter-spacing:.1em;margin-bottom:10px}
+.mirror-quote{font-size:15px;font-weight:700;color:var(--tx);line-height:1.75;margin-bottom:8px}
 .mirror-tag{font-size:10px;color:var(--tx-s)}
 .mirror-refresh{
-  background:none;border:none;
-  font-size:11px;color:var(--lv-d);
-  cursor:pointer;padding:0;margin-top:10px;
+  background:none;border:none;font-size:11px;color:var(--lv-d);
+  cursor:pointer;padding:0;margin-top:10px;display:block;
   -webkit-tap-highlight-color:transparent;
 }
 
 /* 花ドット */
-.dots-section{margin-top:14px}
-.dots-label{
-  font-size:10px;color:var(--tx-s);
-  letter-spacing:.1em;margin-bottom:10px;
-}
-.dots-grid{
-  display:grid;
-  grid-template-columns:repeat(10,1fr);
-  gap:5px;
-}
+.dots-section{margin-bottom:12px}
+.dots-label{font-size:10px;color:var(--tx-s);letter-spacing:.1em;margin-bottom:10px}
+.dots-grid{display:grid;grid-template-columns:repeat(10,1fr);gap:5px}
 .flower-dot{
   aspect-ratio:1;border-radius:50%;
-  display:flex;align-items:center;justify-content:center;
-  font-size:13px;
+  display:flex;align-items:center;justify-content:center;font-size:13px;
 }
 .flower-dot.on{background:var(--lv-l)}
-.flower-dot.off{background:var(--be-l,#F0E8E0);opacity:.5}
-.dots-note{
-  font-size:10px;color:var(--tx-s);
-  text-align:center;margin-top:10px;
-  line-height:1.6;
+.flower-dot.today-dot{background:var(--lv);box-shadow:0 0 0 2px var(--lv-m)}
+.flower-dot.off{background:#F0E8E0;opacity:.5}
+.dots-note{font-size:10px;color:var(--tx-s);text-align:center;margin-top:10px;line-height:1.6}
+
+/* 今日の花 */
+.today-flower-banner{
+  background:linear-gradient(135deg,var(--lv-l),var(--pk-l));
+  border-radius:16px;padding:14px 18px;margin-bottom:14px;
+  display:flex;align-items:center;gap:12px;
 }
+.today-flower-ico{font-size:28px}
+.today-flower-body{}
+.today-flower-name{font-size:12px;font-weight:700;color:var(--tx);margin-bottom:2px}
+.today-flower-msg{font-size:11px;color:var(--tx-s);line-height:1.5}
+
+/* ひと押し後の導線 */
+.post-nav{
+  text-align:center;margin-top:2px;margin-bottom:6px;
+}
+.post-nav-link{
+  background:none;border:none;
+  font-size:12px;color:var(--lv-d);cursor:pointer;
+  padding:6px 12px;text-decoration:underline;text-underline-offset:3px;
+  -webkit-tap-highlight-color:transparent;
+  opacity:.85;
+}
+.post-nav-link:hover{opacity:1}
 
 @media(prefers-reduced-motion:reduce){
   *{animation-duration:.01s!important;animation-delay:0s!important;transition-duration:.01s!important}
@@ -646,19 +676,22 @@ body{
 </div>
 
 <div class="act-btns" id="actBtns">
-  <button class="btn-fav" id="favBtn" onclick="toggleFav()" aria-label="お気に入りに追加">
-    <span id="favIco" aria-hidden="true">♡</span> お気に入り
+  <button class="btn-fav" id="favBtn" onclick="toggleFav()" aria-label="お守りにする">
+    <span id="favIco" aria-hidden="true">♡</span> お守りにする
   </button>
   <button class="btn-done" onclick="done()">✦ 受け取った</button>
+</div>
+<div class="post-nav" id="postNav" style="display:none">
+  <button class="post-nav-link" onclick="switchTab('ashiato')">今日のあしあとを見にいく 🌱</button>
 </div>
 
 </div><!-- /page-home -->
 
-<!-- ── タブ: お気に入り ── -->
+<!-- ── タブ: お守り ── -->
 <div class="tab-page" id="page-fav">
   <header class="hd" style="padding-bottom:16px">
     <div class="fav-page-header" style="width:100%">
-      <div class="fav-page-title">♡ お気に入り</div>
+      <div class="fav-page-title">🧿 ことばのお守り</div>
       <div class="fav-page-count" id="favPageCount"></div>
     </div>
   </header>
@@ -683,7 +716,7 @@ body{
     <span class="tab-ico">✦</span>ひと押し
   </button>
   <button class="tab-btn" id="tab-fav" onclick="switchTab('fav')" role="tab" aria-selected="false" style="position:relative">
-    <span class="tab-ico">♡</span>お気に入り
+    <span class="tab-ico">🧿</span>お守り
     <span class="tab-badge" id="favBadge"></span>
   </button>
   <button class="tab-btn" id="tab-ashiato" onclick="switchTab('ashiato')" role="tab" aria-selected="false">
@@ -1084,11 +1117,15 @@ function go(){
   document.getElementById('cAct').textContent=cur.a;
   faved=favs.some(f=>f.mood===mood&&f.scene===scene&&(f.msgIdx||0)===0);
   syncFav();
+  // ── ht_logs に1件追記 ──
+  saveLog({mood,scene,msg:cur.m,act:cur.a,msgIdx:0,faved:false});
   const retryBtn=document.getElementById('retryBtn');
   retryBtn.classList.toggle('vis',mArr.length>1);
   const card=document.getElementById('card');
   card.classList.remove('in');card.classList.add('vis');
   document.getElementById('actBtns').classList.add('vis');
+  // 導線を表示
+  document.getElementById('postNav').style.display='block';
   requestAnimationFrame(()=>requestAnimationFrame(()=>{
     card.classList.add('in');
     showParticles();
@@ -1099,11 +1136,54 @@ function go(){
     });
   }));
   setTimeout(()=>card.scrollIntoView({behavior:'smooth',block:'nearest'}),50);
-  renderHistory();
-  updateScrollLink();
 }
 
-// ── Retry message (改修2) ──
+// ── ht_logs 保存 ──
+function saveLog(entry){
+  const logs=JSON.parse(localStorage.getItem('ht_logs')||'[]');
+  logs.unshift({
+    date:new Date().toISOString().slice(0,10),
+    time:new Date().toTimeString().slice(0,5),
+    mood:entry.mood,scene:entry.scene,
+    msg:entry.msg,act:entry.act,
+    msgIdx:entry.msgIdx||0,
+    faved:entry.faved||false,
+    ts:Date.now()
+  });
+  // 最大200件
+  if(logs.length>200)logs.splice(200);
+  localStorage.setItem('ht_logs',JSON.stringify(logs));
+}
+
+// ── 日替わり花 ──
+const DAILY_FLOWERS=[
+  {name:'すみれの日',ico:'🌸',msg:'今日のあなたには、小さなすみれを置いておきます。'},
+  {name:'たんぽぽの日',ico:'🌼',msg:'たんぽぽみたいに、風が吹いても大丈夫。'},
+  {name:'白い小花の日',ico:'🌷',msg:'名前のない小花も、ちゃんと咲いている。'},
+  {name:'もみじの日',ico:'🍁',msg:'今日の色を、そのままにしておいていい。'},
+  {name:'クローバーの日',ico:'🍀',msg:'小さいけど、ちゃんとそこにある。'},
+  {name:'桜の日',ico:'🌸',msg:'散ってもいい。咲いたことは本物だから。'},
+  {name:'ひまわりの日',ico:'🌻',msg:'太陽がなくても、あなたは今日も立ってる。'},
+];
+function getDailyFlower(){
+  const d=new Date();
+  const idx=(d.getFullYear()*1000+d.getMonth()*31+d.getDate())%DAILY_FLOWERS.length;
+  return DAILY_FLOWERS[idx];
+}
+
+// ── 特別なひと押し判定 ──
+function getSpecialMsg(total){
+  const dow=new Date().getDay();
+  const h=new Date().getHours();
+  if(total===1) return 'はじめてのひと押し。来てくれてありがとう。';
+  if(total===3) return '3回目のヒトオシ。来るたびに、少し慣れてきた？';
+  if(total===7) return '7回目。気づいたら、こんなに来てたんだね。';
+  if(total===10) return '10回目。しんどい日を10回、ちゃんと越えてきた。';
+  if(total===20) return '20回。あなたはもう、自分を大切にする習慣がある。';
+  if(dow===1&&h<12) return '月曜の朝、来てくれた。それだけでもう、今週は大丈夫。';
+  if(dow===5&&h>=15) return '金曜の午後。今週もここまで来た、えらいよ。';
+  return null;
+}
 function retryMsg(){
   if(!cur||!cur._mArr)return;
   vib(8);playPop();
@@ -1127,17 +1207,17 @@ function toggleFav(){
   if(!cur)return;vib(8);playPop();
   const idx=cur.msgIdx||0;
   const i=favs.findIndex(f=>f.mood===cur.mood&&f.scene===cur.scene&&(f.msgIdx||0)===idx);
-  if(i>=0){favs.splice(i,1);faved=false;showToast('お気に入りから外したよ');}
+  if(i>=0){favs.splice(i,1);faved=false;showToast('お守りから外したよ');}
   else{
     favs.unshift({mood:cur.mood,scene:cur.scene,m:cur.m,a:cur.a,msgIdx:idx,savedAt:Date.now()});
-    faved=true;showToast('お気に入りに追加したよ 💕');
+    faved=true;showToast('お守りにしたよ 🧿');
   }
   localStorage.setItem('ht_f',JSON.stringify(favs));
   syncFav();renderFavCarousel();updateFavBadge();renderFavList();
 }
 function syncFav(){
   document.getElementById('favBtn').classList.toggle('on',faved);
-  document.getElementById('favIco').textContent=faved?'♥':'♡';
+  document.getElementById('favIco').textContent=faved?'🧿':'♡';
 }
 
 // ── Scroll link (改修6) ──
@@ -1286,7 +1366,26 @@ function done(){
   vib([14,40,14,40,20]);playWin();confetti();showFlower();
   const m=document.getElementById('mascot');
   m.classList.remove('pop');void m.offsetWidth;m.classList.add('pop');
-  showToast('ありがとう、届いたよ 🌸');
+  // 特別メッセージチェック
+  const total=parseInt(localStorage.getItem('ht_total')||'0');
+  const special=getSpecialMsg(total);
+  if(special){setTimeout(()=>showToastLong(special),600);}
+  else{showToast('ありがとう、届いたよ 🌸');}
+  // 今日の花バナー（当日1回だけ）
+  const todayStr=new Date().toISOString().slice(0,10);
+  const flowerShown=localStorage.getItem('ht_flower_shown');
+  if(flowerShown!==todayStr){
+    localStorage.setItem('ht_flower_shown',todayStr);
+    const flower=getDailyFlower();
+    setTimeout(()=>{
+      const banner=document.createElement('div');
+      banner.className='today-flower-banner';
+      banner.innerHTML=`<div class="today-flower-ico">${flower.ico}</div><div class="today-flower-body"><div class="today-flower-name">${flower.name}</div><div class="today-flower-msg">${flower.msg}</div></div>`;
+      const postNav=document.getElementById('postNav');
+      postNav.parentNode.insertBefore(banner,postNav);
+      setTimeout(()=>{banner.style.transition='opacity .6s';banner.style.opacity='0';setTimeout(()=>banner.remove(),700);},5000);
+    },1200);
+  }
 }
 function confetti(){
   const el=document.getElementById('cel');
@@ -1496,15 +1595,14 @@ function switchTab(name){
   if(name==='ashiato') renderAshiato();
 }
 
-// ── お気に入りリスト（縦スクロール）──
+// ── お守りリスト ──
 function renderFavList(){
   const area=document.getElementById('favListArea');
   const countEl=document.getElementById('favPageCount');
   if(!favs.length){
     countEl.textContent='';
-    area.innerHTML=`<div class="fav-empty"><div class="fav-empty-ico">♡</div>気に入った言葉を<br>ひと押し後に保存すると<br>ここに並ぶよ</div>`;
-    updateFavBadge();
-    return;
+    area.innerHTML=`<div class="fav-empty"><div class="fav-empty-ico">🧿</div>まだ、お守りはありません。<br>しんどい日にまた見たい言葉を、<br>そっと残しておけます。</div>`;
+    updateFavBadge();return;
   }
   countEl.textContent=favs.length+'件';
   area.innerHTML=favs.map((f,i)=>{
@@ -1512,16 +1610,40 @@ function renderFavList(){
     const act=Array.isArray(f.a)?f.a[0]:f.a;
     const dt=formatGentleDate(f.savedAt);
     return`<div class="fav-list-card">
-      <div class="fav-list-tag">${f.mood} × ${f.scene}</div>
+      <div class="fav-list-tag">${f.mood} × ${f.scene}　${dt?'· '+dt:''}</div>
       <div class="fav-list-msg">${msg}</div>
       <div class="fav-list-act">✦ ${act}</div>
+      <button class="fav-list-replay" onclick="replayOmamori(${i})">この言葉を今日のひと押しにする</button>
       <div class="fav-list-footer">
-        <span class="fav-list-date">${dt}</span>
+        <span class="fav-list-date"></span>
         <button class="fav-list-del" aria-label="削除" onclick="delFavItem(${i})">×</button>
       </div>
     </div>`;
   }).join('');
   updateFavBadge();
+}
+
+function replayOmamori(idx){
+  const f=favs[idx];if(!f)return;
+  const msg=Array.isArray(f.m)?f.m[0]:f.m;
+  const act=Array.isArray(f.a)?f.a[0]:f.a;
+  cur={mood:f.mood,scene:f.scene,m:msg,a:act,msgIdx:f.msgIdx||0,_mArr:[msg],_aArr:[act]};
+  faved=true;syncFav();
+  document.getElementById('cAct').textContent=act;
+  document.getElementById('cActRow').style.opacity='0';
+  const card=document.getElementById('card');
+  card.classList.remove('in');card.classList.add('vis');
+  document.getElementById('actBtns').classList.add('vis');
+  document.getElementById('postNav').style.display='none';
+  requestAnimationFrame(()=>requestAnimationFrame(()=>{
+    card.classList.add('in');showParticles();
+    typeWriter(document.getElementById('cMsg'),msg,()=>{
+      document.getElementById('cActRow').style.transition='opacity .35s ease';
+      document.getElementById('cActRow').style.opacity='1';
+    });
+  }));
+  switchTab('home');
+  showToast('お守りの言葉を届けるよ 🧿');
 }
 
 function delFavItem(idx){
@@ -1544,31 +1666,36 @@ function updateFavBadge(){
   }
 }
 
-// ── あしあとページ ──
+// ── あしあとページ（全面強化）──
 function renderAshiato(){
   const total=parseInt(localStorage.getItem('ht_total')||'0');
   const el=document.getElementById('ashiatoContent');
   if(total===0){
-    el.innerHTML=`<div class="fav-empty"><div class="fav-empty-ico">✦</div>まだ記録がないよ。<br>ひと押しするたびに<br>ここに積み重なっていくよ</div>`;
+    el.innerHTML=`<div class="fav-empty"><div class="fav-empty-ico">🌱</div>まだ記録がないよ。<br>ひと押しするたびに<br>ここに積み重なっていくよ</div>`;
     return;
   }
-
+  const todayStr=new Date().toISOString().slice(0,10);
   const days=JSON.parse(localStorage.getItem('ht_days')||'[]');
-  const combos=JSON.parse(localStorage.getItem('ht_combo_count')||'{}');
+  const logs=JSON.parse(localStorage.getItem('ht_logs')||'[]');
   const today=new Date();
 
-  // 直近7日の訪問数
-  let week=0;
-  for(let i=0;i<7;i++){
-    const d=new Date(today);d.setDate(d.getDate()-i);
-    if(days.includes(d.toISOString().slice(0,10)))week++;
-  }
+  // 2-1. 今日カード
+  const todayLog=logs.find(l=>l.date===todayStr);
+  const todayCardHtml=todayLog
+    ?`<div class="today-card">
+        <div class="today-card-label">今日のあしあと</div>
+        <div class="today-card-main">今日も、ひと押しを受け取れたね</div>
+        <div class="today-card-row">
+          <span class="today-chip">${todayLog.mood}</span>
+          <span class="today-chip">${todayLog.scene}</span>
+        </div>
+        <div class="today-card-act">✦ ${todayLog.act}</div>
+      </div>`
+    :`<div class="today-empty">
+        <div class="today-empty-main">今日はまだ、ひと押し前です。<br>しんどくなったら、そっと戻ってきてね。</div>
+      </div>`;
 
-  // 一番多いコンボ
-  let topCombo='',topCount=0;
-  Object.entries(combos).forEach(([k,v])=>{if(v>topCount){topCount=v;topCombo=k;}});
-
-  // ── ヒーロー文言 ──
+  // ヒーロー文言
   function heroMsg(n){
     if(n===1)  return 'はじめての一歩、ちゃんと踏み出した。';
     if(n<5)    return 'しんどい日に、ちゃんと来た。それだけでいい。';
@@ -1579,88 +1706,98 @@ function renderAshiato(){
     return `${n}回。もう「自分を大切にする人」だよ、あなたは。`;
   }
 
-  // ── 週の文言 ──
-  function weekMsg(n){
-    if(n===0) return null;
-    if(n===1) return {body:'先週も1日、来てくれた。',sub:'来なかった日も、それはそれでいい。'};
-    if(n<=3)  return {body:`先週は${n}日、来てくれたね。`,sub:'しんどい中で来られた日のことを、ちゃんと覚えておいて。'};
-    if(n<=5)  return {body:`先週は${n}日も来た。`,sub:'それだけ自分のことを気にかけてたってこと。'};
-    return {body:'先週はほぼ毎日来てくれた。',sub:'毎日しんどかったかもしれないけど、毎日ちゃんと向き合ってた。'};
+  // 2-2. 直近7日
+  let week=0;
+  const moodCount7={};
+  for(let i=0;i<7;i++){
+    const d=new Date(today);d.setDate(d.getDate()-i);
+    if(days.includes(d.toISOString().slice(0,10)))week++;
   }
-
-  // ── コンボ文言 ──
-  function comboMsg(combo,count){
-    if(!combo||count<2) return null;
-    const [mood]=combo.split('×');
-    return {
-      body:`「${combo.trim()}」が${count}回いちばん多い。`,
-      sub:`${mood.trim()}な日でも、来ようとしてたんだね。`
-    };
+  logs.filter(l=>(Date.now()-new Date(l.date).getTime())/86400000<7)
+    .forEach(l=>{moodCount7[l.mood]=(moodCount7[l.mood]||0)+1;});
+  let topMood7='',topMoodN7=0;
+  Object.entries(moodCount7).forEach(([k,v])=>{if(v>topMoodN7){topMoodN7=v;topMood7=k;}});
+  function weekBody(n,mood){
+    if(n===0) return{b:'今週はまだ来ていないんだね。',s:'しんどくなったら、いつでも戻ってきて。'};
+    if(n===1) return{b:'今週も1日、来てくれた。',s:'来られなかった日も、それはそれでいい。'};
+    if(n<=3)  return{b:`今週は${n}日、来てくれたね。`,s:mood?`「${mood}」な日が多かったね。それでも来てた。`:'しんどい中で来られた日のことを、ちゃんと覚えておいて。'};
+    if(n<=5)  return{b:`今週は${n}日も来た。`,s:mood?`「${mood}」が多めだったね。それでも、何度も自分を整えようとしていてえらい。`:'それだけ自分のことを気にかけてたってこと。'};
+    return{b:'今週はほぼ毎日来てくれた。',s:'毎日しんどかったかもしれないけど、毎日ちゃんと向き合ってた。'};
   }
+  const wb=weekBody(week,topMood7);
+  const weekCardHtml=`<div class="week-card">
+    <div class="week-card-head">直近7日間</div>
+    <div class="week-card-body">${wb.b}</div>
+    <div class="week-card-sub">${wb.s}</div>
+  </div>`;
 
-  // ── 過去の言葉：お気に入りからランダム ──
-  function mirrorCard(){
-    const f=JSON.parse(localStorage.getItem('ht_f')||'[]');
-    if(!f.length) return '';
-    const item=f[Math.floor(Math.random()*f.length)];
-    const msg=Array.isArray(item.m)?item.m[0]:item.m;
-    const tag=`${item.mood} × ${item.scene}`;
-    return `
-      <div class="mirror-card" id="mirrorCard">
-        <div class="mirror-label">あのとき受け取った言葉</div>
-        <div class="mirror-quote">${msg}</div>
-        <div class="mirror-tag">${tag}</div>
-        <button class="mirror-refresh" onclick="refreshMirror()">↻ 別の言葉を見る</button>
+  // 2-4. 過去のことば
+  function mirrorHtml(){
+    const pool=logs.filter(l=>l.date!==todayStr&&l.msg);
+    if(!pool.length&&!favs.length)return'';
+    if(pool.length){
+      const item=pool[Math.floor(Math.random()*pool.length)];
+      const diff=Math.round((Date.now()-new Date(item.date).getTime())/86400000);
+      const ago=diff<=0?'今日':diff===1?'昨日':`${diff}日前`;
+      return`<div class="mirror-card" id="mirrorCard">
+        <div class="mirror-label">前のあなたが受け取ったことば</div>
+        <div class="mirror-quote">${item.msg}</div>
+        <div class="mirror-tag">${item.mood} × ${item.scene}　|　${ago}</div>
+        <button class="mirror-refresh" onclick="refreshMirror()">↻ 別のことばを見る</button>
       </div>`;
+    }
+    const f=favs[Math.floor(Math.random()*favs.length)];
+    const msg=Array.isArray(f.m)?f.m[0]:f.m;
+    return`<div class="mirror-card" id="mirrorCard">
+      <div class="mirror-label">前のあなたが受け取ったことば</div>
+      <div class="mirror-quote">${msg}</div>
+      <div class="mirror-tag">${f.mood} × ${f.scene}</div>
+      <button class="mirror-refresh" onclick="refreshMirror()">↻ 別のことばを見る</button>
+    </div>`;
   }
 
-  // ── 花ドット30日 ──
-  function flowerDots(){
+  // 2-3. 花ドット30日
+  function flowerHtml(){
     const dots=[];
     for(let i=29;i>=0;i--){
-      const d=new Date(today);
-      d.setDate(d.getDate()-i);
+      const d=new Date(today);d.setDate(d.getDate()-i);
       const key=d.toISOString().slice(0,10);
-      const on=days.includes(key);
-      dots.push(`<div class="flower-dot ${on?'on':'off'}">${on?'✿':'·'}</div>`);
+      const isToday=key===todayStr,on=days.includes(key);
+      let cls='flower-dot '+(isToday&&on?'today-dot':on?'on':'off');
+      dots.push(`<div class="${cls}">${on?'✿':'·'}</div>`);
     }
-    return `
-      <div class="dots-section">
-        <div class="dots-label">直近30日のあしあと</div>
-        <div class="dots-grid">${dots.join('')}</div>
-        <div class="dots-note">花が咲いている日は、ちゃんと来た日だよ。<br>来られなかった日も、それでいい。</div>
-      </div>`;
+    return`<div class="dots-section">
+      <div class="dots-label">直近30日のあしあと</div>
+      <div class="dots-grid">${dots.join('')}</div>
+      <div class="dots-note">しんどい日も、なんとか越えてきた足あとです。</div>
+    </div>`;
   }
 
-  const wMsg=weekMsg(week);
-  const cMsg=comboMsg(topCombo,topCount);
-  const cards=[wMsg,cMsg].filter(Boolean).map(c=>`
-    <div class="praise-card">
-      <div class="praise-card-body">${c.body}</div>
-      <div class="praise-card-sub">${c.sub}</div>
-    </div>`).join('');
-
-  el.innerHTML=`
+  el.innerHTML=todayCardHtml+`
     <div class="praise-hero">
       <div class="praise-hero-num">${total}</div>
       <div class="praise-hero-msg">${heroMsg(total)}</div>
-    </div>
-    ${mirrorCard()}
-    ${cards?`<div class="praise-cards">${cards}</div>`:''}
-    ${flowerDots()}
-  `;
+    </div>`
+    +weekCardHtml+mirrorHtml()+flowerHtml();
 }
 
-// 過去の言葉をシャッフル
 function refreshMirror(){
-  const f=JSON.parse(localStorage.getItem('ht_f')||'[]');
-  if(f.length<2) return;
-  const card=document.getElementById('mirrorCard');
-  if(!card) return;
-  const item=f[Math.floor(Math.random()*f.length)];
-  const msg=Array.isArray(item.m)?item.m[0]:item.m;
-  card.querySelector('.mirror-quote').textContent=msg;
-  card.querySelector('.mirror-tag').textContent=`${item.mood} × ${item.scene}`;
+  const todayStr=new Date().toISOString().slice(0,10);
+  const logs=JSON.parse(localStorage.getItem('ht_logs')||'[]');
+  const pool=logs.filter(l=>l.date!==todayStr&&l.msg);
+  const card=document.getElementById('mirrorCard');if(!card)return;
+  if(pool.length>=1){
+    const item=pool[Math.floor(Math.random()*pool.length)];
+    const diff=Math.round((Date.now()-new Date(item.date).getTime())/86400000);
+    const ago=diff<=0?'今日':diff===1?'昨日':`${diff}日前`;
+    card.querySelector('.mirror-quote').textContent=item.msg;
+    card.querySelector('.mirror-tag').textContent=`${item.mood} × ${item.scene}　|　${ago}`;
+  } else if(favs.length>=1){
+    const f=favs[Math.floor(Math.random()*favs.length)];
+    const msg=Array.isArray(f.m)?f.m[0]:f.m;
+    card.querySelector('.mirror-quote').textContent=msg;
+    card.querySelector('.mirror-tag').textContent=`${f.mood} × ${f.scene}`;
+  }
 }
 
 // ── Init ──
@@ -1677,7 +1814,8 @@ showOnboarding();
 </body>
 </html>
 <!-- STORAGE KEYS
-  ht_f            … お気に入り [{mood,scene,m,a,msgIdx,savedAt}, ...]
+  ht_f            … お守り [{mood,scene,m,a,msgIdx,savedAt}, ...]
+  ht_logs         … 1押し毎ログ [{date,time,mood,scene,msg,act,msgIdx,faved,ts}, ...] max200件
   ht_onboarded    … オンボーディング完了 ("1")
   ht_snd_tip_shown… 音ツールチップ表示済 ("1")
   ht_days         … 押した日付 ["YYYY-MM-DD", ...] 30日ローリング
@@ -1687,4 +1825,5 @@ showOnboarding();
   ht_milestones   … 達成済みマイルストーン回数の配列 [5, 10, ...]
   ht_mood_count   … 気分チップ頻度 {value: count}
   ht_scene_count  … 場所チップ頻度 {value: count}
+  ht_flower_shown … 今日の花を表示した日付 "YYYY-MM-DD"
 -->
