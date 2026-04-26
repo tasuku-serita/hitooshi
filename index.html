@@ -1175,13 +1175,13 @@ function getDailyFlower(){
 function getSpecialMsg(total){
   const dow=new Date().getDay();
   const h=new Date().getHours();
-  if(total===1) return 'はじめてのひと押し。来てくれてありがとう。';
-  if(total===3) return '3回目のヒトオシ。来るたびに、少し慣れてきた？';
-  if(total===7) return '7回目。気づいたら、こんなに来てたんだね。';
-  if(total===10) return '10回目。しんどい日を10回、ちゃんと越えてきた。';
-  if(total===20) return '20回。あなたはもう、自分を大切にする習慣がある。';
-  if(dow===1&&h<12) return '月曜の朝、来てくれた。それだけでもう、今週は大丈夫。';
-  if(dow===5&&h>=15) return '金曜の午後。今週もここまで来た、えらいよ。';
+  if(total===1) return 'はじめてここに来てくれたね。来てくれてありがとう。';
+  if(total===3) return '3回目だね。来るたびに、少し慣れてきたかな？';
+  if(total===7) return '気づいたらもう7回もここに来てたね。';
+  if(total===10) return 'ここに10回来てくれたあなた、しんどい日をちゃんと越えてきたね！';
+  if(total===20) return '20回も来てくれたね。もう自分を大切にすることが、あなたの一部になってるよ。';
+  if(dow===1&&h<12) return '月曜の朝なのに来てくれたね。もうそれだけで、今週は大丈夫だよ。';
+  if(dow===5&&h>=15) return '金曜の午後にここに来てくれたあなた、今週もちゃんと越えてきたね！';
   return null;
 }
 function retryMsg(){
@@ -1546,11 +1546,11 @@ function closeOb(){
 
 // ── Counter (改修11) ──
 const MILESTONES={
-  5:'5回、ヒトオシを受け取ってきたね。それだけでいい。',
-  10:'10回。しんどい日を10回、越えてきた。',
-  20:'20回。あなたはちゃんと、自分を労ってる。',
-  50:'50回。ほんとうに、えらい。',
-  100:'100回目。ここまで来てくれて、ありがとう。'
+  5:'5回も自分のためにここに来たね！それだけで十分、えらいよ！',
+  10:'10回！しんどい日を10回もちゃんと越えてきたあなた、本当にえらい！',
+  20:'20回も来てくれたね。あなたはちゃんと、自分のことを大切にしてるよ。',
+  50:'50回！ほんとうにえらいよ、あなた。',
+  100:'100回、ここに来てくれた。ありがとう、本当に。'
 };
 function updateCounter(){
   const total=parseInt(localStorage.getItem('ht_total')||'0');
@@ -1601,7 +1601,7 @@ function renderFavList(){
   const countEl=document.getElementById('favPageCount');
   if(!favs.length){
     countEl.textContent='';
-    area.innerHTML=`<div class="fav-empty"><div class="fav-empty-ico">🧿</div>まだ、お守りはありません。<br>しんどい日にまた見たい言葉を、<br>そっと残しておけます。</div>`;
+    area.innerHTML=`<div class="fav-empty"><div class="fav-empty-ico">🧿</div>まだお守りはないよ。<br>また見たいなと思った言葉を、<br>そっと残しておいてね。</div>`;
     updateFavBadge();return;
   }
   countEl.textContent=favs.length+'件';
@@ -1671,7 +1671,7 @@ function renderAshiato(){
   const total=parseInt(localStorage.getItem('ht_total')||'0');
   const el=document.getElementById('ashiatoContent');
   if(total===0){
-    el.innerHTML=`<div class="fav-empty"><div class="fav-empty-ico">🌱</div>まだ記録がないよ。<br>ひと押しするたびに<br>ここに積み重なっていくよ</div>`;
+    el.innerHTML=`<div class="fav-empty"><div class="fav-empty-ico">🌱</div>まだ記録がないよ。<br>ひと押しするたびに、<br>ここに足あとが増えていくよ。</div>`;
     return;
   }
   const todayStr=new Date().toISOString().slice(0,10);
@@ -1684,7 +1684,7 @@ function renderAshiato(){
   const todayCardHtml=todayLog
     ?`<div class="today-card">
         <div class="today-card-label">今日のあしあと</div>
-        <div class="today-card-main">今日も、ひと押しを受け取れたね</div>
+        <div class="today-card-main">今日もここに来てくれたね</div>
         <div class="today-card-row">
           <span class="today-chip">${todayLog.mood}</span>
           <span class="today-chip">${todayLog.scene}</span>
@@ -1692,18 +1692,18 @@ function renderAshiato(){
         <div class="today-card-act">✦ ${todayLog.act}</div>
       </div>`
     :`<div class="today-empty">
-        <div class="today-empty-main">今日はまだ、ひと押し前です。<br>しんどくなったら、そっと戻ってきてね。</div>
+        <div class="today-empty-main">今日はまだここには来ていないんだね。<br>しんどくなったら、そっと戻ってきてね。</div>
       </div>`;
 
   // ヒーロー文言
   function heroMsg(n){
-    if(n===1)  return '来てくれた。それだけで、十分だよ。';
-    if(n<5)    return '何度かしんどい日を、ちゃんと乗り越えてきたね。';
-    if(n<10)   return `${n}回も来た。しんどい日に、自分のために動いてた。`;
-    if(n<20)   return `${n}回も、自分のために来た。えらいよ、本当に。`;
-    if(n<50)   return `${n}回。その日その日を、ちゃんと生きてきた。`;
-    if(n<100)  return `${n}回。あなたは自分の味方でい続けた。`;
-    return `${n}回、ここに来た。それはもう、習慣じゃなくて愛情だよ。`;
+    if(n===1)  return '来てくれたね。それだけで、今日は十分だよ。';
+    if(n<5)    return `${n}回、ここに来てくれたね。しんどい日に来られたあなた、えらい。`;
+    if(n<10)   return `${n}回も、ここに来てくれたね。自分のために動いてたんだよ、ちゃんと。`;
+    if(n<20)   return `${n}回も自分のためにここに来たね！本当にえらいよ！`;
+    if(n<50)   return `${n}回。その日その日を、ちゃんと生きてきたあなたがいる。`;
+    if(n<100)  return `${n}回も来てくれた。あなたはずっと、自分の味方でいてくれてた。`;
+    return `${n}回、ここに来てくれた。もうそれは愛情だよ、自分への。`;
   }
 
   // 2-2. 直近7日
@@ -1718,21 +1718,21 @@ function renderAshiato(){
   let topMood7='',topMoodN7=0;
   Object.entries(moodCount7).forEach(([k,v])=>{if(v>topMoodN7){topMoodN7=v;topMood7=k;}});
   function weekBody(n,mood){
-    if(n===0) return{b:'今週はまだ来ていないんだね。',s:'しんどくなったら、いつでも戻ってきて。'};
-    if(n===1) return{b:'今週も1日、来てくれた。',s:'来られなかった日も、それはそれでいい。'};
+    if(n===0) return{b:'今週はまだここには来ていないんだね。',s:'しんどくなったら、いつでも戻ってきてね。'};
+    if(n===1) return{b:'今週はここに1日、来てくれたね。',s:'来られなかった日があっても、それはそれでいいよ。'};
     if(n<=3){
       const s=mood
-        ?`「${mood}」気持ちを抱えながら、それでもここに来た。ちゃんと自分を大切にしてるってことだよ。`
-        :'しんどい中で来られた日のこと、ちゃんと覚えておいてね。';
-      return{b:`今週は${n}日、来てくれたね。`,s};
+        ?`「${mood}」気持ちを抱えながらも、ここに来てくれたあなた。それって、ちゃんと自分を大切にしてるってことだよ。`
+        :'しんどい中でもここに来られた日のこと、ちゃんと覚えておいてね。';
+      return{b:`今週はここに${n}日来てくれたね。`,s};
     }
     if(n<=5){
       const s=mood
-        ?`「${mood}」な日が続いていたんだね。そんな中でも、何度も自分を整えようとしてた。`
-        :'それだけ自分のことを気にかけてたってこと。';
-      return{b:`今週は${n}日も来た。`,s};
+        ?`「${mood}」な日が続いていたんだね。そんな中でも何度もここに来てくれたあなた、えらいよ。`
+        :'それだけ自分のことを気にかけてくれてたってこと。';
+      return{b:`今週はここに${n}日も来てくれたね。`,s};
     }
-    return{b:'今週はほぼ毎日来てくれた。',s:'毎日しんどかったかもしれないけど、毎日ちゃんと向き合ってた。'};
+    return{b:'今週はほぼ毎日ここに来てくれたね。',s:'毎日しんどかったかもしれないけど、毎日ちゃんと自分と向き合ってたね。'};
   }
   const wb=weekBody(week,topMood7);
   const weekCardHtml=`<div class="week-card">
@@ -1750,7 +1750,7 @@ function renderAshiato(){
       const diff=Math.round((Date.now()-new Date(item.date).getTime())/86400000);
       const ago=diff<=0?'今日':diff===1?'昨日':`${diff}日前`;
       return`<div class="mirror-card" id="mirrorCard">
-        <div class="mirror-label">前のあなたが受け取ったことば</div>
+        <div class="mirror-label">前のあなたが受け取った言葉</div>
         <div class="mirror-quote">${item.msg}</div>
         <div class="mirror-tag">${item.mood} × ${item.scene}　|　${ago}</div>
         <button class="mirror-refresh" onclick="refreshMirror()">↻ 別のことばを見る</button>
@@ -1759,7 +1759,7 @@ function renderAshiato(){
     const f=favs[Math.floor(Math.random()*favs.length)];
     const msg=Array.isArray(f.m)?f.m[0]:f.m;
     return`<div class="mirror-card" id="mirrorCard">
-      <div class="mirror-label">前のあなたが受け取ったことば</div>
+      <div class="mirror-label">前のあなたが受け取った言葉</div>
       <div class="mirror-quote">${msg}</div>
       <div class="mirror-tag">${f.mood} × ${f.scene}</div>
       <button class="mirror-refresh" onclick="refreshMirror()">↻ 別のことばを見る</button>
@@ -1779,7 +1779,7 @@ function renderAshiato(){
     return`<div class="dots-section">
       <div class="dots-label">直近30日のあしあと</div>
       <div class="dots-grid">${dots.join('')}</div>
-      <div class="dots-note">しんどい日も、なんとか越えてきた足あとです。</div>
+      <div class="dots-note">しんどい日も、ちゃんとここに来てたあなたの足あとだよ。</div>
     </div>`;
   }
 
