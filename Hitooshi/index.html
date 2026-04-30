@@ -1,0 +1,1787 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>ヒトオシ — しんどい日のやさしい1タップ</title>
+<style>
+:root {
+  --cr: #FDF5EC;
+  --lv: #C4B4D8;
+  --lv-l: #EDE8F5;
+  --lv-m: #B0A0CC;
+  --lv-d: #9A86B6;
+  --pk: #E0B8C4;
+  --pk-l: #F8ECF0;
+  --pk-m: #C89AAC;
+  --pk-d: #B88A9C;
+  --be: #E8DDD0;
+  --be-d: #D0C0B0;
+  --tx: #4E3E4C;
+  --tx-m: #7A6878;
+  --tx-s: #A898A8;
+  --wh: #FFFFFF;
+  --sh: 0 4px 24px rgba(130,90,120,.11);
+  --sh-s: 0 2px 10px rgba(130,90,120,.09);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  background:var(--cr);
+  background-image:
+    radial-gradient(ellipse at 12% 88%, rgba(196,180,216,.17) 0%, transparent 52%),
+    radial-gradient(ellipse at 88% 12%, rgba(224,184,196,.17) 0%, transparent 52%);
+  font-family:-apple-system,'Hiragino Sans','Hiragino Kaku Gothic ProN','Noto Sans JP',sans-serif;
+  color:var(--tx);
+  min-height:100vh;
+  padding:0 16px calc(64px + max(8px,env(safe-area-inset-bottom,8px)));
+  max-width:480px;
+  margin:0 auto;
+}
+
+/* ── Header ── */
+.hd{
+  padding:36px 4px 26px;
+  position:relative;
+  display:flex;flex-direction:column;align-items:center;gap:4px;
+}
+.snd-btn{
+  position:absolute;top:36px;right:4px;
+  background:var(--wh);border:none;border-radius:20px;
+  padding:6px 12px;font-size:11px;color:var(--tx-s);
+  cursor:pointer;display:flex;align-items:center;gap:4px;
+  box-shadow:var(--sh-s);transition:box-shadow .2s;
+  -webkit-tap-highlight-color:transparent;
+}
+.snd-btn:hover{box-shadow:0 3px 14px rgba(130,90,120,.17)}
+.logo{
+  width:36px;height:36px;
+  background:linear-gradient(135deg,var(--lv) 0%,var(--pk) 100%);
+  border-radius:12px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:17px;color:#fff;
+  box-shadow:0 3px 10px rgba(170,130,190,.26);
+  margin-bottom:2px;
+}
+.app-name{font-size:26px;font-weight:800;letter-spacing:.18em;color:var(--tx)}
+.app-hook{
+  font-size:15px;font-weight:700;color:var(--tx);
+  letter-spacing:.02em;line-height:1.5;text-align:center;
+  margin-top:3px;
+}
+.app-sub{
+  font-size:11px;color:var(--tx-s);
+  letter-spacing:.03em;line-height:1.6;text-align:center;
+  margin-top:1px;
+}
+.app-sub2{
+  font-size:11px;color:var(--tx-s);
+  letter-spacing:.03em;line-height:1.65;text-align:center;
+  margin-top:5px;white-space:pre-line;
+}
+.counter-line{
+  font-size:11px;color:var(--tx-s);letter-spacing:.04em;
+  margin-top:4px;display:none;
+}
+#counterNum{
+  display:inline-block;
+  transition:color .3s;
+}
+#counterNum.bump{animation:numBump .55s cubic-bezier(.34,1.56,.64,1)}
+@keyframes numBump{
+  0%{transform:translateY(0) scale(1);opacity:1}
+  35%{transform:translateY(-5px) scale(1.18);opacity:.7}
+  100%{transform:translateY(0) scale(1);opacity:1}
+}
+
+/* ── Section ── */
+.sec{margin-bottom:20px}
+.lbl{
+  font-size:10.5px;font-weight:700;color:var(--tx-s);
+  letter-spacing:.16em;text-transform:uppercase;
+  margin-bottom:10px;
+  display:flex;align-items:center;gap:7px;
+}
+.lbl::after{content:'';flex:1;height:1px;background:var(--be)}
+
+/* ── Chips ── */
+.chips{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.chip{
+  background:var(--wh);border:1.5px solid var(--be);border-radius:14px;
+  padding:12px 8px 10px;
+  font-size:12px;color:var(--tx-m);
+  cursor:pointer;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;
+  min-height:62px;
+  transition:background .16s,border-color .16s,color .16s,box-shadow .16s,transform .12s,opacity .16s;
+  user-select:none;-webkit-tap-highlight-color:transparent;
+  box-shadow:var(--sh-s);
+  line-height:1.3;text-align:center;
+}
+.chip-ico{font-size:22px;line-height:1;display:block}
+.chip-txt{font-size:12px;display:block}
+.chip:active{transform:scale(.95)}
+.mood-chips .chip.on{
+  background:var(--lv-l);border-color:var(--lv);color:var(--lv-d);font-weight:600;
+  box-shadow:0 3px 12px rgba(160,140,210,.22);
+}
+.scene-chips .chip.on{
+  background:var(--pk-l);border-color:var(--pk);color:var(--pk-d);font-weight:600;
+  box-shadow:0 3px 12px rgba(200,154,172,.22);
+}
+.chips.dimmed .chip:not(.on){opacity:.42;transform:scale(.97)}
+.scene-chips .chip:last-child{
+  grid-column: 1 / -1;
+  flex-direction: row;
+  gap: 10px;
+  min-height: 48px;
+  padding: 10px 16px;
+  justify-content: center;
+}
+.chip-hidden{display:none}
+.mood-expanded .chip-hidden{display:flex}
+.chip-more{
+  width:100%;margin-top:6px;
+  background:none;border:1.5px dashed var(--be-d);border-radius:12px;
+  padding:8px;font-size:12px;color:var(--tx-s);
+  cursor:pointer;text-align:center;
+  transition:background .15s,border-color .15s;
+  -webkit-tap-highlight-color:transparent;
+}
+.chip-more:hover{background:var(--lv-l);border-color:var(--lv)}
+
+/* ── Main Button ── */
+.btn-wrap{padding:4px 0 18px}
+.main-btn{
+  width:100%;
+  background:linear-gradient(135deg,var(--lv-m) 0%,var(--pk-m) 100%);
+  border:none;border-radius:26px;
+  padding:17px 24px;
+  font-size:15.5px;font-weight:700;color:#fff;
+  cursor:pointer;letter-spacing:.08em;
+  transition:transform .15s,box-shadow .15s;
+  box-shadow:0 5px 20px rgba(175,125,165,.33);
+  -webkit-tap-highlight-color:transparent;
+}
+.main-btn:hover{transform:translateY(-2px);box-shadow:0 7px 24px rgba(175,125,165,.42)}
+.main-btn:active{transform:translateY(1px);box-shadow:0 3px 12px rgba(175,125,165,.26)}
+
+/* ── Result Card ── */
+.card{
+  background:#FFFAF5;border-radius:22px;
+  padding:28px 22px 24px;
+  margin-bottom:12px;
+  box-shadow:0 8px 36px rgba(200,140,100,.18);
+  border:2.5px solid #E8C8A8;
+  display:none;opacity:0;transform:translateY(14px);
+  transition:opacity .36s ease,transform .36s ease;
+  position:relative;overflow:hidden;
+}
+.card.vis{display:block}
+.card.in{opacity:1;transform:translateY(0)}
+.card-bar{
+  position:absolute;top:0;left:0;right:0;height:10px;
+  background:linear-gradient(90deg,#D4A8C8 0%,#E8B88C 100%);
+}
+.card-body{display:flex;gap:12px;align-items:flex-start}
+.card-texts{flex:1;min-width:0}
+.c-msg{
+  font-size:18px;line-height:2.0;color:var(--tx);font-weight:700;
+  margin-bottom:22px;min-height:2.2em;
+  letter-spacing:.02em;
+}
+.c-act-row{
+  display:flex;align-items:stretch;
+  border-radius:14px;overflow:hidden;
+  border:2px solid #E8C0A0;
+  background:#FFF3E8;
+  opacity:0;
+  transition:opacity .35s ease;
+  box-shadow:0 3px 12px rgba(220,160,100,.18);
+}
+.c-act-icon{
+  width:40px;flex-shrink:0;
+  background:linear-gradient(160deg,#E8B88C,#D4A0A0);
+  display:flex;align-items:center;justify-content:center;
+  font-size:14px;color:#fff;font-weight:700;
+}
+.c-act-text{
+  padding:13px 14px;
+  font-size:14px;color:#6A4E3C;line-height:1.6;font-weight:600;
+  flex:1;
+}
+.retry-btn{
+  display:none;align-items:center;justify-content:center;gap:5px;
+  margin-top:10px;
+  background:none;border:1.5px dashed #D0B8A8;border-radius:10px;
+  padding:8px 14px;font-size:12px;color:#8A6858;
+  cursor:pointer;width:100%;
+  transition:background .15s,border-color .15s;
+  -webkit-tap-highlight-color:transparent;
+}
+.retry-btn.vis{display:flex}
+.retry-btn:hover{background:#FFF3E8;border-color:#C0A090}
+
+/* マスコット */
+.mascot-box{
+  width:52px;flex-shrink:0;
+  display:flex;align-items:flex-end;justify-content:center;
+  padding-top:4px;padding-bottom:2px;
+}
+.mascot{
+  width:48px;height:48px;
+  object-fit:contain;object-position:center;
+  opacity:.75;transition:opacity .3s;
+}
+.mascot.pop{animation:mpop .55s cubic-bezier(.34,1.56,.64,1);opacity:1}
+@keyframes mpop{
+  0%{transform:scale(1) rotate(0)}
+  38%{transform:scale(1.38) rotate(-8deg)}
+  68%{transform:scale(.91) rotate(4deg)}
+  100%{transform:scale(1) rotate(0)}
+}
+
+/* ── Particles ── */
+.c-particle{
+  position:absolute;border-radius:50%;
+  opacity:0;pointer-events:none;
+  will-change:transform,opacity;
+  animation:particleUp 1.8s ease-out forwards;
+}
+@keyframes particleUp{
+  0%{opacity:0;transform:translate3d(0,0,0)}
+  20%{opacity:.55}
+  80%{opacity:.35}
+  100%{opacity:0;transform:translate3d(0,-58px,0)}
+}
+
+/* ── Flower ── */
+.flower-svg{
+  position:absolute;top:50%;left:50%;
+  width:100px;height:100px;overflow:visible;
+  transform:translate(-50%,-50%) scale(0);
+  pointer-events:none;z-index:10;
+  animation:flowerBloom .9s cubic-bezier(.34,1.56,.64,1) forwards;
+}
+@keyframes flowerBloom{
+  0%{transform:translate(-50%,-50%) scale(0);opacity:0}
+  12%{opacity:1}
+  75%{opacity:1;transform:translate(-50%,-50%) scale(1)}
+  100%{opacity:0;transform:translate(-50%,-50%) scale(1.06)}
+}
+.f-p{opacity:0;animation:fPIn .55s ease-out forwards}
+.f-p:nth-child(2){animation-delay:.07s}
+.f-p:nth-child(3){animation-delay:.14s}
+.f-p:nth-child(4){animation-delay:.21s}
+.f-p:nth-child(5){animation-delay:.28s}
+.f-ctr{opacity:0;animation:fPIn .4s ease-out .16s forwards}
+@keyframes fPIn{to{opacity:1}}
+
+/* ── Action Buttons ── */
+.act-btns{display:none;gap:9px;margin-bottom:14px}
+.act-btns.vis{display:flex}
+.btn-fav{
+  flex:1;background:var(--wh);border:1.5px solid var(--be);border-radius:18px;
+  padding:11px 8px;font-size:13px;color:var(--tx-s);
+  cursor:pointer;display:flex;align-items:center;justify-content:center;gap:5px;
+  transition:all .18s;-webkit-tap-highlight-color:transparent;
+  box-shadow:var(--sh-s);
+}
+.btn-fav.on{background:var(--pk-l);border-color:var(--pk);color:var(--pk-m)}
+.btn-done{
+  flex:2;
+  background:linear-gradient(135deg,#ECD4F4 0%,#F4D4DC 100%);
+  border:none;border-radius:18px;
+  padding:12px 8px;
+  font-size:14px;font-weight:700;color:var(--tx);
+  cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;
+  transition:transform .15s,box-shadow .15s;
+  box-shadow:0 4px 14px rgba(175,145,195,.2);
+  -webkit-tap-highlight-color:transparent;
+}
+.btn-done:hover{transform:translateY(-1px);box-shadow:0 6px 18px rgba(175,145,195,.3)}
+.btn-done:active{transform:translateY(1px)}
+
+/* ── Scroll link ── */
+.scroll-link-wrap{text-align:center;margin-bottom:16px;display:none}
+.scroll-link{
+  background:none;border:none;
+  font-size:12px;color:var(--tx-s);cursor:pointer;
+  padding:4px 8px;
+  -webkit-tap-highlight-color:transparent;
+  text-decoration:underline;text-underline-offset:3px;
+}
+
+/* ── Divider ── */
+.div{height:1px;background:linear-gradient(90deg,transparent,var(--be),transparent);margin:4px 0 22px;display:none}
+
+/* ── History ── */
+.history-sec{margin-bottom:18px;display:none}
+.history-stats{display:flex;gap:10px;margin-bottom:6px}
+.hist-item{
+  background:var(--wh);border-radius:14px;padding:12px 16px;
+  display:flex;flex-direction:column;align-items:center;flex:1;
+  box-shadow:var(--sh-s);
+}
+.hist-num{font-size:24px;font-weight:800;color:var(--lv-d);line-height:1.1}
+.hist-label{font-size:10px;color:var(--tx-s);margin-top:2px;text-align:center}
+.hist-combo{font-size:11px;color:var(--tx-m);padding:8px 12px;background:var(--lv-l);border-radius:10px;margin-top:6px}
+
+/* ── Favorites Carousel ── */
+.fav-sec{display:none;padding-bottom:8px}
+.fav-sec.vis{display:block}
+.fav-ttl{font-size:10.5px;font-weight:700;color:var(--tx-s);letter-spacing:.16em;margin-bottom:10px}
+.fav-indicator{font-size:10px;color:var(--tx-s);margin-bottom:8px;min-height:14px}
+.fav-stage{position:relative;overflow:hidden;transition:opacity .15s ease-out,transform .15s ease-out}
+.fav-card{background:var(--wh);border-radius:16px;padding:14px 13px;box-shadow:0 2px 10px rgba(130,90,120,.08)}
+.fav-card-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:4px}
+.fav-tag{font-size:10px;color:var(--tx-s)}
+.fav-date{font-size:9.5px;color:var(--tx-s);opacity:.7;margin-top:2px}
+.fav-msg{font-size:12.5px;color:var(--tx-m);line-height:1.55;margin:6px 0}
+.fav-bottom{display:flex;align-items:center;justify-content:space-between}
+.fav-step{font-size:10px;color:var(--pk-m)}
+.fav-del{
+  background:none;border:none;color:var(--be-d);cursor:pointer;
+  font-size:16px;line-height:1;padding:2px 4px;
+  transition:color .15s;user-select:none;-webkit-tap-highlight-color:transparent;
+}
+.fav-del:hover{color:var(--pk-m)}
+.fav-save{
+  background:none;border:none;font-size:11px;color:var(--tx-s);
+  cursor:pointer;padding:2px 4px;transition:color .15s;-webkit-tap-highlight-color:transparent;
+}
+.fav-save:hover{color:var(--pk-m)}
+.fav-nav-row{display:flex;justify-content:center;gap:16px;margin-top:10px}
+.fav-nav-btn{
+  background:none;border:1.5px solid var(--be);border-radius:50%;
+  width:30px;height:30px;font-size:15px;color:var(--tx-s);
+  cursor:pointer;display:flex;align-items:center;justify-content:center;
+  transition:all .18s;-webkit-tap-highlight-color:transparent;
+}
+.fav-nav-btn:hover:not(:disabled){border-color:var(--pk);color:var(--pk-m)}
+.fav-nav-btn:disabled{opacity:.28;cursor:default}
+
+/* ── Confetti ── */
+.cel{position:fixed;inset:0;pointer-events:none;z-index:999;display:none}
+.cel.on{display:block}
+.dot{position:absolute;border-radius:50%;animation:fall linear forwards}
+@keyframes fall{
+  0%{opacity:1;transform:translateY(0) scale(1) rotate(0)}
+  80%{opacity:1}
+  100%{opacity:0;transform:translateY(100vh) scale(.35) rotate(540deg)}
+}
+
+/* ── Toast ── */
+.toast{
+  position:fixed;
+  bottom:max(28px,env(safe-area-inset-bottom,28px));
+  left:50%;transform:translateX(-50%) translateY(8px);
+  background:rgba(70,55,68,.88);color:#fff;
+  padding:9px 18px;border-radius:18px;font-size:12.5px;
+  opacity:0;transition:opacity .24s,transform .24s;
+  pointer-events:none;z-index:1000;
+  backdrop-filter:blur(8px);white-space:nowrap;
+}
+.toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
+.toast.interact{pointer-events:auto}
+.toast-del-btn{
+  background:var(--pk-m);color:#fff;border:none;border-radius:10px;
+  padding:3px 10px;font-size:11px;cursor:pointer;margin-left:6px;vertical-align:middle;
+}
+
+/* ── Onboarding ── */
+.onboard{
+  position:fixed;inset:0;z-index:2000;background:var(--cr);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:40px 28px max(40px,env(safe-area-inset-bottom,40px));text-align:center;
+}
+.ob-steps-wrap{position:relative;flex:1;width:100%;display:flex;align-items:center;justify-content:center}
+.ob-step{
+  position:absolute;width:100%;
+  display:flex;flex-direction:column;align-items:center;gap:18px;
+  opacity:0;pointer-events:none;transition:opacity .4s ease;
+}
+.ob-step.on{opacity:1;pointer-events:auto}
+.ob-icon{font-size:46px}
+.ob-txt{font-size:19px;font-weight:800;color:var(--tx);line-height:1.55;letter-spacing:.02em}
+.ob-chips-demo{display:flex;flex-wrap:wrap;gap:6px;justify-content:center}
+.ob-chip{background:var(--wh);border:1.5px solid var(--be);border-radius:20px;padding:5px 12px;font-size:12px;color:var(--tx-m)}
+.ob-chip.hi{background:var(--lv);border-color:var(--lv);color:#fff}
+.ob-next{
+  background:var(--lv-l);border:1.5px solid var(--lv);border-radius:16px;
+  padding:10px 28px;font-size:14px;font-weight:700;color:var(--lv-d);
+  cursor:pointer;margin-top:4px;
+  -webkit-tap-highlight-color:transparent;
+  transition:background .15s;
+}
+.ob-next:hover{background:var(--lv)}
+.ob-bottom{display:flex;flex-direction:column;align-items:center;gap:12px;width:100%}
+.ob-dots{display:flex;gap:8px}
+.ob-dot{width:7px;height:7px;border-radius:50%;background:var(--be);transition:background .3s;cursor:pointer}
+.ob-dot.on{background:var(--lv)}
+.ob-start{
+  width:100%;max-width:260px;
+  background:linear-gradient(135deg,var(--lv-m),var(--pk-m));
+  border:none;border-radius:22px;padding:14px 24px;
+  font-size:15px;font-weight:700;color:#fff;cursor:pointer;
+  box-shadow:0 4px 16px rgba(175,125,165,.3);-webkit-tap-highlight-color:transparent;
+}
+.ob-skip{background:none;border:none;font-size:11.5px;color:var(--tx-s);cursor:pointer;padding:4px}
+
+/* ── Tab Bar ── */
+.tab-bar{
+  position:fixed;bottom:0;left:50%;transform:translateX(-50%);
+  width:100%;max-width:480px;
+  display:flex;
+  background:rgba(253,245,236,.94);
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  border-top:1px solid var(--be);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+  z-index:100;
+}
+.tab-btn{
+  flex:1;display:flex;flex-direction:column;align-items:center;
+  gap:3px;padding:10px 4px 8px;
+  background:none;border:none;cursor:pointer;
+  font-size:10px;color:var(--tx-s);letter-spacing:.04em;
+  transition:color .18s;-webkit-tap-highlight-color:transparent;
+}
+.tab-btn.active{color:var(--lv-d);font-weight:700}
+.tab-ico{font-size:20px;line-height:1;display:block}
+.tab-badge{
+  position:absolute;top:8px;right:calc(50% - 16px);
+  width:8px;height:8px;
+  background:var(--pk-m);border-radius:50%;
+  display:none;
+}
+.tab-badge.vis{display:block}
+
+/* ── Tab Pages ── */
+.tab-page{display:none}
+.tab-page.active{display:block}
+
+/* お守りページ専用 */
+.fav-page-header{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:18px;
+}
+.fav-page-title{font-size:18px;font-weight:800;color:var(--tx);letter-spacing:.04em}
+.fav-page-count{font-size:11px;color:var(--tx-s)}
+.fav-list{display:flex;flex-direction:column;gap:10px}
+.fav-list-card{
+  background:var(--wh);border-radius:16px;padding:14px 16px;
+  box-shadow:var(--sh-s);position:relative;
+}
+.fav-list-tag{font-size:10px;color:var(--tx-s);margin-bottom:6px}
+.fav-list-msg{font-size:13.5px;color:var(--tx);line-height:1.7;font-weight:600;margin-bottom:8px}
+.fav-list-act{
+  font-size:11.5px;color:var(--tx-m);
+  background:var(--lv-l);border-radius:8px;padding:6px 10px;
+  display:inline-block;margin-bottom:8px;
+}
+.fav-list-replay{
+  width:100%;margin-top:6px;
+  background:none;border:1.5px dashed var(--lv);border-radius:10px;
+  padding:8px;font-size:12px;color:var(--lv-d);
+  cursor:pointer;text-align:center;
+  transition:background .15s;-webkit-tap-highlight-color:transparent;
+}
+.fav-list-replay:hover{background:var(--lv-l)}
+.fav-list-footer{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-top:8px;
+}
+.fav-list-date{font-size:9.5px;color:var(--tx-s)}
+.fav-list-del{
+  background:none;border:none;color:var(--be-d);cursor:pointer;
+  font-size:15px;padding:2px 4px;transition:color .15s;
+  -webkit-tap-highlight-color:transparent;
+}
+.fav-list-del:hover{color:var(--pk-m)}
+.fav-empty{
+  text-align:center;padding:48px 16px;
+  color:var(--tx-s);font-size:13px;line-height:1.8;
+}
+.fav-empty-ico{font-size:36px;margin-bottom:12px;opacity:.5}
+
+/* あしあとページ */
+.ashiato-section{margin-bottom:24px}
+.ashiato-title{font-size:18px;font-weight:800;color:var(--tx);letter-spacing:.04em;margin-bottom:16px}
+
+/* 今日カード */
+.today-card{
+  background:var(--wh);border-radius:18px;
+  padding:18px 18px 16px;margin-bottom:12px;
+  box-shadow:var(--sh-s);
+  border-left:4px solid var(--lv);
+}
+.today-card-label{font-size:10px;color:var(--tx-s);letter-spacing:.12em;margin-bottom:8px}
+.today-card-main{font-size:14px;font-weight:700;color:var(--tx);line-height:1.6;margin-bottom:10px}
+.today-card-row{display:flex;gap:6px;flex-wrap:wrap}
+.today-chip{
+  font-size:11px;color:var(--tx-m);
+  background:var(--lv-l);border-radius:8px;padding:4px 10px;
+}
+.today-card-act{
+  font-size:12px;color:var(--tx-m);
+  margin-top:10px;padding:8px 12px;
+  background:#FFF8F0;border-radius:10px;
+}
+.today-empty{
+  background:var(--wh);border-radius:18px;
+  padding:18px 18px 16px;margin-bottom:12px;
+  box-shadow:var(--sh-s);text-align:center;
+}
+.today-empty-main{font-size:13px;font-weight:600;color:var(--tx-s);line-height:1.7}
+
+/* ヒーロー */
+.praise-hero{
+  background:var(--wh);border-radius:20px;
+  padding:24px 20px;margin-bottom:12px;
+  box-shadow:var(--sh);text-align:center;
+}
+.praise-hero-num{
+  font-size:52px;font-weight:800;color:var(--lv-d);
+  line-height:1;letter-spacing:-.02em;margin-bottom:6px;
+}
+.praise-hero-msg{font-size:15px;font-weight:700;color:var(--tx);line-height:1.6;}
+
+/* 週まとめ */
+.week-card{
+  background:var(--wh);border-radius:16px;
+  padding:16px 18px;margin-bottom:12px;
+  box-shadow:var(--sh-s);
+}
+.week-card-head{font-size:10px;color:var(--tx-s);letter-spacing:.1em;margin-bottom:8px}
+.week-card-body{font-size:13.5px;font-weight:700;color:var(--tx);line-height:1.65;margin-bottom:4px}
+.week-card-sub{font-size:11.5px;color:var(--tx-s);line-height:1.55}
+
+/* 過去のことば */
+.mirror-card{
+  background:var(--lv-l);border-radius:16px;
+  padding:16px 18px;margin-bottom:12px;
+}
+.mirror-label{font-size:10px;color:var(--tx-s);letter-spacing:.1em;margin-bottom:10px}
+.mirror-quote{font-size:15px;font-weight:700;color:var(--tx);line-height:1.75;margin-bottom:8px}
+.mirror-tag{font-size:10px;color:var(--tx-s)}
+.mirror-refresh{
+  background:none;border:none;font-size:11px;color:var(--lv-d);
+  cursor:pointer;padding:0;margin-top:10px;display:block;
+  -webkit-tap-highlight-color:transparent;
+}
+
+/* 花ドット */
+.dots-section{margin-bottom:12px}
+.dots-label{font-size:10px;color:var(--tx-s);letter-spacing:.1em;margin-bottom:10px}
+.dots-grid{display:grid;grid-template-columns:repeat(10,1fr);gap:5px}
+.flower-dot{
+  aspect-ratio:1;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;font-size:13px;
+}
+.flower-dot.on{background:var(--lv-l)}
+.flower-dot.today-dot{background:var(--lv);box-shadow:0 0 0 2px var(--lv-m)}
+.flower-dot.off{background:#F0E8E0;opacity:.5}
+.dots-note{font-size:10px;color:var(--tx-s);text-align:center;margin-top:10px;line-height:1.6}
+
+/* 今日の花 */
+.today-flower-banner{
+  background:linear-gradient(135deg,var(--lv-l),var(--pk-l));
+  border-radius:16px;padding:14px 18px;margin-bottom:14px;
+  display:flex;align-items:center;gap:12px;
+}
+.today-flower-ico{font-size:28px}
+.today-flower-body{}
+.today-flower-name{font-size:12px;font-weight:700;color:var(--tx);margin-bottom:2px}
+.today-flower-msg{font-size:11px;color:var(--tx-s);line-height:1.5}
+
+/* ひと押し後の導線 */
+.post-nav{
+  text-align:center;margin-top:2px;margin-bottom:6px;
+}
+.post-nav-link{
+  background:none;border:none;
+  font-size:12px;color:var(--lv-d);cursor:pointer;
+  padding:6px 12px;text-decoration:underline;text-underline-offset:3px;
+  -webkit-tap-highlight-color:transparent;
+  opacity:.85;
+}
+.post-nav-link:hover{opacity:1}
+
+@media(prefers-reduced-motion:reduce){
+  *{animation-duration:.01s!important;animation-delay:0s!important;transition-duration:.01s!important}
+}
+@media(min-width:480px){.hd{padding-top:48px}}
+@media(max-width:360px){.chip{font-size:12px;padding:6px 12px}.app-name{font-size:24px}}
+
+</style>
+</head>
+<body>
+
+<!-- ── タブ: ひと押し ── -->
+<div class="tab-page active" id="page-home">
+
+<header class="hd">
+  <button class="snd-btn" id="sndBtn" onclick="toggleSnd()" aria-label="応援音切替">
+    <span id="sndIco">🔔</span><span id="sndTxt">応援あり</span>
+  </button>
+  <div class="logo" aria-hidden="true">✦</div>
+  <div class="app-name">ヒトオシ</div>
+  <div class="app-hook" id="appHook">仕事がしんどいときに</div>
+  <div class="app-sub" id="appSub">気分と場面を選んでやさしいヒトオシを届けます</div>
+  <div class="app-sub2">気分を選ぶだけ。<br>今のあなたに合う、短い言葉と小さな行動</div>
+  <div class="counter-line" id="counterLine">これまでに <span id="counterNum"></span> 回、受け取ってきたね</div>
+</header>
+
+<section class="sec">
+  <div class="lbl">いまの気分</div>
+  <div class="chips mood-chips" id="moodC" role="group" aria-label="気分を選ぶ">
+    <button class="chip" data-v="だるい" aria-pressed="false"><span class="chip-ico">😪</span><span class="chip-txt">だるい</span></button>
+    <button class="chip" data-v="疲れている" aria-pressed="false"><span class="chip-ico">🪫</span><span class="chip-txt">疲れている</span></button>
+    <button class="chip" data-v="不安" aria-pressed="false"><span class="chip-ico">😰</span><span class="chip-txt">不安</span></button>
+    <button class="chip" data-v="めんどくさい" aria-pressed="false"><span class="chip-ico">😮‍💨</span><span class="chip-txt">めんどくさい</span></button>
+    <button class="chip" data-v="何もしたくない" aria-pressed="false"><span class="chip-ico">🌫️</span><span class="chip-txt">何もしたくない</span></button>
+    <button class="chip" data-v="行きたくない" aria-pressed="false"><span class="chip-ico">🚫</span><span class="chip-txt">行きたくない</span></button>
+    <button class="chip chip-hidden" data-v="眠い" aria-pressed="false"><span class="chip-ico">💤</span><span class="chip-txt">眠い</span></button>
+    <button class="chip chip-hidden" data-v="人に会いたくない" aria-pressed="false"><span class="chip-ico">🙈</span><span class="chip-txt">人に会いたくない</span></button>
+    <button class="chip chip-hidden" data-v="緊張する" aria-pressed="false"><span class="chip-ico">💦</span><span class="chip-txt">緊張する</span></button>
+    <button class="chip chip-hidden" data-v="気分が重い" aria-pressed="false"><span class="chip-ico">☁️</span><span class="chip-txt">気分が重い</span></button>
+  </div>
+  <button class="chip-more" id="moodMore" onclick="toggleMoodExpand()">他の気分も見る ▾</button>
+</section>
+
+<section class="sec">
+  <div class="lbl">いまどこ？</div>
+  <div class="chips scene-chips" id="sceneC" role="group" aria-label="場所を選ぶ">
+    <button class="chip" data-v="出勤前" aria-pressed="false"><span class="chip-ico">🌅</span><span class="chip-txt">出勤前</span></button>
+    <button class="chip" data-v="通勤中" aria-pressed="false"><span class="chip-ico">🚃</span><span class="chip-txt">通勤中</span></button>
+    <button class="chip" data-v="仕事前" aria-pressed="false"><span class="chip-ico">💼</span><span class="chip-txt">仕事前</span></button>
+    <button class="chip" data-v="昼休み中" aria-pressed="false"><span class="chip-ico">☕</span><span class="chip-txt">昼休み中</span></button>
+    <button class="chip" data-v="午後つらいとき" aria-pressed="false"><span class="chip-ico">🌇</span><span class="chip-txt">午後つらいとき</span></button>
+  </div>
+</section>
+
+<div class="btn-wrap">
+  <button class="main-btn" id="mainBtn" onclick="go()">今の私をひと押しする</button>
+</div>
+
+<div class="card" id="card">
+  <div class="card-bar"></div>
+  <div class="card-body">
+    <div class="card-texts">
+      <div class="c-msg" id="cMsg" aria-live="polite"></div>
+      <div class="c-act-row" id="cActRow">
+        <div class="c-act-icon">▷</div>
+        <div class="c-act-text" id="cAct"></div>
+      </div>
+      <button class="retry-btn" id="retryBtn" onclick="retryMsg()">↻ もう少し言葉をもらう</button>
+    </div>
+    <div class="mascot-box">
+      <img src="mascot.png" alt="" class="mascot" id="mascot" onerror="this.parentElement.style.display='none'">
+    </div>
+  </div>
+</div>
+
+<div class="act-btns" id="actBtns">
+  <button class="btn-fav" id="favBtn" onclick="toggleFav()" aria-label="お守りにする">
+    <span id="favIco" aria-hidden="true">♡</span> お守りにする
+  </button>
+  <button class="btn-done" onclick="done()">あしあとに残す</button>
+</div>
+<div class="post-nav" id="postNav" style="display:none">
+  <button class="post-nav-link" onclick="switchTab('ashiato')">今日のあしあとを見にいく 🌱</button>
+</div>
+<div id="ad-after-push" style="
+  display:none;background:var(--wh);border-radius:14px;
+  padding:14px 16px;margin-bottom:12px;box-shadow:var(--sh-s);
+  border:0.5px dashed var(--be-d);min-height:64px;
+  align-items:center;justify-content:center;
+">
+  <div style="font-size:10px;color:var(--tx-s);letter-spacing:.1em">AD</div>
+</div>
+
+</div><!-- /page-home -->
+
+<!-- ── タブ: お守り ── -->
+<div class="tab-page" id="page-fav">
+  <header class="hd" style="padding-bottom:16px">
+    <div class="fav-page-header" style="width:100%">
+      <div class="fav-page-title">🧿 ことばのお守り</div>
+      <div class="fav-page-count" id="favPageCount"></div>
+    </div>
+  </header>
+  <div id="favListArea"></div>
+</div>
+
+<!-- ── タブ: あしあと ── -->
+<div class="tab-page" id="page-ashiato">
+  <header class="hd" style="padding-bottom:16px">
+    <div style="width:100%">
+      <div class="ashiato-title">あしあと</div>
+    </div>
+  </header>
+  <div class="ashiato-section">
+    <div id="ashiatoContent"></div>
+  </div>
+</div>
+
+<!-- ── タブバー ── -->
+<nav class="tab-bar" role="tablist">
+  <button class="tab-btn active" id="tab-home" onclick="switchTab('home')" role="tab" aria-selected="true">
+    <span class="tab-ico">✦</span>ひと押し
+  </button>
+  <button class="tab-btn" id="tab-fav" onclick="switchTab('fav')" role="tab" aria-selected="false" style="position:relative">
+    <span class="tab-ico">🧿</span>お守り
+    <span class="tab-badge" id="favBadge"></span>
+  </button>
+  <button class="tab-btn" id="tab-ashiato" onclick="switchTab('ashiato')" role="tab" aria-selected="false">
+    <span class="tab-ico">🌱</span>あしあと
+  </button>
+</nav>
+
+<div class="cel" id="cel" aria-hidden="true"></div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+// ── Message Data ──
+const D = {
+  "だるい":{
+    "出勤前":{
+      m:["だるいままでいいよ。だるいまま着替えたあなた、えらい","体が重くて当然だよ。動こうとしてるあなた、それで十分","だるいのは昨日ちゃんと生きた証拠。今日もゆっくりいこう","だるくていいよ。それでも今日も来たあなた、えらい","重くても動いてるあなた、それだけでもう十分だよ"],
+      a:["服を1枚だけ選んでみる","顔だけ洗ってみる","水をひとくち飲む"]
+    },
+    "通勤中":{
+      m:["だるいまま乗れてるね。それだけで今日は十分えらい","電車の中でだるいのは当然だよ。乗れてるあなた、すごい","だるいまま向かってるあなた、それだけでもう十分だよ","だるさを抱えて電車に乗ってるあなた、えらいよ","だるいまま座ってるだけでいい。それで十分だよ"],
+      a:["窓の外を5秒だけぼーっと見てみる","目を閉じて揺られてていい","好きな音楽を聴く"]
+    },
+    "仕事前":{
+      m:["だるくても席にいるあなた、それで今日はOKだよ","席にいるだけで十分。だるいまま、ただいてくれればいい","だるさを抱えながら来たあなた、それが今日一番えらいこと","だるいのにここにいるあなた、それだけですごいよ","だるさは本物だよ。それでも来たあなた、えらい"],
+      a:["お茶かお水をひとくち飲む","まず深呼吸を1回","机を少しだけ整える"]
+    },
+    "昼休み中":{
+      m:["だるいのに午前中来たあなた、えらかったよ","だるい午前中を乗り越えたね。それだけで十分えらい","午前中のだるさ、ちゃんと越えてきたね","午前中よく耐えたね。昼休みはゆっくりしてていい","だるいまま午前中いたあなた、本当にえらかったよ"],
+      a:["目を5秒だけ閉じてみる","好きなものをゆっくり食べる","横になれたら少しだけ目を閉じる"]
+    },
+    "午後つらいとき":{
+      m:["あとちょっとだけ、だるいまま座ってていいよ","だるいまま午後まで来たあなた、ほんとにえらい","あと少し。だるいままで全然いいよ","だるいままでいい。あとちょっとだけそこにいてね","今日ここまで来てくれたあなた、本当にえらいよ"],
+      a:["背筋だけちょっと伸ばしてみる","退勤後の楽しみをひとつ決める","水を飲んでひと息つく"]
+    }
+  },
+  "眠い":{
+    "出勤前":{
+      m:["眠いのは夜ちゃんと生きた証拠だよ。えらい","眠くても起きてるあなた、それだけで今日はすごい","眠たい目をこすって来てくれたね。ありがとう","眠たいまま準備したあなた、それだけでもうすごい","起きられたあなた、それだけで今日はじゅうぶんだよ"],
+      a:["顔を洗うか、冷たい水を飲む","外の空気を少し吸う","コーヒーか温かいものを飲む"]
+    },
+    "通勤中":{
+      m:["眠いまま乗れてるね。すごいよ、あなた","眠いまま電車に乗れてるあなた、それだけで十分えらい","うとうとしながらでも向かってるあなた、えらいよ","電車の中で眠くなって当然だよ。そのままでいいよ","眠い体で向かってるあなた、十分すごいよ"],
+      a:["目を閉じて揺られてていい","イヤホンして好きな音楽を聴く","窓にもたれてひと息つく"]
+    },
+    "仕事前":{
+      m:["眠たい目で画面見てるあなた、がんばってるね","眠たいまま仕事場にいるあなた、それだけで十分えらい","眠いまま来たあなた、今日はそれが一番えらいよ","眠たい中でもここにいるあなた、えらいよ","眠さをこらえてるあなた、十分がんばってるよ"],
+      a:["水かお茶を飲んで、深呼吸1回","席で少しだけ伸びをする","目薬をさすか目を少し閉じる"]
+    },
+    "昼休み中":{
+      m:["眠いなら寝ていいよ。昼休みは充電タイム","眠い午前中を乗り越えたね。よくやったよ、あなた","眠くても午前中来たあなた、えらいよ","昼休みはあなたの充電タイム。思い切り休んでいい","眠い目で午前中いたあなた、それだけで十分えらい"],
+      a:["15分だけ目を閉じてみる","目を閉じて好きな音楽を聴く","横になれたら少しだけ寝る"]
+    },
+    "午後つらいとき":{
+      m:["眠いまま午後まで来たあなた、ほんとにえらい","眠い中で午後まで来たね。本当にすごいよ","眠たいまま今日もここまで来たね。あとちょっとだけ","眠たいまま午後に来てくれたね。もうそれで十分だよ","眠い体でここまで来たあなた、本当にえらいよ"],
+      a:["席を立ってちょっとだけ歩く","冷たい水を飲む","トイレで顔を洗う"]
+    }
+  },
+  "不安":{
+    "出勤前":{
+      m:["不安なまま行くあなた、それが一番つよいよ","不安を感じてるあなたは、ちゃんと真剣に向き合ってる証拠","不安でいいよ。不安のまま動けてるあなた、すごい","不安があっても動けてるあなた、それがつよさだよ","不安な朝に来てくれたあなた、それだけで十分えらい"],
+      a:["深呼吸を3回だけしてみる","好きな音楽を1曲かけながら準備する","肩の力を抜いて、まず1歩"]
+    },
+    "通勤中":{
+      m:["不安なまま向かってるあなた、それだけで十分つよい","不安を抱えながら電車に乗れてるあなた、えらいよ","不安な気持ちと一緒に向かってるね。それでいいよ","不安を抱えて電車に乗れてるあなた、すごいよ","不安なまま電車に揺られてるだけでいい。えらいよ"],
+      a:["好きな音楽を1曲だけかけてみる","窓の外をぼーっと眺めてみる","目を閉じて深呼吸する"]
+    },
+    "仕事前":{
+      m:["不安なのは、ちゃんと考えてるあなたの証拠だよ","不安があるのは、それだけ大事にしてるから","不安なまま来たあなた、それだけでもう十分すごい","不安を感じながら来られたあなた、それだけで十分","不安なままでいいよ。ここにいるあなた、えらい"],
+      a:["まず1つだけ、小さいこと片付けてみる","深呼吸を3回してみる","温かいものをひとくち飲む"]
+    },
+    "昼休み中":{
+      m:["不安な午前中を乗り越えたね。よくやったよ","不安の中でも午前中来たあなた、すごいよ","不安を抱えながらここまで来たね。えらいよ","不安と一緒に午前中いたあなた、それだけでえらい","不安な午前中、ちゃんと越えてきたあなたがいるよ"],
+      a:["空や外の景色を少し眺めてみる","好きなものをゆっくり食べる","温かいものを飲んでひと息つく"]
+    },
+    "午後つらいとき":{
+      m:["不安なままここまで来たあなた、それだけで十分すごい","不安を抱えたまま午後まで来たね。本当にえらい","不安な気持ちと一緒に今日もここまで来たね。えらいよ","不安なまま今日もここにいるあなた、すごいよ","午後まで不安を抱えてきたあなた、本当にえらい"],
+      a:["肩の力を抜いて、深呼吸1回","退勤後の楽しみをひとつ考える","ゆっくり水を飲む"]
+    }
+  },
+  "行きたくない":{
+    "出勤前":{
+      m:["行きたくないのわかるよ。でもカバン持てたあなた、えらい","行きたくない気持ち、正直でいいよ。そこに立ってるだけでえらい","行きたくなくて当然だよ。それでも動こうとしてるあなた、すごい","行きたくないまま動き始めたあなた、えらいよ","行きたくないって感じてる、それが正直でいいよ"],
+      a:["カバンを玄関まで持っていく、それだけ","靴だけ履いてみる","まず玄関まで出る、それだけ"]
+    },
+    "通勤中":{
+      m:["行きたくなかったのに電車乗ってるあなた、もうすごい","行きたくなかったのに動いてるね。それだけで今日は十分","行きたくなかった日に電車に乗れたね。それだけでえらい","行きたくなかった日にここまで来たあなた、えらい","行きたくない気持ちを抱えて乗れてるあなた、すごい"],
+      a:["今日帰ったら何しようかだけ考える","好きな音楽を聴きながら揺られる","今夜のご褒美をひとつ決める"]
+    },
+    "仕事前":{
+      m:["行きたくなかったのにいるあなた、えらいよ","行きたくなかったのに来たね。それだけで今日は十分","行きたくなかったのにここにいるあなた、本当にえらい","行きたくなかったのに今日もここに来られたね","行きたくない気持ちを抱えてここにいるあなた、十分"],
+      a:["まず5分だけ、時計を見ながらやってみる","一番簡単なことを1個だけやる","深呼吸して、まずひとつだけ"]
+    },
+    "昼休み中":{
+      m:["行きたくなかったのに午前中来たあなた、えらすぎるよ","行きたくなかった日に午前中乗り越えたね。本当にすごい","行きたくなかったのに午前中もこなしたあなた、えらすぎる","行きたくなかったのに午前中よくいたね。えらいよ","行きたくない日に午前中来てくれた、それだけで十分"],
+      a:["今夜の自分へのご褒美を決めてみる","好きなものをゆっくり食べる","少しだけ外の空気を吸う"]
+    },
+    "午後つらいとき":{
+      m:["行きたくなかった日に午後まで来たあなた、えらいよ","行きたくなかったのにここまで来たね。それだけで十分すごい","行きたくなかったのに今日もここまで来たあなた、本当にえらい","行きたくなかった日の午後、よくここまで来たね","行きたくないのに今日もいてくれたあなた、えらい"],
+      a:["退勤後の楽しみをスマホのメモに書く","帰ったらやりたいことをひとつ決める","あと少し、今日のあなたに声をかけてあげて"]
+    }
+  },
+  "人に会いたくない":{
+    "出勤前":{
+      m:["挨拶だけでいいよ。それだけで十分えらい","会いたくない日に来てるあなた、十分すぎるくらいえらい","人に会いたくない気持ち、正直でいいよ。最低限でいい","会いたくない日に動いてくれたあなた、十分えらい","人に会いたくなくて当然だよ。来ただけでOKだよ"],
+      a:["最低限の挨拶だけにする、と心の中で決める","イヤホンを準備する","一人の時間を確保できる場所を考えておく"]
+    },
+    "通勤中":{
+      m:["イヤホンという壁、最高の発明だよね","自分の世界に入っていいよ。それが今日の作戦","人との距離を保ちながら向かってるあなた、それでいいよ","誰とも話さなくていい。ただ揺られてるだけでいいよ","自分のペースで電車に揺られてるあなた、それでいい"],
+      a:["好きなプレイリストで自分の世界に入る","イヤホンをして外を眺める","好きなポッドキャストを聴く"]
+    },
+    "仕事前":{
+      m:["今日は必要最低限だけ返事すればいい日にしよう","全員と話さなくていいよ。今日はそれだけで十分","会いたくない日に来たあなた、それだけで今日はえらい","会いたくない日にここにいるあなた、それで十分だよ","今日は最小限でいい。来ただけでもうえらいよ"],
+      a:["必要な人だけに挨拶、と心の中で決める","一人作業できる仕事を優先する","なるべく席で完結できるようにする"]
+    },
+    "昼休み中":{
+      m:["一人で食べてもいいよ。それが最高の休息の日もある","昼休みはあなたの時間。一人でいていい","会いたくない日に午前中もちゃんと来たあなた、えらい","会いたくなかったのに午前中いたあなた、えらいよ","一人の昼休みが、あなたを守ってくれる時間でいい"],
+      a:["一人でこっそり好きなものを食べる","静かな場所でぼーっとする","イヤホンして好きな音楽を聴く"]
+    },
+    "午後つらいとき":{
+      m:["会いたくない日に会い続けたあなた、えらすぎるよ。あと少し","会いたくない日にここまで来たあなた、本当にすごい","今日も人と関わり続けたあなた、本当にお疲れさま","会いたくない中で午後まで来たあなた、本当にすごい","もう少し。あなたはちゃんとやってきてるよ"],
+      a:["帰ったら誰にも連絡しない時間を作る、と決める","一人の時間の計画をたてる","今夜は静かに過ごす、と決める"]
+    }
+  },
+  "何もしたくない":{
+    "出勤前":{
+      m:["何もしたくないのに起きたあなた、もうそれで十分えらい","何もしたくない朝に起きてるあなた、それだけで今日はすごい","何もしたくない気持ち、正直でいいよ。起きてるあなた、えらい","何もしたくない気持ちのまま来てくれたあなた、えらい","何もしたくない日に動けたあなた、それだけで十分だよ"],
+      a:["着替えるだけ着替えてみる、それだけでいい","水を一杯飲む","まず立ち上がるだけ"]
+    },
+    "通勤中":{
+      m:["何もしたくないまま乗れてるあなた、えらいよ","何もしたくないのに電車に乗れてるね。それだけで十分","何もしたくない中で動いてるあなた、それがすでにすごい","何もしたくないまま電車に揺られてるだけでえらいよ","何もしたくない体を動かしてくれたあなた、すごいよ"],
+      a:["窓の外をぼーっと見てていい","目を閉じて揺られてていい","今夜の楽しみをひとつ考える"]
+    },
+    "仕事前":{
+      m:["何もしたくないときほど、ひとつだけやってみよう","何もしたくない日に来たあなた、それだけで十分えらい","何もしたくないのにここにいるあなた、すごいよ","何もしたくなくてOKだよ。ここにいるだけでいい","何もしたくない日に席にいるあなた、それで十分えらい"],
+      a:["いちばん簡単なタスクを1個だけやる","お茶をゆっくり飲む","深呼吸をして、まずひとつだけ"]
+    },
+    "昼休み中":{
+      m:["何もしたくない昼休みは、何もしなくていいよ","午前中よく来たね。昼休みは何もしなくていい","何もしたくない中で午前中来たあなた、えらいよ","何もしたくない中で午前中いたあなた、十分えらいよ","昼休みはただゆっくりしていい。あなたはえらかったよ"],
+      a:["ただ座って、好きな音楽を聴く","目を閉じてぼーっとする","好きなものをゆっくり食べる"]
+    },
+    "午後つらいとき":{
+      m:["何もしたくないのにここまで来たあなた、今日はそれだけで十分","何もしたくない日に午後まで来たあなた、本当にすごい","何もしたくないのに今日もここまで来たね。えらいよ","何もしたくないのにここまでいたあなた、えらいよ","午後まで来てくれたあなた、本当にそれで十分だよ"],
+      a:["5分だけ席を離れて、外の空気を吸う","水を飲んでひと息つく","退勤後の楽しみをひとつ決める"]
+    }
+  },
+  "めんどくさい":{
+    "出勤前":{
+      m:["めんどくさい気持ち、正直でいいよ。体だけ動かしてみよう","めんどくさいのわかるよ。起きてるあなた、えらい","めんどくさい朝に動こうとしてるあなた、それだけで十分","めんどくさいまま動き始めたあなた、それだけですごい","めんどくさい日に動けたあなた、本当にえらいよ"],
+      a:["まず靴だけ履いてみる","着替えだけしてみる","カバンだけ持ってみる"]
+    },
+    "通勤中":{
+      m:["めんどくさいのに乗ってるあなた、それが今日一番すごいこと","めんどくさい中で動いてるあなた、それだけで今日はえらい","めんどくさいのに電車に乗れてるあなた、すごいよ","めんどくさいまま電車に乗れてるあなた、十分えらい","めんどくさい気持ちのまま来てくれたね。すごいよ"],
+      a:["今日終わったら何を食べるか決めておく","好きな音楽を聴きながら揺られる","今夜のご褒美をひとつ決める"]
+    },
+    "仕事前":{
+      m:["めんどくさいの全部わかるよ。とりあえず1個だけやってみよう","めんどくさいまま来たあなた、それだけで今日は十分","めんどくさいのにここに来たあなた、えらいよ","めんどくさいのにここにいるあなた、それで十分だよ","めんどくさい気持ちを抱えて来てくれた、えらいよ"],
+      a:["いちばん小さなタスクをひとつだけ片す","深呼吸してから始める","まず5分だけやってみる"]
+    },
+    "昼休み中":{
+      m:["午前中よく来たね。午後もめんどくさいままでいいよ","めんどくさい中で午前中来たあなた、えらいよ","めんどくさいのに午前中来たあなた、それだけで十分えらい","めんどくさい午前中、よくいてくれたね。えらいよ","めんどくさい日の午前中を乗り越えたあなた、すごい"],
+      a:["好きなものを食べてエネルギーチャージ","ゆっくり休む","少しだけ外に出てみる"]
+    },
+    "午後つらいとき":{
+      m:["めんどくさい気持ち、正直で好きだよ。あとちょっとだけ","めんどくさいまま午後まで来たあなた、本当にえらい","めんどくさいのに今日もここまで来たね。あとちょっとだけ","めんどくさいのに午後まで来てくれたあなた、えらい","めんどくさい気持ちと一緒にここまで来たね。すごいよ"],
+      a:["退勤まであと何時間か確認してみる","帰ったらやりたいことをひとつ決める","水を飲んでひと息つく"]
+    }
+  },
+  "緊張する":{
+    "出勤前":{
+      m:["緊張するってことは、ちゃんと向き合ってるあなたの証拠だよ","緊張してるあなたは、真剣に取り組んでる証拠","緊張するのは、大事にしてるから。それでいいよ","緊張しながら準備したあなた、それだけでもうえらい","緊張を感じてるあなたは、ちゃんと前を向いてるよ"],
+      a:["深呼吸：4秒吸って6秒かけて吐く","肩を回してから出る","好きな音楽を聴きながら準備する"]
+    },
+    "通勤中":{
+      m:["緊張したまま向かえてるあなた、それだけで十分つよい","緊張しながらも電車に乗れてるあなた、えらいよ","緊張したまま動いてるあなた、十分すごいよ","緊張を抱えて電車に乗れてるあなた、十分つよいよ","緊張したまま来てくれたあなた、それだけでえらいよ"],
+      a:["肩の力を抜いて、遠くを見てみる","深呼吸を3回してみる","好きな音楽で気持ちを整える"]
+    },
+    "仕事前":{
+      m:["緊張してていいよ。みんなそれなりに緊張してる","緊張してるあなたを責めなくていい。みんな緊張してるよ","緊張は集中してる証拠だよ。うまく使えばいい","緊張してるあなたのことを、ここから応援してるよ","緊張しながらも席にいるあなた、それで十分だよ"],
+      a:["手のひらに「大丈夫」と書いて握る（内緒で）","深呼吸を3回してみる","水をゆっくり飲む"]
+    },
+    "昼休み中":{
+      m:["緊張した午前中を乗り越えたあなた、よくやったよ","緊張しながら午前中来たあなた、本当にえらい","緊張の中で午前中乗り越えたね。すごいよ","緊張の中で午前中にいたあなた、本当にえらかったよ","緊張しながら午前中を越えたね。すごいよ、あなた"],
+      a:["温かいものを飲んで、少しだけ体を緩める","肩の力を抜いてひと息つく","外の景色を眺めてみる"]
+    },
+    "午後つらいとき":{
+      m:["緊張しながらここまで来たあなた、ほんとにすごい","緊張しながら午後まで来たね。本当にえらいよ","緊張の中で今日もここまで来たあなた、あとちょっとだけ","緊張したまま午後まで来てくれたあなた、えらいよ","緊張しながらでも今日もここにいるあなた、すごい"],
+      a:["ゆっくり深呼吸して、肩を回してみる","水を飲んでひと息つく","退勤後の楽しみをひとつ決める"]
+    }
+  },
+  "気分が重い":{
+    "出勤前":{
+      m:["気分が重い日は、体だけ動かせばいいよ。頭は後からついてくる","気分が重くて当然だよ。動こうとしてるあなた、えらい","気分が重い朝に起きてるあなた、それだけで今日はすごい","気分が重い朝に動いてくれたあなた、えらいよ","重い気分のまま来てくれたね。それだけで十分だよ"],
+      a:["着替えだけしてみる、それだけでいい","水をひとくち飲む","顔を洗うだけでいい"]
+    },
+    "通勤中":{
+      m:["重いまま乗れてるあなた、それだけで今日は十分えらい","気分が重いのに電車に乗れてるあなた、えらいよ","重い気分を引きずりながら向かってるあなた、十分すごい","重い気分のまま電車に乗れてるあなた、すごいよ","気分が重い中で来てくれた、それだけで十分えらいよ"],
+      a:["目を閉じて音楽を聴く","窓の外をぼーっと眺める","好きなプレイリストで気持ちを包む"]
+    },
+    "仕事前":{
+      m:["気分が重くても体は来てるあなた、えらいよ","気分が重いのに来たあなた、それが今日一番えらいこと","気分が重いまま来たあなた、まず自分をほめてあげて","気分が重い日にここにいるあなた、それでOKだよ","重い気分を抱えて来てくれたあなた、えらいよ"],
+      a:["お茶をゆっくり飲む、それだけでいい","深呼吸を1回してみる","机を少し整える"]
+    },
+    "昼休み中":{
+      m:["重い気分で午前中来たあなた、それ相当すごいよ","気分が重い中で午前中来たあなた、本当にえらい","重い気分のまま午前中来たね。すごいよ","重い気分で午前中いたあなた、それだけで十分えらい","気分が重い中で午前中来てくれたね。すごいよ"],
+      a:["外に出て5分だけぼーっとする","好きなものをゆっくり食べる","目を閉じてひと息つく"]
+    },
+    "午後つらいとき":{
+      m:["気分が重い日こそ、終わった時の軽さが待ってるよ","重い気分で午後まで来たあなた、本当にえらい","気分が重いのに今日もここまで来たね。あとちょっとだけ","重い気分のまま午後まで来てくれたあなた、えらい","気分が重い中でここまでいたあなた、本当にすごいよ"],
+      a:["退勤後の好きなことをひとつ決めておく","水を飲んでひと息つく","あと少し、今日の自分に声をかける"]
+    }
+  },
+  "疲れている":{
+    "出勤前":{
+      m:["疲れてるのに起きてるあなた、もうそれで十分すごい","疲れた体で起きてるあなた、それだけで今日はもうえらい","疲れてるのに動こうとしてるあなた、えらいよ","疲れた体で今日も来てくれたあなた、えらいよ","疲れてる中で動いてくれたね。それだけで十分だよ"],
+      a:["水をひとくち飲んで、深呼吸する","顔を洗う","外の空気をひと息吸う"]
+    },
+    "通勤中":{
+      m:["疲れてるのに来てるあなた、今日もほんとにすごいよ","疲れた体で電車に乗れてるあなた、えらいよ","疲れてるのに向かってるあなた、十分すぎるくらいすごい","疲れた体で電車に乗れてるあなた、十分すごいよ","疲れてるのに来てくれたね。それだけでもうえらいよ"],
+      a:["座れたら目を閉じて、ぼーっとしていい","イヤホンして好きな音楽を聴く","今夜の楽しみをひとつ考える"]
+    },
+    "仕事前":{
+      m:["疲れたまま来たあなた、それが今日一番えらいこと","疲れてるのに来たあなた、それだけで今日は十分","疲れた体を連れてきてくれたあなた、えらいよ","疲れたまま席にいるあなた、それだけで今日は十分","疲れてるのにここにいてくれてる、えらいよ、あなた"],
+      a:["いちばん簡単なことから始める","深呼吸をひとつしてから始める","お茶をゆっくり飲む"]
+    },
+    "昼休み中":{
+      m:["疲れてるから昼休みがある。今日はしっかり休んでね","疲れた体で午前中来たあなた、えらいよ","疲れながら午前中来たあなた、本当にすごい","疲れた体で午前中いたあなた、それだけで十分えらい","昼休みはしっかり休んでね。疲れてるあなた、えらい"],
+      a:["横になれなくても、目を閉じるだけでもいい","好きなものをゆっくり食べる","静かな場所でひと息つく"]
+    },
+    "午後つらいとき":{
+      m:["疲れてるまま午後まで来たあなた、ほんとにえらい","疲れた体で午後まで来たね。本当にえらいよ","疲れながら今日もここまで来たあなた、あとちょっとだけ","疲れた体で午後まで来てくれたあなた、すごいよ","疲れながらでも今日もここにいてくれた、えらいよ"],
+      a:["今夜は早く寝る、と決めておく","退勤後の楽しみをひとつ決める","水を飲んでひと息つく"]
+    }
+  }
+};
+
+// 場面別ボタン文言
+const SCENE_BTN = {
+  "出勤前":        "そっと送り出してもらう ✦",
+  "通勤中":        "いまの私にひと押し ✦",
+  "仕事前":        "仕事前に、整えてもらう ✦",
+  "昼休み中":      "午後に向けて、整える ✦",
+  "午後つらいとき": "もうひと息だけ支えてもらう ✦"
+};
+const DEFAULT_BTN = "今の私をひと押しする";
+
+// ── State ──
+let mood=null, scene=null, soundOn=true, cur=null, faved=false;
+let favs=JSON.parse(localStorage.getItem('ht_f')||'[]');
+let actx=null, typeTimer=null, toastTimer=null, favIdx=0, lpTimer=null;
+let lastMirrorIdx=-1;
+
+// ── Audio ──
+function ac(){
+  if(!actx) actx=new(window.AudioContext||window.webkitAudioContext)();
+  return actx;
+}
+function playPop(){
+  if(!soundOn)return;
+  try{
+    const c=ac(),o=c.createOscillator(),g=c.createGain();
+    o.connect(g);g.connect(c.destination);o.type='sine';
+    o.frequency.setValueAtTime(680,c.currentTime);
+    o.frequency.exponentialRampToValueAtTime(960,c.currentTime+.07);
+    g.gain.setValueAtTime(.2,c.currentTime);
+    g.gain.exponentialRampToValueAtTime(.001,c.currentTime+.26);
+    o.start(c.currentTime);o.stop(c.currentTime+.26);
+  }catch(e){}
+}
+function playWin(){
+  if(!soundOn)return;
+  try{
+    const c=ac();
+    [523,659,784,1047].forEach((f,i)=>{
+      const o=c.createOscillator(),g=c.createGain();
+      o.connect(g);g.connect(c.destination);o.type='sine';o.frequency.value=f;
+      const t=c.currentTime+i*.11;
+      g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(.16,t+.03);
+      g.gain.exponentialRampToValueAtTime(.001,t+.38);
+      o.start(t);o.stop(t+.38);
+    });
+  }catch(e){}
+}
+
+// ── Haptics ──
+function vib(pat){if(!soundOn||!navigator.vibrate)return;navigator.vibrate(pat);}
+
+// ── Typewriter ──
+function typeWriter(el, text, onMidway){
+  if(typeTimer){clearTimeout(typeTimer);typeTimer=null;}
+  el.textContent='';
+  document.getElementById('cActRow').style.opacity='0';
+  let i=0, midFired=false;
+  const speed=20, midAt=Math.floor(text.length*.65);
+  function next(){
+    if(i<text.length){
+      el.textContent+=text[i++];
+      if(!midFired&&i>=midAt){midFired=true;if(onMidway)onMidway();}
+      typeTimer=setTimeout(next,speed);
+    } else {
+      typeTimer=null;
+      if(!midFired&&onMidway)onMidway();
+    }
+  }
+  next();
+}
+
+// ── Particles ──
+function showParticles(){
+  const card=document.getElementById('card');
+  card.querySelectorAll('.c-particle').forEach(p=>p.remove());
+  const cols=['var(--lv)','var(--pk)','var(--lv-m)','var(--pk-m)'];
+  for(let i=0;i<7;i++){
+    const p=document.createElement('div');p.className='c-particle';
+    const sz=4+Math.random()*4;
+    p.style.cssText=`left:${10+Math.random()*80}%;bottom:${15+Math.random()*50}%;`
+      +`width:${sz}px;height:${sz}px;background:${cols[i%cols.length]};`
+      +`animation-delay:${Math.random()*.7}s;`;
+    card.appendChild(p);
+  }
+  setTimeout(()=>card.querySelectorAll('.c-particle').forEach(p=>p.remove()),2600);
+}
+
+// ── Flower SVG ──
+function showFlower(){
+  const card=document.getElementById('card');
+  const svg=document.createElementNS('http://www.w3.org/2000/svg','svg');
+  svg.setAttribute('class','flower-svg');svg.setAttribute('viewBox','-50 -50 100 100');svg.setAttribute('aria-hidden','true');
+  const uid='flg'+Date.now();
+  svg.innerHTML=`<defs><linearGradient id="${uid}" x1="0%" y1="0%" x2="0%" y2="100%">
+    <stop offset="0%" stop-color="#C4B4D8"/><stop offset="100%" stop-color="#E0B8C4"/>
+  </linearGradient></defs>
+  ${[0,72,144,216,288].map((deg,i)=>
+    `<ellipse class="f-p" cx="0" cy="-22" rx="9" ry="16"
+      fill="url(#${uid})" opacity=".85" transform="rotate(${deg})"
+      style="animation-delay:${i*.07}s"/>`
+  ).join('')}
+  <circle class="f-ctr" r="9" fill="#C4B4D8"/>`;
+  card.appendChild(svg);
+  setTimeout(()=>{if(svg.parentNode)svg.remove();},1100);
+}
+
+// ── Date label ──
+function formatGentleDate(ts){
+  if(!ts)return'';
+  const diff=Date.now()-ts, days=diff/86400000;
+  const h=new Date(ts).getHours();
+  const tod=h>=5&&h<10?'朝':h>=10&&h<14?'お昼ごろ':h>=14&&h<18?'午後':h>=18&&h<22?'夜':'夜中';
+  if(diff<120000)return'さっき';
+  if(days<1)return`今日の${tod}`;
+  if(days<2)return`昨日の${tod}`;
+  if(days<4)return`${Math.floor(days)}日前の${tod}`;
+  if(days<8)return`先週の${tod}`;
+  if(days<15)return`2週間前の${tod}`;
+  return`少し前の${tod}`;
+}
+
+// ── Chips ──
+document.getElementById('moodC').addEventListener('click',e=>{
+  const ch=e.target.closest('.chip');if(!ch)return;
+  document.querySelectorAll('#moodC .chip').forEach(c=>{c.classList.remove('on');c.setAttribute('aria-pressed','false');});
+  ch.classList.add('on');ch.setAttribute('aria-pressed','true');
+  document.getElementById('moodC').classList.add('dimmed');
+  mood=ch.dataset.v;playPop();vib(8);
+});
+document.getElementById('sceneC').addEventListener('click',e=>{
+  const ch=e.target.closest('.chip');if(!ch)return;
+  document.querySelectorAll('#sceneC .chip').forEach(c=>{c.classList.remove('on');c.setAttribute('aria-pressed','false');});
+  ch.classList.add('on');ch.setAttribute('aria-pressed','true');
+  document.getElementById('sceneC').classList.add('dimmed');
+  scene=ch.dataset.v;playPop();vib(8);
+  document.getElementById('mainBtn').textContent=SCENE_BTN[scene]||DEFAULT_BTN;
+});
+
+// ── Mood expand (改修5) ──
+function toggleMoodExpand(){
+  const expanded=document.getElementById('moodC').classList.toggle('mood-expanded');
+  sessionStorage.setItem('ht_mood_expanded',expanded?'1':'');
+  document.getElementById('moodMore').textContent=expanded?'閉じる ▴':'他の気分も見る ▾';
+}
+
+// ── Main go ──
+function go(){
+  if(!mood||!scene){showToast('気分と場面を選んでね 🌸');return;}
+  vib([10,30,10]);playPop();
+  trackChip('mood',mood);trackChip('scene',scene);
+  trackDay();trackCombo(mood,scene);
+  const todayStr=new Date().toISOString().slice(0,10);
+  const sess=JSON.parse(localStorage.getItem('ht_session')||'{}');
+  const isFirstToday=sess.date!==todayStr;
+  if(isFirstToday){sess.date=todayStr;sess.flowerShown=false;localStorage.setItem('ht_session',JSON.stringify(sess));}
+  updateCounter();
+  const d=D[mood][scene];
+  const mArr=Array.isArray(d.m)?d.m:[d.m];
+  const aArr=Array.isArray(d.a)?d.a:[d.a];
+  cur={mood,scene,m:mArr[0],a:aArr[0],msgIdx:0,_mArr:mArr,_aArr:aArr};
+  document.getElementById('appSub').textContent=mood+' × '+scene;
+  document.getElementById('cAct').textContent=cur.a;
+  faved=favs.some(f=>f.mood===mood&&f.scene===scene&&(f.msgIdx||0)===0);
+  syncFav();
+  // ── ht_logs に1件追記 ──
+  saveLog({mood,scene,msg:cur.m,act:cur.a,msgIdx:0,faved:false});
+  const retryBtn=document.getElementById('retryBtn');
+  retryBtn.classList.toggle('vis',mArr.length>1);
+  const card=document.getElementById('card');
+  card.classList.remove('in');card.classList.add('vis');
+  document.getElementById('actBtns').classList.add('vis');
+  // 導線を表示
+  document.getElementById('postNav').style.display='block';
+  requestAnimationFrame(()=>requestAnimationFrame(()=>{
+    card.classList.add('in');
+    showParticles();
+    typeWriter(document.getElementById('cMsg'),cur.m,()=>{
+      const row=document.getElementById('cActRow');
+      row.style.transition='opacity .35s ease';
+      row.style.opacity='1';
+    });
+  }));
+  setTimeout(()=>card.scrollIntoView({behavior:'smooth',block:'nearest'}),50);
+}
+
+// ── ht_logs 保存 ──
+function saveLog(entry){
+  const logs=JSON.parse(localStorage.getItem('ht_logs')||'[]');
+  logs.unshift({
+    date:new Date().toISOString().slice(0,10),
+    time:new Date().toTimeString().slice(0,5),
+    mood:entry.mood,scene:entry.scene,
+    msg:entry.msg,act:entry.act,
+    msgIdx:entry.msgIdx||0,
+    faved:entry.faved||false,
+    ts:Date.now()
+  });
+  // 最大200件
+  if(logs.length>200)logs.splice(200);
+  localStorage.setItem('ht_logs',JSON.stringify(logs));
+}
+
+// ── 日替わり花 ──
+const DAILY_FLOWERS=[
+  {name:'すみれの日',ico:'🌸',msg:'今日のあなたには、小さなすみれを置いておきます。'},
+  {name:'たんぽぽの日',ico:'🌼',msg:'たんぽぽみたいに、風が吹いても大丈夫。'},
+  {name:'白い小花の日',ico:'🌷',msg:'名前のない小花も、ちゃんと咲いている。'},
+  {name:'もみじの日',ico:'🍁',msg:'今日の色を、そのままにしておいていい。'},
+  {name:'クローバーの日',ico:'🍀',msg:'小さいけど、ちゃんとそこにある。'},
+  {name:'桜の日',ico:'🌸',msg:'散ってもいい。咲いたことは本物だから。'},
+  {name:'ひまわりの日',ico:'🌻',msg:'太陽がなくても、あなたは今日も立ってる。'},
+];
+function getDailyFlower(){
+  const d=new Date();
+  const idx=(d.getFullYear()*1000+d.getMonth()*31+d.getDate())%DAILY_FLOWERS.length;
+  return DAILY_FLOWERS[idx];
+}
+
+// ── 特別なひと押し判定 ──
+function getSpecialMsg(total){
+  const dow=new Date().getDay();
+  const h=new Date().getHours();
+  if(total===1) return 'はじめてここに来てくれたね。来てくれてありがとう。';
+  if(total===3) return '3回目だね。来るたびに、少し慣れてきたかな？';
+  if(total===7) return '気づいたらもう7回もここに来てたね。';
+  if(total===10) return 'ここに10回来てくれたあなた、しんどい日をちゃんと越えてきたね！';
+  if(total===20) return '20回も来てくれたね。もう自分を大切にすることが、あなたの一部になってるよ。';
+  if(dow===1&&h<12) return '月曜の朝なのに来てくれたね。もうそれだけで、今週は大丈夫だよ。';
+  if(dow===5&&h>=15) return '金曜の午後にここに来てくれたあなた、今週もちゃんと越えてきたね！';
+  return null;
+}
+function retryMsg(){
+  if(!cur||!cur._mArr)return;
+  vib(8);playPop();
+  const nextIdx=(cur.msgIdx+1)%cur._mArr.length;
+  cur.msgIdx=nextIdx;
+  cur.m=cur._mArr[nextIdx];
+  cur.a=cur._aArr[nextIdx%cur._aArr.length];
+  document.getElementById('cAct').textContent=cur.a;
+  faved=favs.some(f=>f.mood===cur.mood&&f.scene===cur.scene&&(f.msgIdx||0)===nextIdx);
+  syncFav();
+  document.getElementById('cActRow').style.opacity='0';
+  typeWriter(document.getElementById('cMsg'),cur.m,()=>{
+    const row=document.getElementById('cActRow');
+    row.style.transition='opacity .35s ease';
+    row.style.opacity='1';
+  });
+  saveLog({mood:cur.mood,scene:cur.scene,msg:cur.m,act:cur.a,msgIdx:cur.msgIdx,faved:false});
+}
+
+// ── Fav ──
+function toggleFav(){
+  if(!cur)return;vib(8);playPop();
+  const idx=cur.msgIdx||0;
+  const i=favs.findIndex(f=>f.mood===cur.mood&&f.scene===cur.scene&&(f.msgIdx||0)===idx);
+  if(i>=0){favs.splice(i,1);faved=false;showToast('お守りから外したよ');}
+  else{
+    favs.unshift({mood:cur.mood,scene:cur.scene,m:cur.m,a:cur.a,msgIdx:idx,savedAt:Date.now()});
+    faved=true;showToast('今日の言葉を、お守りにしました。');
+    const _sess=JSON.parse(localStorage.getItem('ht_session')||'{}');
+    _sess.newOmamoriToday=new Date().toISOString().slice(0,10);
+    localStorage.setItem('ht_session',JSON.stringify(_sess));
+  }
+  localStorage.setItem('ht_f',JSON.stringify(favs));
+  syncFav();updateFavBadge();renderFavList();
+}
+function syncFav(){
+  document.getElementById('favBtn').classList.toggle('on',faved);
+  document.getElementById('favIco').textContent=faved?'🧿':'♡';
+}
+
+
+// ── Image save (改修9) ──
+function saveCardAsImage(idx){
+  const f=favs[idx];if(!f)return;
+  const msg=Array.isArray(f.m)?f.m[0]:f.m;
+  const act=Array.isArray(f.a)?f.a[0]:f.a;
+  function doSave(){
+    const el=document.createElement('div');
+    Object.assign(el.style,{position:'fixed',left:'-9999px',top:'0',width:'320px',
+      background:'#fff',borderRadius:'16px',padding:'20px 18px',
+      fontFamily:"-apple-system,'Hiragino Sans',sans-serif",boxSizing:'border-box',color:'#4E3E4C'});
+    el.innerHTML=`
+      <div style="height:3px;background:linear-gradient(90deg,#C4B4D8,#E0B8C4);margin:-20px -18px 14px;border-radius:16px 16px 0 0"></div>
+      <div style="font-size:10px;color:#A898A8;margin-bottom:6px">${f.mood} × ${f.scene}</div>
+      <div style="font-size:13.5px;line-height:1.8;margin-bottom:12px">${msg}</div>
+      <div style="display:flex;border-radius:10px;overflow:hidden;border:1.5px solid #E0B8C4;margin-bottom:10px">
+        <div style="width:32px;background:#E0B8C4;display:flex;align-items:center;justify-content:center;font-size:12px;color:#fff;font-weight:700">▷</div>
+        <div style="padding:8px 11px;font-size:12px;color:#7A6878">${act}</div>
+      </div>
+      <div style="text-align:right;font-size:9.5px;color:#A898A8">#ヒトオシ ✦</div>`;
+    document.body.appendChild(el);
+    html2canvas(el,{backgroundColor:'#ffffff',scale:2}).then(canvas=>{
+      const a=document.createElement('a');
+      a.download='hitooshi.png';a.href=canvas.toDataURL('image/png');a.click();
+      document.body.removeChild(el);showToast('画像を保存したよ 💕');
+    }).catch(()=>{document.body.removeChild(el);showToast('保存できなかった…ごめんね');});
+  }
+  if(typeof html2canvas==='undefined'){
+    showToast('読み込み中…');
+    const s=document.createElement('script');
+    s.src='https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js';
+    s.onload=doSave;s.onerror=()=>showToast('接続が必要です');
+    document.head.appendChild(s);
+  } else doSave();
+}
+
+// ── Done (改修4) ──
+function done(){
+  trackTotal();
+  const totalNow=parseInt(localStorage.getItem('ht_total')||'0');
+  updateCounter();
+  setTimeout(animateCounter,200);
+  setTimeout(()=>checkMilestone(totalNow),800);
+  vib([14,40,14,40,20]);playWin();confetti();showFlower();
+  const m=document.getElementById('mascot');
+  m.classList.remove('pop');void m.offsetWidth;m.classList.add('pop');
+  // 特別メッセージチェック
+  const total=parseInt(localStorage.getItem('ht_total')||'0');
+  const special=getSpecialMsg(total);
+  if(special){setTimeout(()=>showToastLong(special),600);}
+  else{showToast('ありがとう、届いたよ 🌸');}
+  // 今日の花バナー（当日1回だけ）
+  const todayStr=new Date().toISOString().slice(0,10);
+  const sess=JSON.parse(localStorage.getItem('ht_session')||'{}');
+  if(sess.date!==todayStr){sess.date=todayStr;sess.flowerShown=false;}
+  if(!sess.flowerShown){
+    sess.flowerShown=true;localStorage.setItem('ht_session',JSON.stringify(sess));
+    const flower=getDailyFlower();
+    setTimeout(()=>{
+      const banner=document.createElement('div');
+      banner.className='today-flower-banner';
+      banner.innerHTML=`<div class="today-flower-ico">${flower.ico}</div><div class="today-flower-body"><div class="today-flower-name">${flower.name}</div><div class="today-flower-msg">${flower.msg}</div></div>`;
+      const postNav=document.getElementById('postNav');
+      postNav.parentNode.insertBefore(banner,postNav);
+      setTimeout(()=>{banner.style.transition='opacity .6s';banner.style.opacity='0';setTimeout(()=>banner.remove(),700);},5000);
+    },1200);
+  }
+}
+function confetti(){
+  const el=document.getElementById('cel');
+  el.innerHTML='';el.classList.add('on');
+  const cols=['#C4B4D8','#E0B8C4','#F0C8A8','#C4D0BC','#B8D4E4','#F4D4DC'];
+  for(let i=0;i<28;i++){
+    const d=document.createElement('div');d.className='dot';
+    const s=6+Math.random()*7;
+    d.style.cssText=`left:${Math.random()*100}vw;top:-14px;width:${s}px;height:${s}px;`
+      +`background:${cols[i%cols.length]};`
+      +`animation-duration:${1.2+Math.random()*.9}s;animation-delay:${Math.random()*.45}s;`;
+    el.appendChild(d);
+  }
+  setTimeout(()=>{el.classList.remove('on');el.innerHTML='';},2500);
+}
+
+// ── Sound ──
+function toggleSnd(){
+  soundOn=!soundOn;
+  document.getElementById('sndIco').textContent=soundOn?'🔔':'🔕';
+  document.getElementById('sndTxt').textContent=soundOn?'応援あり':'そっと';
+}
+
+// ── Toast ──
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.classList.remove('interact');t.classList.add('on');
+  clearTimeout(toastTimer);
+  toastTimer=setTimeout(()=>t.classList.remove('on'),2300);
+}
+
+// ── History (改修1 + 改修10) ──
+function trackDay(){
+  const today=new Date().toISOString().slice(0,10);
+  const days=JSON.parse(localStorage.getItem('ht_days')||'[]');
+  if(!days.includes(today))days.unshift(today);
+  const cutoff=new Date();cutoff.setDate(cutoff.getDate()-30);
+  const cutStr=cutoff.toISOString().slice(0,10);
+  localStorage.setItem('ht_days',JSON.stringify(days.filter(d=>d>=cutStr)));
+}
+function trackCombo(m,s){
+  const c=JSON.parse(localStorage.getItem('ht_combo_count')||'{}');
+  const k=`${m}×${s}`;c[k]=(c[k]||0)+1;
+  localStorage.setItem('ht_combo_count',JSON.stringify(c));
+}
+function trackTotal(){
+  const t=parseInt(localStorage.getItem('ht_total')||'0')+1;
+  localStorage.setItem('ht_total',String(t));
+}
+// ── Chip frequency sort ──
+function trackChip(type,val){
+  const k=type==='mood'?'ht_mood_count':'ht_scene_count';
+  const c=JSON.parse(localStorage.getItem(k)||'{}');
+  c[val]=(c[val]||0)+1;localStorage.setItem(k,JSON.stringify(c));
+}
+function sortChips(){
+  [['moodC','ht_mood_count'],['sceneC','ht_scene_count']].forEach(([cid,k])=>{
+    const counts=JSON.parse(localStorage.getItem(k)||'{}');
+    const wrap=document.getElementById(cid);
+    const visible=[...wrap.querySelectorAll('.chip:not(.chip-hidden)')];
+    const hidden=[...wrap.querySelectorAll('.chip.chip-hidden')];
+    visible.sort((a,b)=>(counts[b.dataset.v]||0)-(counts[a.dataset.v]||0))
+      .forEach(c=>wrap.appendChild(c));
+    hidden.forEach(c=>wrap.appendChild(c));
+  });
+}
+
+// ── 時間帯グリーティング ──
+function initGreeting(){
+  const h=new Date().getHours();
+  let msg;
+  if(h>=5&&h<10)       msg='おはよう。来てくれてありがとう。';
+  else if(h>=10&&h<14) msg='仕事、ちょっとしんどい？';
+  else if(h>=14&&h<18) msg='午後もがんばってるね、えらい。';
+  else if(h>=18&&h<23) msg='今日もお疲れさまでした。';
+  else                 msg='来てくれてありがとう。';
+  document.getElementById('appSub').textContent=msg;
+}
+
+// ── Onboarding (改修7 + 改修8) ──
+function showOnboarding(){
+  if(localStorage.getItem('ht_onboarded'))return;
+  const ob=document.createElement('div');
+  ob.className='onboard';ob.id='onboarding';
+  ob.setAttribute('role','dialog');ob.setAttribute('aria-modal','true');
+  ob.innerHTML=`
+    <div class="ob-steps-wrap">
+      <div class="ob-step on" id="ob0">
+        <div class="ob-icon">✦</div>
+        <div class="ob-txt">ちょっとしんどい日に、<br>来てくれてありがとう。</div>
+        <button class="ob-next" onclick="goOb(document.getElementById('onboarding'),1)">つぎへ →</button>
+      </div>
+      <div class="ob-step" id="ob1">
+        <div class="ob-txt">気分と、いまどこ、<br>を選ぶだけ。</div>
+        <div class="ob-chips-demo">
+          <div class="ob-chip hi">😪 だるい</div>
+          <div class="ob-chip">💤 眠い</div>
+          <div class="ob-chip hi">🚃 通勤中</div>
+          <div class="ob-chip">☕ 昼休み中</div>
+        </div>
+        <button class="ob-next" onclick="goOb(document.getElementById('onboarding'),2)">つぎへ →</button>
+      </div>
+      <div class="ob-step" id="ob2">
+        <div class="ob-icon">🌸</div>
+        <div class="ob-txt">✦ 無理しない、<br>が合言葉です。</div>
+        <button class="ob-start" onclick="closeOb()">はじめる</button>
+      </div>
+    </div>
+    <div class="ob-bottom">
+      <div class="ob-dots">
+        <div class="ob-dot on" onclick="goOb(document.getElementById('onboarding'),0)"></div>
+        <div class="ob-dot" onclick="goOb(document.getElementById('onboarding'),1)"></div>
+        <div class="ob-dot" onclick="goOb(document.getElementById('onboarding'),2)"></div>
+      </div>
+      <button class="ob-skip" onclick="closeOb()">スキップ</button>
+    </div>`;
+  document.body.appendChild(ob);
+}
+function goOb(ob,s){
+  ob.querySelectorAll('.ob-step').forEach(el=>el.classList.remove('on'));
+  ob.querySelectorAll('.ob-dot').forEach((d,i)=>d.classList.toggle('on',i===s));
+  const el=ob.querySelector(`#ob${s}`);if(el)el.classList.add('on');
+}
+function closeOb(){
+  localStorage.setItem('ht_onboarded','1');
+  const ob=document.getElementById('onboarding');if(!ob)return;
+  ob.style.transition='opacity .4s';ob.style.opacity='0';
+  setTimeout(()=>{
+    ob.remove();
+    if(!localStorage.getItem('ht_snd_tip_shown')){
+      localStorage.setItem('ht_snd_tip_shown','1');
+      setTimeout(()=>showToast('音と振動の切替だよ 🔔'),400);
+    }
+  },400);
+}
+
+// ── Counter (改修11) ──
+const MILESTONES={
+  5:'5回も自分のためにここに来たね！それだけで十分、えらいよ！',
+  10:'10回！しんどい日を10回もちゃんと越えてきたあなた、本当にえらい！',
+  20:'20回も来てくれたね。あなたはちゃんと、自分のことを大切にしてるよ。',
+  50:'50回！ほんとうにえらいよ、あなた。',
+  100:'100回、ここに来てくれた。ありがとう、本当に。'
+};
+function updateCounter(){
+  const total=parseInt(localStorage.getItem('ht_total')||'0');
+  const line=document.getElementById('counterLine');
+  const num=document.getElementById('counterNum');
+  if(total===0){line.style.display='none';return;}
+  line.style.display='block';
+  num.textContent=total;
+}
+function animateCounter(){
+  const num=document.getElementById('counterNum');
+  if(!num)return;
+  num.classList.remove('bump');
+  void num.offsetWidth;
+  num.classList.add('bump');
+  setTimeout(()=>num.classList.remove('bump'),700);
+}
+function checkMilestone(total){
+  if(!MILESTONES[total])return;
+  const done=JSON.parse(localStorage.getItem('ht_milestones')||'[]');
+  if(done.includes(total))return;
+  done.push(total);
+  localStorage.setItem('ht_milestones',JSON.stringify(done));
+  showToastLong(MILESTONES[total]);
+}
+function showToastLong(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.classList.remove('interact');t.classList.add('on');
+  clearTimeout(toastTimer);
+  toastTimer=setTimeout(()=>t.classList.remove('on'),4000);
+}
+
+// ── タブ切り替え ──
+function switchTab(name){
+  ['home','fav','ashiato'].forEach(t=>{
+    document.getElementById('page-'+t).classList.toggle('active', t===name);
+    const btn=document.getElementById('tab-'+t);
+    btn.classList.toggle('active', t===name);
+    btn.setAttribute('aria-selected', t===name ? 'true' : 'false');
+  });
+  if(name==='fav') renderFavList();
+  if(name==='ashiato') renderAshiato();
+}
+
+// ── お守りリスト ──
+function renderFavList(){
+  const area=document.getElementById('favListArea');
+  const countEl=document.getElementById('favPageCount');
+  if(!favs.length){
+    countEl.textContent='';
+    area.innerHTML=`<div class="fav-empty"><div class="fav-empty-ico">🧿</div>まだお守りはないよ。<br>また見たいなと思った言葉を、<br>そっと残しておいてね。</div>`;
+    updateFavBadge();return;
+  }
+  countEl.textContent=favs.length+'件';
+  const adFavHtml=`<div style="
+    background:var(--wh);border-radius:14px;padding:14px 16px;
+    margin-top:4px;box-shadow:var(--sh-s);
+    border:0.5px dashed var(--be-d);
+    min-height:64px;display:none;align-items:center;justify-content:center;
+  "><div style="font-size:10px;color:var(--tx-s);letter-spacing:.1em">AD</div></div>`;
+  area.innerHTML=favs.map((f,i)=>{
+    const msg=Array.isArray(f.m)?f.m[0]:f.m;
+    const act=Array.isArray(f.a)?f.a[0]:f.a;
+    const dt=formatGentleDate(f.savedAt);
+    return`<div class="fav-list-card">
+      <div class="fav-list-tag">${f.mood} × ${f.scene}　${dt?'· '+dt:''}</div>
+      <div class="fav-list-msg">${msg}</div>
+      <div class="fav-list-act">✦ ${act}</div>
+      <button class="fav-list-replay" onclick="replayOmamori(${i})">この言葉を今日のひと押しにする</button>
+      <div class="fav-list-footer">
+        <span class="fav-list-date"></span>
+        <button class="fav-list-del" aria-label="削除" onclick="delFavItem(${i})">×</button>
+      </div>
+    </div>`;
+  }).join('')+adFavHtml;
+  updateFavBadge();
+}
+
+function replayOmamori(idx){
+  const f=favs[idx];if(!f)return;
+  const msg=Array.isArray(f.m)?f.m[0]:f.m;
+  const act=Array.isArray(f.a)?f.a[0]:f.a;
+  cur={mood:f.mood,scene:f.scene,m:msg,a:act,msgIdx:f.msgIdx||0,_mArr:[msg],_aArr:[act]};
+  faved=true;syncFav();
+  document.getElementById('cAct').textContent=act;
+  document.getElementById('cActRow').style.opacity='0';
+  const card=document.getElementById('card');
+  card.classList.remove('in');card.classList.add('vis');
+  document.getElementById('actBtns').classList.add('vis');
+  document.getElementById('postNav').style.display='none';
+  requestAnimationFrame(()=>requestAnimationFrame(()=>{
+    card.classList.add('in');showParticles();
+    typeWriter(document.getElementById('cMsg'),msg,()=>{
+      document.getElementById('cActRow').style.transition='opacity .35s ease';
+      document.getElementById('cActRow').style.opacity='1';
+    });
+  }));
+  saveLog({mood:f.mood,scene:f.scene,msg:msg,act:act,msgIdx:f.msgIdx||0,faved:true});
+  switchTab('home');
+  showToast('お守りの言葉を届けるよ 🧿');
+}
+
+function delFavItem(idx){
+  if(cur&&favs[idx]&&favs[idx].mood===cur.mood&&favs[idx].scene===cur.scene&&(favs[idx].msgIdx||0)===(cur.msgIdx||0)){
+    faved=false;syncFav();
+  }
+  favs.splice(idx,1);
+  localStorage.setItem('ht_f',JSON.stringify(favs));
+  renderFavList();
+  showToast('そっと消したよ');
+}
+
+function updateFavBadge(){
+  const badge=document.getElementById('favBadge');
+  const sess=JSON.parse(localStorage.getItem('ht_session')||'{}');
+  const todayStr=new Date().toISOString().slice(0,10);
+  if(sess.newOmamoriToday===todayStr){
+    badge.textContent='';
+    badge.classList.add('vis');
+  } else {
+    badge.classList.remove('vis');
+  }
+}
+
+// ── あしあとページ（全面強化）──
+function renderAshiato(){
+  const total=parseInt(localStorage.getItem('ht_total')||'0');
+  const el=document.getElementById('ashiatoContent');
+  if(total===0){
+    el.innerHTML=`<div class="fav-empty"><div class="fav-empty-ico">🌱</div>まだ記録がないよ。<br>ひと押しするたびに、<br>ここに足あとが増えていくよ。</div>`;
+    return;
+  }
+  const todayStr=new Date().toISOString().slice(0,10);
+  const days=JSON.parse(localStorage.getItem('ht_days')||'[]');
+  const logs=JSON.parse(localStorage.getItem('ht_logs')||'[]');
+  const today=new Date();
+
+  // 2-1. 今日カード
+  const todayLog=logs.find(l=>l.date===todayStr);
+  const todayCardHtml=todayLog
+    ?`<div class="today-card">
+        <div class="today-card-label">今日のあしあと</div>
+        <div class="today-card-main">今日もここに来てくれたね</div>
+        <div class="today-card-row">
+          <span class="today-chip">${todayLog.mood}</span>
+          <span class="today-chip">${todayLog.scene}</span>
+        </div>
+        <div class="today-card-act">✦ ${todayLog.act}</div>
+      </div>`
+    :`<div class="today-empty">
+        <div class="today-empty-main">今日はまだここには来ていないんだね。<br>しんどくなったら、そっと戻ってきてね。</div>
+      </div>`;
+
+  // ヒーロー文言
+  function heroMsg(n){
+    if(n===1)  return '来てくれたね。それだけで、今日は十分だよ。';
+    if(n<5)    return `${n}回、ここに来てくれたね。しんどい日に来られたあなた、えらい。`;
+    if(n<10)   return `${n}回も、ここに来てくれたね。自分のために動いてたんだよ、ちゃんと。`;
+    if(n<20)   return `${n}回も自分のためにここに来たね！本当にえらいよ！`;
+    if(n<50)   return `${n}回。その日その日を、ちゃんと生きてきたあなたがいる。`;
+    if(n<100)  return `${n}回も来てくれた。あなたはずっと、自分の味方でいてくれてた。`;
+    return `${n}回、ここに来てくれた。もうそれは愛情だよ、自分への。`;
+  }
+
+  // 2-2. 直近7日
+  let week=0;
+  const moodCount7={};
+  for(let i=0;i<7;i++){
+    const d=new Date(today);d.setDate(d.getDate()-i);
+    if(days.includes(d.toISOString().slice(0,10)))week++;
+  }
+  logs.filter(l=>(Date.now()-new Date(l.date).getTime())/86400000<7)
+    .forEach(l=>{moodCount7[l.mood]=(moodCount7[l.mood]||0)+1;});
+  let topMood7='',topMoodN7=0;
+  Object.entries(moodCount7).forEach(([k,v])=>{if(v>topMoodN7){topMoodN7=v;topMood7=k;}});
+  function weekBody(n,mood){
+    if(n===0) return{b:'今週はまだここには来ていないんだね。',s:'しんどくなったら、いつでも戻ってきてね。'};
+    if(n===1) return{b:'今週はここに1日、来てくれたね。',s:'来られなかった日があっても、それはそれでいいよ。'};
+    if(n<=3){
+      const s=mood
+        ?`「${mood}」気持ちを抱えながらも、ここに来てくれたあなた。それって、ちゃんと自分を大切にしてるってことだよ。`
+        :'しんどい中でもここに来られた日のこと、ちゃんと覚えておいてね。';
+      return{b:`今週はここに${n}日来てくれたね。`,s};
+    }
+    if(n<=5){
+      const s=mood
+        ?`「${mood}」な日が続いていたんだね。そんな中でも何度もここに来てくれたあなた、えらいよ。`
+        :'それだけ自分のことを気にかけてくれてたってこと。';
+      return{b:`今週はここに${n}日も来てくれたね。`,s};
+    }
+    return{b:'今週はほぼ毎日ここに来てくれたね。',s:'毎日しんどかったかもしれないけど、毎日ちゃんと自分と向き合ってたね。'};
+  }
+  const wb=weekBody(week,topMood7);
+  const weekCardHtml=`<div class="week-card">
+    <div class="week-card-head">直近7日間</div>
+    <div class="week-card-body">${wb.b}</div>
+    <div class="week-card-sub">${wb.s}</div>
+  </div>`;
+
+  // 2-4. 過去のことば
+  function mirrorHtml(){
+    const pool=logs.filter(l=>l.date!==todayStr&&l.msg);
+    if(!pool.length&&!favs.length)return'';
+    if(pool.length){
+      let idx;
+      do { idx=Math.floor(Math.random()*pool.length); } while(pool.length>1 && idx===lastMirrorIdx);
+      lastMirrorIdx=idx;
+      const item=pool[idx];
+      const diff=Math.round((Date.now()-new Date(item.date).getTime())/86400000);
+      const ago=diff<=0?'今日':diff===1?'昨日':`${diff}日前`;
+      return`<div class="mirror-card" id="mirrorCard">
+        <div class="mirror-label">前のあなたが受け取った言葉</div>
+        <div class="mirror-quote">${item.msg}</div>
+        <div class="mirror-tag">${item.mood} × ${item.scene}　|　${ago}</div>
+        <button class="mirror-refresh" onclick="refreshMirror()">↻ 別のことばを見る</button>
+      </div>`;
+    }
+    let idx;
+    do { idx=Math.floor(Math.random()*favs.length); } while(favs.length>1 && idx===lastMirrorIdx);
+    lastMirrorIdx=idx;
+    const f=favs[idx];
+    const msg=Array.isArray(f.m)?f.m[0]:f.m;
+    return`<div class="mirror-card" id="mirrorCard">
+      <div class="mirror-label">前のあなたが受け取った言葉</div>
+      <div class="mirror-quote">${msg}</div>
+      <div class="mirror-tag">${f.mood} × ${f.scene}</div>
+      <button class="mirror-refresh" onclick="refreshMirror()">↻ 別のことばを見る</button>
+    </div>`;
+  }
+
+  // 2-3. 花ドット30日
+  function flowerHtml(){
+    const dots=[];
+    for(let i=29;i>=0;i--){
+      const d=new Date(today);d.setDate(d.getDate()-i);
+      const key=d.toISOString().slice(0,10);
+      const isToday=key===todayStr,on=days.includes(key);
+      let cls='flower-dot '+(isToday&&on?'today-dot':on?'on':'off');
+      dots.push(`<div class="${cls}">${on?'✿':'·'}</div>`);
+    }
+    return`<div class="dots-section">
+      <div class="dots-label">直近30日のあしあと</div>
+      <div class="dots-grid">${dots.join('')}</div>
+      <div class="dots-note">しんどい日も、ちゃんとここに来てたあなたの足あとだよ。</div>
+    </div>`;
+  }
+
+  // 連続日数計算
+  let streak=0;
+  for(let i=0;i<30;i++){
+    const d=new Date(today);d.setDate(d.getDate()-i);
+    if(days.includes(d.toISOString().slice(0,10)))streak++;
+    else break;
+  }
+  // 自己肯定メッセージ
+  let selfAffirmHtml='';
+  if(todayLog){
+    const affirmMsg=streak>=2
+      ?`${streak}日連続で自分を大切にできたね。`
+      :'今日もヒトオシを受け取れました。<br>それだけで十分えらい日です。';
+    selfAffirmHtml=`<div style="background:var(--lv-l);border-radius:14px;padding:13px 16px;margin-bottom:12px;font-size:13px;font-weight:700;color:var(--tx);line-height:1.75;text-align:center;">${affirmMsg}</div>`;
+  }
+  const adCardHtml=`<div id="sponsored-card" style="
+    background:var(--wh);border-radius:16px;padding:14px 16px;
+    margin-bottom:12px;box-shadow:var(--sh-s);
+    border:0.5px dashed var(--be-d);
+    min-height:72px;display:none;align-items:center;justify-content:center;
+  ">
+    <div style="font-size:10px;color:var(--tx-s);letter-spacing:.1em">AD</div>
+  </div>`;
+  const praiseHeroHtml=`<div class="praise-hero">
+    <div class="praise-hero-num">${total}</div>
+    <div class="praise-hero-msg">${heroMsg(total)}</div>
+  </div>`;
+  el.innerHTML=selfAffirmHtml+todayCardHtml+praiseHeroHtml+weekCardHtml+mirrorHtml()+flowerHtml()+adCardHtml;
+}
+
+function refreshMirror(){
+  const todayStr=new Date().toISOString().slice(0,10);
+  const logs=JSON.parse(localStorage.getItem('ht_logs')||'[]');
+  const pool=logs.filter(l=>l.date!==todayStr&&l.msg);
+  const card=document.getElementById('mirrorCard');if(!card)return;
+  if(pool.length>=1){
+    let idx;
+    do { idx=Math.floor(Math.random()*pool.length); } while(pool.length>1 && idx===lastMirrorIdx);
+    lastMirrorIdx=idx;
+    const item=pool[idx];
+    const diff=Math.round((Date.now()-new Date(item.date).getTime())/86400000);
+    const ago=diff<=0?'今日':diff===1?'昨日':`${diff}日前`;
+    card.querySelector('.mirror-quote').textContent=item.msg;
+    card.querySelector('.mirror-tag').textContent=`${item.mood} × ${item.scene}　|　${ago}`;
+  } else if(favs.length>=1){
+    let idx;
+    do { idx=Math.floor(Math.random()*favs.length); } while(favs.length>1 && idx===lastMirrorIdx);
+    lastMirrorIdx=idx;
+    const f=favs[idx];
+    const msg=Array.isArray(f.m)?f.m[0]:f.m;
+    card.querySelector('.mirror-quote').textContent=msg;
+    card.querySelector('.mirror-tag').textContent=`${f.mood} × ${f.scene}`;
+  }
+}
+
+// ── Init ──
+sortChips();
+// 「出勤前」を初期選択
+(function(){
+  const sceneChips=document.querySelectorAll('#sceneC .chip');
+  sceneChips.forEach(c=>{
+    if(c.dataset.v==='出勤前'){
+      c.classList.add('on');c.setAttribute('aria-pressed','true');
+    }
+  });
+  document.getElementById('sceneC').classList.add('dimmed');
+  scene='出勤前';
+})();
+initGreeting();
+updateCounter();
+updateFavBadge();
+if(sessionStorage.getItem('ht_mood_expanded')){
+  document.getElementById('moodC').classList.add('mood-expanded');
+  document.getElementById('moodMore').textContent='閉じる ▴';
+}
+showOnboarding();
+</script>
+</body>
+</html>
+<!-- STORAGE KEYS
+  ht_f            … お守り
+  ht_logs         … 1押し毎ログ max200件
+  ht_session      … 当日セッション {date, flowerShown, newOmamoriToday}
+  ht_onboarded    … オンボーディング完了
+  ht_snd_tip_shown … 音ツールチップ表示済
+  ht_days         … 押した日付 30日ローリング
+  ht_combo_count  … 組み合わせ頻度
+  ht_total        … 累計押した回数
+  ht_milestones   … 達成済みマイルストーン
+  ht_mood_count   … 気分チップ頻度
+  ht_scene_count  … 場所チップ頻度
+-->
